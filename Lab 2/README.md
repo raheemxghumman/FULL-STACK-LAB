@@ -23,15 +23,13 @@ To run locally, open any task's `index.html` in a browser — nothing to install
 
 ![Timetable](screenshots/task1-timetable.png)
 
-A faithful recreation of the official aSc timetable sheet for **BSCS-V-A (Shift-I)**, then upgraded:
+A clean recreation of the official aSc timetable sheet for **BSCS-V-A (Shift-I)**, kept deliberately close to the original:
 
-- Semantic `<table>` with `colspan` for the three-hour lab blocks (AI Lab, OS Lab, Full Stack Lab).
-- Every course has its own colour with a legend; instructor, course and room in every cell; labs are striped with a "LAB · 3 HOURS" badge.
-- Sticky day column while scrolling sideways, hover lift on cells, a course summary section with weekly hours and rooms.
-- **Responsive:** below 820 px the same table automatically turns into a day-by-day card list (using `data-time` attributes and `::before`), with a CSS-only checkbox to force the week grid.
-- Print stylesheet fits the timetable on one landscape page.
+- Same structure as the sheet: title, "Air University" label, time-slot header with both label styles, large day abbreviations, and the generated-on footer.
+- Semantic `<table>` with `colspan="3"` for the three-hour lab blocks (AI Lab, OS Lab, Full Stack Lab); instructor, course and room in every cell.
+- Small improvements only: consistent typography, a faint shade on lab cells, a hover highlight, horizontal scrolling with a sticky day column on phones, and a print stylesheet for one landscape page.
 
-CSS concepts: custom properties, `color-mix()`, `:has()`, `position: sticky`, `repeating-linear-gradient`, `attr()`, media queries, `@media print`.
+CSS concepts: `border-collapse`, `table-layout: fixed`, `position: sticky`, media queries, `@media print`, transitions.
 
 ## Task 2 — Facebook Home Page
 
