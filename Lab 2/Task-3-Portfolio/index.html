@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Portfolio of Abdulraheem — web developer, SEO specialist and video editor from Multan, studying Computer Science at Air University Islamabad.">
+  <meta name="theme-color" content="#0b0f19">
+  <title>Abdulraheem — Web Developer · SEO · Video Editor</title>
+
+  <!-- Google Fonts (optional enhancement; system fallbacks are defined in style.css) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       THEME TOGGLE (CSS-only). The checkbox lives at the very top of
+       <body> so  body:has(#theme:checked)  can re-theme the whole page.
+       The visible switch is a <label for="theme"> inside the navbar.
+       ============================================================ -->
+  <input type="checkbox" id="theme" class="visually-hidden" aria-label="Switch to light theme">
+
+  <a class="skip-link" href="#about">Skip to content</a>
+
+  <!-- ============================================================
+       HEADER / NAVBAR (sticky, glass)
+       ============================================================ -->
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a href="#home" class="brand" aria-label="Abdulraheem — home">
+        <span class="brand-mark">AR</span><span class="brand-dot">.</span>
+      </a>
+
+      <!-- Mobile hamburger (checkbox hack) -->
+      <input type="checkbox" id="nav-toggle" class="visually-hidden" aria-label="Open navigation menu">
+      <label for="nav-toggle" class="burger" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </label>
+      <!-- Backdrop closes the menu when tapped -->
+      <label for="nav-toggle" class="nav-backdrop" aria-hidden="true"></label>
+
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Theme switch -->
+        <label for="theme" class="theme-switch" title="Toggle light / dark theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <span class="switch-knob"></span>
+        </label>
+        <a href="#contact" class="btn btn-small btn-primary nav-cta">Hire me</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section id="home" class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <span class="blob blob-1"></span>
+        <span class="blob blob-2"></span>
+        <span class="blob blob-3"></span>
+      </div>
+
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <p class="eyebrow"><span class="pulse"></span> Available for freelance work</p>
+          <h1 class="hero-title">Hi, I'm <span class="gradient-text">Abdulraheem</span></h1>
+
+          <!-- Rotating role line (pure CSS keyframes) -->
+          <p class="hero-role">I'm a
+            <span class="rotator" aria-label="Web Developer, SEO Specialist, Video Editor, CS Student">
+              <span class="rotator-track" aria-hidden="true">
+                <span>Web Developer</span>
+                <span>SEO Specialist</span>
+                <span>Video Editor</span>
+                <span>CS Student</span>
+                <span>Web Developer</span>
+              </span>
+            </span>
+          </p>
+
+          <p class="hero-lead">
+            I design and build fast, search-friendly websites and edit videos that people
+            actually watch. Born in Multan, now studying Computer Science at
+            <strong>Air University, Islamabad</strong>.
+          </p>
+
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-primary">
+              View my work
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#contact" class="btn btn-ghost">Contact me</a>
+          </div>
+
+          <ul class="socials" aria-label="Social links">
+            <li><a href="https://github.com/raheemxghumman" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke="none" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+            <li><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke="none" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+            <li><a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></li>
+            <li><a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg></a></li>
+            <li><a href="#" aria-label="Behance"><svg viewBox="0 0 24 24" aria-hidden="true"><text x="2" y="17" font-size="13" font-weight="700" fill="currentColor" stroke="none" font-family="Inter, Arial, sans-serif">Bē</text></svg></a></li>
+          </ul>
+        </div>
+
+        <!-- Avatar (swap for a real photo: replace the <svg> with
+             <img src="assets/profile.jpg" alt="Abdulraheem" class="avatar">) -->
+        <div class="hero-visual">
+          <div class="avatar-wrap">
+            <span class="avatar-ring" aria-hidden="true"></span>
+            <svg class="avatar" viewBox="0 0 200 200" role="img" aria-label="Abdulraheem">
+              <defs>
+                <linearGradient id="av-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#6366f1"/>
+                  <stop offset="1" stop-color="#22d3ee"/>
+                </linearGradient>
+                <radialGradient id="av-shine" cx="30%" cy="25%" r="70%">
+                  <stop offset="0" stop-color="#fff" stop-opacity=".35"/>
+                  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="100" cy="100" r="100" fill="url(#av-grad)"/>
+              <circle cx="100" cy="100" r="100" fill="url(#av-shine)"/>
+              <text x="100" y="134" text-anchor="middle" font-size="104" font-weight="700" fill="#fff" font-family="Space Grotesk, Inter, Arial, sans-serif">A</text>
+            </svg>
+
+            <!-- Floating skill chips -->
+            <span class="chip chip-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg> Web Dev</span>
+            <span class="chip chip-2"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg> SEO</span>
+            <span class="chip chip-3"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg> Video</span>
+          </div>
+        </div>
+      </div>
+
+      <a href="#about" class="scroll-hint" aria-label="Scroll to about section">
+        <span></span>
+      </a>
+    </section>
+
+    <!-- ============================================================
+         TECH MARQUEE (infinite CSS scroll)
+         ============================================================ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>Socket.IO</span><span>SEO</span><span>Google Analytics</span><span>Premiere Pro</span><span>After Effects</span><span>DaVinci Resolve</span><span>Figma</span><span>Firebase</span><span>Git</span>
+        <!-- duplicate for seamless loop -->
+        <span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>Socket.IO</span><span>SEO</span><span>Google Analytics</span><span>Premiere Pro</span><span>After Effects</span><span>DaVinci Resolve</span><span>Figma</span><span>Firebase</span><span>Git</span>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABOUT
+         ============================================================ -->
+    <section id="about" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-kicker">About me</p>
+          <h2 class="section-title">A developer who cares about <span class="gradient-text">how it looks</span> and how it ranks</h2>
+        </header>
+
+        <div class="about-grid">
+          <div class="about-copy reveal">
+            <p>
+              I'm Abdulraheem, a Computer Science student at <strong>Air University, Islamabad</strong>
+              who grew up in <strong>Multan</strong>. I started out editing videos for friends and small
+              YouTube channels, then fell in love with building the websites those videos were embedded in.
+            </p>
+            <p>
+              Today I combine three skills that rarely live in one person: I <strong>build</strong> clean,
+              responsive front-ends and full-stack apps, I <strong>optimise</strong> them so search engines
+              and real people find them, and I <strong>produce</strong> the video content that keeps
+              visitors on the page.
+            </p>
+            <p>
+              When I'm not in the lab, you'll find me colour-grading footage, reading about Core Web Vitals,
+              or experimenting with what pure CSS can do.
+            </p>
+
+            <ul class="about-facts">
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <div><small>Based in</small><strong>Islamabad, Pakistan</strong></div>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-5 9 5-9 5-9-5z"/><path d="M7 12v5c0 1.5 2.5 3 5 3s5-1.5 5-3v-5"/></svg>
+                <div><small>Studying</small><strong>BS Computer Science, Air University</strong></div>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13M9 21v-6h6v6M12 6V3"/></svg>
+                <div><small>Hometown</small><strong>Multan, Pakistan</strong></div>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                <div><small>Availability</small><strong>Open to freelance & internships</strong></div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats reveal">
+            <div class="stat"><strong>3<span>+</span></strong><small>Years of experience</small></div>
+            <div class="stat"><strong>20<span>+</span></strong><small>Projects delivered</small></div>
+            <div class="stat"><strong>100<span>+</span></strong><small>Videos edited</small></div>
+            <div class="stat"><strong>10<span>+</span></strong><small>Happy clients</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SKILLS
+         ============================================================ -->
+    <section id="skills" class="section section-alt">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-kicker">Skills</p>
+          <h2 class="section-title">What I bring to the table</h2>
+          <p class="section-sub">Three disciplines, one workflow: build it, make it rank, make it watchable.</p>
+        </header>
+
+        <div class="skills-grid">
+          <!-- Web development -->
+          <article class="skill-card reveal">
+            <div class="skill-card-head">
+              <span class="skill-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6M14 4l-4 16"/></svg></span>
+              <h3>Web Development</h3>
+            </div>
+            <ul class="bars">
+              <li style="--p:95%"><span class="bar-label">HTML5</span><span class="bar-val">95%</span><span class="bar"><i></i></span></li>
+              <li style="--p:92%"><span class="bar-label">CSS3</span><span class="bar-val">92%</span><span class="bar"><i></i></span></li>
+              <li style="--p:80%"><span class="bar-label">JavaScript</span><span class="bar-val">80%</span><span class="bar"><i></i></span></li>
+              <li style="--p:72%"><span class="bar-label">React</span><span class="bar-val">72%</span><span class="bar"><i></i></span></li>
+              <li style="--p:65%"><span class="bar-label">Node.js &amp; Express</span><span class="bar-val">65%</span><span class="bar"><i></i></span></li>
+              <li style="--p:62%"><span class="bar-label">MongoDB</span><span class="bar-val">62%</span><span class="bar"><i></i></span></li>
+              <li style="--p:60%"><span class="bar-label">Socket.IO</span><span class="bar-val">60%</span><span class="bar"><i></i></span></li>
+              <li style="--p:90%"><span class="bar-label">Responsive design</span><span class="bar-val">90%</span><span class="bar"><i></i></span></li>
+            </ul>
+            <div class="skill-tools"><span>Vite</span><span>Tailwind CSS</span><span>Cloudinary</span><span>REST APIs</span></div>
+          </article>
+
+          <!-- SEO -->
+          <article class="skill-card reveal">
+            <div class="skill-card-head">
+              <span class="skill-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8 11h6M11 8v6"/></svg></span>
+              <h3>SEO</h3>
+            </div>
+            <ul class="bars">
+              <li style="--p:90%"><span class="bar-label">Keyword research</span><span class="bar-val">90%</span><span class="bar"><i></i></span></li>
+              <li style="--p:88%"><span class="bar-label">On-page &amp; technical SEO</span><span class="bar-val">88%</span><span class="bar"><i></i></span></li>
+              <li style="--p:85%"><span class="bar-label">Google Search Console</span><span class="bar-val">85%</span><span class="bar"><i></i></span></li>
+              <li style="--p:80%"><span class="bar-label">Google Analytics 4</span><span class="bar-val">80%</span><span class="bar"><i></i></span></li>
+              <li style="--p:82%"><span class="bar-label">Content strategy</span><span class="bar-val">82%</span><span class="bar"><i></i></span></li>
+            </ul>
+            <div class="skill-tools"><span>Ahrefs</span><span>Semrush</span><span>Yoast</span><span>Schema.org</span><span>Core Web Vitals</span></div>
+          </article>
+
+          <!-- Video editing -->
+          <article class="skill-card reveal">
+            <div class="skill-card-head">
+              <span class="skill-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3zM3 10h13M3 14h13"/></svg></span>
+              <h3>Video Editing</h3>
+            </div>
+            <ul class="bars">
+              <li style="--p:92%"><span class="bar-label">Adobe Premiere Pro</span><span class="bar-val">92%</span><span class="bar"><i></i></span></li>
+              <li style="--p:75%"><span class="bar-label">After Effects</span><span class="bar-val">75%</span><span class="bar"><i></i></span></li>
+              <li style="--p:78%"><span class="bar-label">DaVinci Resolve</span><span class="bar-val">78%</span><span class="bar"><i></i></span></li>
+              <li style="--p:90%"><span class="bar-label">CapCut</span><span class="bar-val">90%</span><span class="bar"><i></i></span></li>
+              <li style="--p:80%"><span class="bar-label">Colour grading</span><span class="bar-val">80%</span><span class="bar"><i></i></span></li>
+              <li style="--p:72%"><span class="bar-label">Motion graphics</span><span class="bar-val">72%</span><span class="bar"><i></i></span></li>
+            </ul>
+            <div class="skill-tools"><span>YouTube</span><span>Reels &amp; Shorts</span><span>Promos</span><span>Thumbnails</span><span>Sound design</span></div>
+          </article>
+
+          <!-- Other -->
+          <article class="skill-card reveal">
+            <div class="skill-card-head">
+              <span class="skill-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 4.6 5 .7-3.6 3.5.9 5L12 14.4 7.5 16.8l.9-5L4.8 8.3l5-.7z"/></svg></span>
+              <h3>Tools &amp; Fundamentals</h3>
+            </div>
+            <ul class="bars">
+              <li style="--p:85%"><span class="bar-label">Git &amp; GitHub</span><span class="bar-val">85%</span><span class="bar"><i></i></span></li>
+              <li style="--p:78%"><span class="bar-label">REST APIs</span><span class="bar-val">78%</span><span class="bar"><i></i></span></li>
+              <li style="--p:65%"><span class="bar-label">Firebase</span><span class="bar-val">65%</span><span class="bar"><i></i></span></li>
+              <li style="--p:75%"><span class="bar-label">Python</span><span class="bar-val">75%</span><span class="bar"><i></i></span></li>
+              <li style="--p:80%"><span class="bar-label">C++</span><span class="bar-val">80%</span><span class="bar"><i></i></span></li>
+              <li style="--p:78%"><span class="bar-label">Figma / UI-UX</span><span class="bar-val">78%</span><span class="bar"><i></i></span></li>
+              <li style="--p:85%"><span class="bar-label">WordPress</span><span class="bar-val">85%</span><span class="bar"><i></i></span></li>
+              <li style="--p:74%"><span class="bar-label">Data structures &amp; algorithms</span><span class="bar-val">74%</span><span class="bar"><i></i></span></li>
+            </ul>
+            <div class="skill-tools"><span>VS Code</span><span>Postman</span><span>Vercel</span><span>Netlify</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SERVICES
+         ============================================================ -->
+    <section id="services" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-kicker">Services</p>
+          <h2 class="section-title">How I can help</h2>
+        </header>
+
+        <div class="services-grid">
+          <article class="service reveal">
+            <span class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8M12 18v3"/></svg></span>
+            <h3>Web Development</h3>
+            <p>Hand-coded, responsive websites, landing pages and full-stack apps with clean HTML, modern CSS and the right amount of JavaScript.</p>
+            <a href="#contact" class="link-arrow">Start a project <span>→</span></a>
+          </article>
+          <article class="service reveal">
+            <span class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19l5-6 4 3 7-9"/><path d="M15 7h5v5"/></svg></span>
+            <h3>SEO Optimisation</h3>
+            <p>Keyword research, on-page fixes, technical audits and Search Console reporting that turn traffic into results.</p>
+            <a href="#contact" class="link-arrow">Get an audit <span>→</span></a>
+          </article>
+          <article class="service reveal">
+            <span class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg></span>
+            <h3>Video Editing</h3>
+            <p>YouTube edits, reels, promos and colour grading in Premiere Pro, After Effects and DaVinci Resolve.</p>
+            <a href="#contact" class="link-arrow">See my reel <span>→</span></a>
+          </article>
+          <article class="service reveal">
+            <span class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7-3-3-7 7v3h3z"/><path d="M14 8l3 3M5 21h14"/></svg></span>
+            <h3>UI / UX Design</h3>
+            <p>Wireframes and high-fidelity mock-ups in Figma, turned into pixel-accurate interfaces.</p>
+            <a href="#contact" class="link-arrow">Design with me <span>→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PROJECTS (real repositories from github.com/raheemxghumman)
+         ============================================================ -->
+    <section id="projects" class="section section-alt">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-kicker">Portfolio</p>
+          <h2 class="section-title">Selected projects</h2>
+          <p class="section-sub">Full-stack apps, hackathon builds and pure-CSS experiments, all open source on GitHub.</p>
+        </header>
+
+        <div class="projects-grid">
+
+          <!-- 1. Notes by Raheem -->
+          <article class="project reveal">
+            <div class="project-thumb">
+              <svg viewBox="0 0 400 240" aria-hidden="true">
+                <defs><linearGradient id="p1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1b4b"/><stop offset="1" stop-color="#312e81"/></linearGradient></defs>
+                <rect width="400" height="240" fill="url(#p1)"/>
+                <!-- browser window -->
+                <rect x="40" y="30" width="320" height="200" rx="10" fill="#0f172a"/>
+                <rect x="40" y="30" width="320" height="26" rx="10" fill="#1e293b"/>
+                <circle cx="56" cy="43" r="4" fill="#f87171"/><circle cx="70" cy="43" r="4" fill="#fbbf24"/><circle cx="84" cy="43" r="4" fill="#34d399"/>
+                <!-- dashboard sidebar -->
+                <rect x="40" y="56" width="70" height="174" fill="#111c34"/>
+                <rect x="50" y="70" width="50" height="8" rx="4" fill="#6366f1"/>
+                <rect x="50" y="88" width="42" height="6" rx="3" fill="#334155"/><rect x="50" y="102" width="46" height="6" rx="3" fill="#334155"/><rect x="50" y="116" width="38" height="6" rx="3" fill="#334155"/><rect x="50" y="130" width="44" height="6" rx="3" fill="#334155"/>
+                <!-- stat cards -->
+                <rect x="122" y="68" width="70" height="40" rx="6" fill="#1e293b"/><rect x="130" y="76" width="30" height="6" rx="3" fill="#94a3b8"/><rect x="130" y="90" width="44" height="10" rx="3" fill="#22d3ee"/>
+                <rect x="200" y="68" width="70" height="40" rx="6" fill="#1e293b"/><rect x="208" y="76" width="30" height="6" rx="3" fill="#94a3b8"/><rect x="208" y="90" width="36" height="10" rx="3" fill="#a78bfa"/>
+                <rect x="278" y="68" width="70" height="40" rx="6" fill="#1e293b"/><rect x="286" y="76" width="30" height="6" rx="3" fill="#94a3b8"/><rect x="286" y="90" width="40" height="10" rx="3" fill="#34d399"/>
+                <!-- notes rows with role badges -->
+                <rect x="122" y="120" width="226" height="26" rx="5" fill="#1e293b"/><rect x="130" y="126" width="12" height="14" rx="2" fill="#6366f1"/><rect x="150" y="127" width="90" height="5" rx="2.5" fill="#e2e8f0"/><rect x="150" y="136" width="60" height="4" rx="2" fill="#64748b"/><rect x="300" y="128" width="40" height="10" rx="5" fill="#22c55e"/>
+                <rect x="122" y="152" width="226" height="26" rx="5" fill="#1e293b"/><rect x="130" y="158" width="12" height="14" rx="2" fill="#22d3ee"/><rect x="150" y="159" width="110" height="5" rx="2.5" fill="#e2e8f0"/><rect x="150" y="168" width="70" height="4" rx="2" fill="#64748b"/><rect x="300" y="160" width="40" height="10" rx="5" fill="#fbbf24"/>
+                <rect x="122" y="184" width="226" height="26" rx="5" fill="#1e293b"/><rect x="130" y="190" width="12" height="14" rx="2" fill="#f472b6"/><rect x="150" y="191" width="80" height="5" rx="2.5" fill="#e2e8f0"/><rect x="150" y="200" width="50" height="4" rx="2" fill="#64748b"/><rect x="300" y="192" width="40" height="10" rx="5" fill="#6366f1"/>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Notes by Raheem</h3>
+              <p>A comprehensive notes-sharing website with separate Student, Admin and Owner dashboards for uploading, approving and managing study material.</p>
+              <ul class="tags"><li>Full-stack</li><li>Dashboards</li><li>Auth</li></ul>
+              <div class="project-links">
+                <a href="https://github.com/raheemxghumman/Notes-by-Raheem" target="_blank" rel="noopener noreferrer">View project</a>
+                <a href="https://github.com/raheemxghumman/Notes-by-Raheem" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 2. Real-time chat app -->
+          <article class="project reveal">
+            <div class="project-thumb">
+              <svg viewBox="0 0 400 240" aria-hidden="true">
+                <defs><linearGradient id="p2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#042f2e"/><stop offset="1" stop-color="#134e4a"/></linearGradient>
+                <linearGradient id="p2img" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#ef4444"/></linearGradient></defs>
+                <rect width="400" height="240" fill="url(#p2)"/>
+                <!-- chat window -->
+                <rect x="90" y="18" width="220" height="204" rx="14" fill="#0f172a"/>
+                <rect x="90" y="18" width="220" height="36" rx="14" fill="#1e293b"/>
+                <rect x="90" y="40" width="220" height="14" fill="#1e293b"/>
+                <circle cx="112" cy="36" r="10" fill="#14b8a6"/><circle cx="119" cy="43" r="3.5" fill="#22c55e" stroke="#1e293b" stroke-width="1.5"/>
+                <rect x="130" y="29" width="70" height="6" rx="3" fill="#e2e8f0"/><rect x="130" y="39" width="36" height="4" rx="2" fill="#22c55e"/>
+                <!-- bubbles -->
+                <rect x="104" y="66" width="120" height="24" rx="12" fill="#1e293b"/><rect x="114" y="75" width="90" height="6" rx="3" fill="#94a3b8"/>
+                <rect x="176" y="98" width="120" height="24" rx="12" fill="#14b8a6"/><rect x="186" y="107" width="96" height="6" rx="3" fill="#ecfeff"/>
+                <!-- image bubble (Cloudinary upload) -->
+                <rect x="104" y="130" width="84" height="52" rx="10" fill="url(#p2img)"/><circle cx="124" cy="148" r="7" fill="#fff" opacity=".8"/><path d="M110 176l20-18 14 12 12-8 24 14z" fill="#fff" opacity=".6"/>
+                <rect x="200" y="160" width="96" height="24" rx="12" fill="#14b8a6"/><rect x="210" y="169" width="70" height="6" rx="3" fill="#ecfeff"/>
+                <!-- input bar -->
+                <rect x="104" y="194" width="160" height="18" rx="9" fill="#1e293b"/><rect x="114" y="200" width="60" height="6" rx="3" fill="#475569"/>
+                <circle cx="286" cy="203" r="10" fill="#14b8a6"/><path d="M282 203l3-4 5 4-5 4z" fill="#0f172a"/>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Real-time Chat App</h3>
+              <p>Full-stack real-time chat with signup/login, online status, image uploads via Cloudinary and theme switching, powered by Socket.IO.</p>
+              <ul class="tags"><li>React</li><li>Express</li><li>MongoDB</li><li>Socket.IO</li></ul>
+              <div class="project-links">
+                <a href="https://github.com/raheemxghumman/chat-app" target="_blank" rel="noopener noreferrer">View project</a>
+                <a href="https://github.com/raheemxghumman/chat-app" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 3. Insta downloader -->
+          <article class="project reveal">
+            <div class="project-thumb">
+              <svg viewBox="0 0 400 240" aria-hidden="true">
+                <defs><linearGradient id="p3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b0764"/><stop offset="1" stop-color="#831843"/></linearGradient>
+                <linearGradient id="p3ig" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#f58529"/><stop offset=".5" stop-color="#dd2a7b"/><stop offset="1" stop-color="#8134af"/></linearGradient></defs>
+                <rect width="400" height="240" fill="url(#p3)"/>
+                <!-- card -->
+                <rect x="70" y="24" width="260" height="192" rx="12" fill="#0f172a"/>
+                <!-- url input + paste button -->
+                <rect x="86" y="40" width="184" height="24" rx="12" fill="#1e293b"/><rect x="98" y="49" width="120" height="6" rx="3" fill="#64748b"/>
+                <rect x="276" y="40" width="40" height="24" rx="12" fill="url(#p3ig)"/>
+                <!-- reel preview -->
+                <rect x="86" y="76" width="90" height="124" rx="8" fill="url(#p3ig)"/>
+                <circle cx="131" cy="138" r="16" fill="#0f172a" opacity=".7"/><path d="M126 130l12 8-12 8z" fill="#fff"/>
+                <!-- details -->
+                <rect x="190" y="80" width="120" height="8" rx="4" fill="#e2e8f0"/>
+                <rect x="190" y="96" width="90" height="6" rx="3" fill="#64748b"/>
+                <rect x="190" y="108" width="70" height="6" rx="3" fill="#64748b"/>
+                <!-- quality chips -->
+                <rect x="190" y="126" width="36" height="14" rx="7" fill="#1e293b"/><rect x="232" y="126" width="36" height="14" rx="7" fill="#22d3ee"/><rect x="274" y="126" width="36" height="14" rx="7" fill="#1e293b"/>
+                <!-- download button + progress -->
+                <rect x="190" y="154" width="120" height="26" rx="8" fill="#22c55e"/><path d="M250 160v10m-4-4l4 4 4-4" stroke="#052e16" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="190" y="190" width="120" height="6" rx="3" fill="#1e293b"/><rect x="190" y="190" width="84" height="6" rx="3" fill="#22d3ee"/>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Insta Downloader</h3>
+              <p>Instagram reel and video downloader: a React (Vite) front-end with a Node.js + Express back-end that resolves the media server-side and streams the download.</p>
+              <ul class="tags"><li>React</li><li>Node.js</li><li>Express</li><li>API</li></ul>
+              <div class="project-links">
+                <a href="https://github.com/raheemxghumman/insta-downloader" target="_blank" rel="noopener noreferrer">View project</a>
+                <a href="https://github.com/raheemxghumman/insta-downloader" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 4. CIRO crisis orchestrator -->
+          <article class="project reveal">
+            <div class="project-thumb">
+              <svg viewBox="0 0 400 240" aria-hidden="true">
+                <defs><linearGradient id="p4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#450a0a"/><stop offset="1" stop-color="#7f1d1d"/></linearGradient></defs>
+                <rect width="400" height="240" fill="url(#p4)"/>
+                <rect x="40" y="26" width="320" height="188" rx="12" fill="#0f172a"/>
+                <!-- map grid -->
+                <path d="M40 60h320M40 100h320M40 140h320M40 180h320M90 26v188M150 26v188M210 26v188M270 26v188M330 26v188" stroke="#1e293b" stroke-width="1"/>
+                <!-- landmass -->
+                <path d="M70 150c10-40 40-70 90-70s70 10 100 0 60 10 70 40-20 60-60 60-60-20-100-10-90 20-100-20z" fill="#1e293b"/>
+                <!-- response route -->
+                <path d="M300 130L220 150 140 120" stroke="#22d3ee" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+                <!-- alert pulses -->
+                <circle cx="140" cy="120" r="22" fill="#ef4444" opacity=".15"/><circle cx="140" cy="120" r="12" fill="#ef4444" opacity=".35"/><circle cx="140" cy="120" r="5" fill="#ef4444"/>
+                <circle cx="220" cy="150" r="18" fill="#f59e0b" opacity=".15"/><circle cx="220" cy="150" r="9" fill="#f59e0b" opacity=".35"/><circle cx="220" cy="150" r="4" fill="#f59e0b"/>
+                <circle cx="300" cy="130" r="14" fill="#22d3ee" opacity=".2"/><circle cx="300" cy="130" r="4" fill="#22d3ee"/>
+                <!-- incident panel -->
+                <rect x="236" y="38" width="112" height="60" rx="8" fill="#1e293b" opacity=".95"/>
+                <rect x="246" y="48" width="14" height="14" rx="3" fill="#ef4444"/><rect x="266" y="50" width="70" height="5" rx="2.5" fill="#e2e8f0"/><rect x="266" y="60" width="50" height="4" rx="2" fill="#94a3b8"/>
+                <rect x="246" y="72" width="90" height="6" rx="3" fill="#334155"/><rect x="246" y="72" width="60" height="6" rx="3" fill="#ef4444"/>
+                <rect x="246" y="84" width="90" height="6" rx="3" fill="#334155"/><rect x="246" y="84" width="40" height="6" rx="3" fill="#f59e0b"/>
+                <!-- AI badge -->
+                <rect x="52" y="38" width="64" height="18" rx="9" fill="#22d3ee"/><text x="84" y="51" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a" font-family="Inter, Arial, sans-serif">AI LIVE</text>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>CIRO – Crisis Intelligence &amp; Response Orchestrator</h3>
+              <p>Hackathon project: real-time AI-powered crisis detection, reasoning and response planning, built with Google ADK and deployed on Firebase + Cloud Run.</p>
+              <ul class="tags"><li>AI Agents</li><li>Google ADK</li><li>Firebase</li><li>Cloud Run</li></ul>
+              <div class="project-links">
+                <a href="https://github.com/raheemxghumman/hackathon_ciro" target="_blank" rel="noopener noreferrer">View project</a>
+                <a href="https://github.com/raheemxghumman/hackathon_ciro" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 5. Prompt formatter -->
+          <article class="project reveal">
+            <div class="project-thumb">
+              <svg viewBox="0 0 400 240" aria-hidden="true">
+                <defs><linearGradient id="p5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0c4a6e"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                <rect width="400" height="240" fill="url(#p5)"/>
+                <rect x="40" y="30" width="320" height="200" rx="10" fill="#0f172a"/>
+                <rect x="40" y="30" width="320" height="26" rx="10" fill="#1e293b"/>
+                <circle cx="56" cy="43" r="4" fill="#f87171"/><circle cx="70" cy="43" r="4" fill="#fbbf24"/><circle cx="84" cy="43" r="4" fill="#34d399"/>
+                <!-- raw input panel -->
+                <rect x="52" y="66" width="140" height="150" rx="6" fill="#111c34"/>
+                <rect x="62" y="76" width="50" height="6" rx="3" fill="#94a3b8"/>
+                <g fill="#334155"><rect x="62" y="92" width="110" height="5" rx="2.5"/><rect x="62" y="102" width="90" height="5" rx="2.5"/><rect x="62" y="112" width="120" height="5" rx="2.5"/><rect x="62" y="122" width="70" height="5" rx="2.5"/><rect x="62" y="132" width="100" height="5" rx="2.5"/><rect x="62" y="142" width="80" height="5" rx="2.5"/></g>
+                <!-- preset chips -->
+                <rect x="62" y="160" width="34" height="12" rx="6" fill="#6366f1"/><rect x="100" y="160" width="34" height="12" rx="6" fill="#1e293b"/><rect x="138" y="160" width="34" height="12" rx="6" fill="#1e293b"/>
+                <rect x="62" y="186" width="120" height="20" rx="6" fill="#22d3ee"/>
+                <!-- arrow -->
+                <path d="M198 140h12m-4-4l4 4-4 4" stroke="#94a3b8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- formatted output panel -->
+                <rect x="216" y="66" width="132" height="150" rx="6" fill="#111c34"/>
+                <rect x="226" y="76" width="60" height="6" rx="3" fill="#94a3b8"/>
+                <rect x="226" y="92" width="16" height="5" rx="2.5" fill="#f472b6"/><rect x="246" y="92" width="80" height="5" rx="2.5" fill="#e2e8f0"/>
+                <rect x="226" y="104" width="16" height="5" rx="2.5" fill="#f472b6"/><rect x="246" y="104" width="60" height="5" rx="2.5" fill="#e2e8f0"/>
+                <rect x="226" y="116" width="16" height="5" rx="2.5" fill="#f472b6"/><rect x="246" y="116" width="90" height="5" rx="2.5" fill="#e2e8f0"/>
+                <rect x="226" y="128" width="16" height="5" rx="2.5" fill="#f472b6"/><rect x="246" y="128" width="50" height="5" rx="2.5" fill="#e2e8f0"/>
+                <rect x="226" y="140" width="16" height="5" rx="2.5" fill="#f472b6"/><rect x="246" y="140" width="76" height="5" rx="2.5" fill="#e2e8f0"/>
+                <rect x="226" y="186" width="112" height="20" rx="6" fill="#22c55e"/>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Prompt Formatter</h3>
+              <p>Local browser tool that formats image and video prompts into bulk-generator formats, with page presets and multiple input modes. No install, no back-end.</p>
+              <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Tooling</li></ul>
+              <div class="project-links">
+                <a href="https://github.com/raheemxghumman/prompt-formatter" target="_blank" rel="noopener noreferrer">View project</a>
+                <a href="https://github.com/raheemxghumman/prompt-formatter" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 6. Facebook clone + Nova Home dashboard (this lab) -->
+          <article class="project reveal">
+            <div class="project-thumb">
+              <svg viewBox="0 0 400 240" aria-hidden="true">
+                <defs><linearGradient id="p6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2e1065"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient>
+                <linearGradient id="p6b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+                <rect width="400" height="240" fill="url(#p6)"/>
+                <!-- left: facebook feed -->
+                <rect x="32" y="26" width="160" height="188" rx="10" fill="#18191a"/>
+                <rect x="32" y="26" width="160" height="22" rx="10" fill="#242526"/>
+                <circle cx="48" cy="37" r="7" fill="#1877f2"/><rect x="60" y="32" width="60" height="10" rx="5" fill="#3a3b3c"/>
+                <rect x="44" y="58" width="136" height="146" rx="6" fill="#242526"/>
+                <circle cx="58" cy="72" r="7" fill="#1877f2"/><rect x="70" y="67" width="60" height="5" rx="2.5" fill="#e4e6eb"/><rect x="70" y="75" width="40" height="4" rx="2" fill="#b0b3b8"/>
+                <rect x="52" y="88" width="120" height="70" rx="4" fill="#1877f2" opacity=".85"/>
+                <rect x="52" y="166" width="34" height="8" rx="4" fill="#3a3b3c"/><rect x="95" y="166" width="34" height="8" rx="4" fill="#3a3b3c"/><rect x="138" y="166" width="34" height="8" rx="4" fill="#3a3b3c"/>
+                <rect x="52" y="184" width="120" height="12" rx="6" fill="#3a3b3c"/>
+                <!-- right: nova home dashboard -->
+                <rect x="208" y="26" width="160" height="188" rx="12" fill="#0f172a"/>
+                <rect x="220" y="38" width="64" height="52" rx="8" fill="#1e293b"/><circle cx="234" cy="52" r="6" fill="#fbbf24"/><rect x="262" y="46" width="18" height="10" rx="5" fill="#22c55e"/><circle cx="275" cy="51" r="3.5" fill="#fff"/><rect x="228" y="74" width="36" height="5" rx="2.5" fill="#94a3b8"/>
+                <rect x="292" y="38" width="64" height="52" rx="8" fill="#1e293b"/><circle cx="306" cy="52" r="6" fill="#22d3ee"/><rect x="334" y="46" width="18" height="10" rx="5" fill="#475569"/><circle cx="339" cy="51" r="3.5" fill="#fff"/><rect x="300" y="74" width="36" height="5" rx="2.5" fill="#94a3b8"/>
+                <rect x="220" y="100" width="64" height="100" rx="8" fill="#1e293b"/>
+                <circle cx="252" cy="140" r="22" fill="none" stroke="#334155" stroke-width="6"/>
+                <circle cx="252" cy="140" r="22" fill="none" stroke="url(#p6b)" stroke-width="6" stroke-dasharray="94 44" stroke-linecap="round" transform="rotate(-210 252 140)"/>
+                <text x="252" y="145" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="Inter, Arial, sans-serif">22°</text>
+                <rect x="232" y="178" width="40" height="5" rx="2.5" fill="#94a3b8"/>
+                <rect x="292" y="100" width="64" height="100" rx="8" fill="#1e293b"/>
+                <rect x="300" y="170" width="7" height="20" rx="2" fill="#6366f1"/><rect x="311" y="154" width="7" height="36" rx="2" fill="#6366f1"/><rect x="322" y="162" width="7" height="28" rx="2" fill="#22d3ee"/><rect x="333" y="144" width="7" height="46" rx="2" fill="#22d3ee"/><rect x="344" y="136" width="7" height="54" rx="2" fill="#f472b6"/>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Facebook UI Clone &amp; Nova Home Dashboard</h3>
+              <p>A pixel-faithful Facebook feed with dark mode, plus a CSS-only interactive smart-home dashboard, both built for the Full Stack Web Development lab in pure HTML + CSS.</p>
+              <ul class="tags"><li>HTML5</li><li>CSS3</li><li>No JavaScript</li></ul>
+              <div class="project-links">
+                <a href="https://github.com/raheemxghumman" target="_blank" rel="noopener noreferrer">View project</a>
+                <a href="https://github.com/raheemxghumman" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <p class="projects-more reveal">
+          <a href="https://github.com/raheemxghumman" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke="none" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            See all repositories on GitHub
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         EXPERIENCE + EDUCATION (timeline)
+         ============================================================ -->
+    <section id="experience" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-kicker">Journey</p>
+          <h2 class="section-title">Experience &amp; education</h2>
+        </header>
+
+        <div class="timeline-grid">
+          <!-- Experience column -->
+          <div class="timeline reveal">
+            <h3 class="timeline-title">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/></svg>
+              Experience
+            </h3>
+            <ol class="timeline-list">
+              <li class="tl-item">
+                <span class="tl-date">2023 — Present</span>
+                <h4>Freelance Web Developer &amp; SEO Specialist</h4>
+                <p class="tl-org">Remote · Fiverr, Upwork &amp; direct clients</p>
+                <ul>
+                  <li>Built and optimised 10+ client websites, from local businesses to personal brands.</li>
+                  <li>Improved organic traffic for a tech blog by 3× through keyword mapping and technical fixes.</li>
+                  <li>Set up Search Console, GA4 dashboards and monthly reporting for clients.</li>
+                </ul>
+              </li>
+              <li class="tl-item">
+                <span class="tl-date">2022 — Present</span>
+                <h4>Freelance Video Editor</h4>
+                <p class="tl-org">Remote · YouTube creators &amp; small businesses</p>
+                <ul>
+                  <li>Edited 100+ videos including long-form tutorials, reels and product promos.</li>
+                  <li>Built reusable motion-graphics templates that cut turnaround time in half.</li>
+                  <li>Handled colour grading, sound design and thumbnail design end to end.</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Education column (years are indicative — adjust as needed) -->
+          <div class="timeline reveal">
+            <h3 class="timeline-title">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-5 9 5-9 5-9-5z"/><path d="M7 12v5c0 1.5 2.5 3 5 3s5-1.5 5-3v-5"/></svg>
+              Education
+            </h3>
+            <ol class="timeline-list">
+              <li class="tl-item">
+                <span class="tl-date">2024 — Present</span>
+                <h4>BS Computer Science</h4>
+                <p class="tl-org">Air University, Islamabad</p>
+                <ul>
+                  <li>Currently in 5th semester: Full Stack Web Development, AI, Operating Systems, Algorithms.</li>
+                  <li>Section BSCS-V-A · Active in the university's web and design community.</li>
+                </ul>
+              </li>
+              <li class="tl-item">
+                <span class="tl-date">2022 — 2024</span>
+                <h4>Intermediate (Pre-Engineering / ICS)</h4>
+                <p class="tl-org">Multan, Pakistan</p>
+                <ul>
+                  <li>Focused on mathematics, physics and computer science fundamentals.</li>
+                </ul>
+              </li>
+              <li class="tl-item">
+                <span class="tl-date">2020 — 2022</span>
+                <h4>Matriculation (Science)</h4>
+                <p class="tl-org">Multan, Pakistan</p>
+                <ul>
+                  <li>First lines of HTML written here — the start of everything on this page.</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         TESTIMONIALS
+         ============================================================ -->
+    <section id="testimonials" class="section section-alt">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-kicker">Testimonials</p>
+          <h2 class="section-title">Kind words from clients</h2>
+        </header>
+
+        <div class="testi-grid">
+          <figure class="testi reveal">
+            <blockquote>Abdulraheem rebuilt our website and within a few months we were finally showing up on Google for the searches that matter. Communication was clear the whole way.</blockquote>
+            <figcaption>
+              <span class="testi-avatar">U</span>
+              <div><strong>Usman R.</strong><small>Small business owner</small></div>
+            </figcaption>
+          </figure>
+          <figure class="testi reveal">
+            <blockquote>Fast turnaround, great pacing and he actually understands what keeps viewers watching. My channel's average view duration went up after we started working together.</blockquote>
+            <figcaption>
+              <span class="testi-avatar">H</span>
+              <div><strong>Hira S.</strong><small>YouTube creator</small></div>
+            </figcaption>
+          </figure>
+          <figure class="testi reveal">
+            <blockquote>Clean code, pixel-perfect to the Figma file and responsive on every device we tested. Exactly what we needed for the product launch page.</blockquote>
+            <figcaption>
+              <span class="testi-avatar">B</span>
+              <div><strong>Bilal A.</strong><small>Start-up founder</small></div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CONTACT
+         ============================================================ -->
+    <section id="contact" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-kicker">Contact</p>
+          <h2 class="section-title">Let's build something <span class="gradient-text">together</span></h2>
+          <p class="section-sub">Have a project, an idea or a video that needs editing? Send a message and I'll get back to you within a day.</p>
+        </header>
+
+        <div class="contact-grid">
+          <div class="contact-info reveal">
+            <div class="info-card">
+              <span class="info-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+              <div><small>Location</small><strong>Islamabad, Pakistan</strong></div>
+            </div>
+            <div class="info-card">
+              <span class="info-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div><small>Response time</small><strong>Within 24 hours</strong></div>
+            </div>
+            <div class="info-card">
+              <span class="info-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <div><small>Currently</small><strong>Open to freelance &amp; internships</strong></div>
+            </div>
+
+            <p class="contact-social-label">Find me online</p>
+            <ul class="socials socials-lg" aria-label="Social links">
+              <li><a href="https://github.com/raheemxghumman" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke="none" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+              <li><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke="none" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+              <li><a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></li>
+              <li><a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg></a></li>
+              <li><a href="#" aria-label="Behance"><svg viewBox="0 0 24 24" aria-hidden="true"><text x="2" y="17" font-size="13" font-weight="700" fill="currentColor" stroke="none" font-family="Inter, Arial, sans-serif">Bē</text></svg></a></li>
+            </ul>
+          </div>
+
+          <!-- Contact form (HTML only — wire up a backend or form service later) -->
+          <form class="contact-form reveal" action="#" method="post">
+            <div class="field-row">
+              <label class="field">
+                <span>Your name</span>
+                <input type="text" name="name" placeholder="Ahmed Khan" required>
+              </label>
+              <label class="field">
+                <span>Email address</span>
+                <input type="email" name="email" placeholder="you@example.com" required>
+              </label>
+            </div>
+            <label class="field">
+              <span>Subject</span>
+              <input type="text" name="subject" placeholder="Website redesign, SEO audit, video edit…">
+            </label>
+            <label class="field">
+              <span>Message</span>
+              <textarea name="message" rows="5" placeholder="Tell me a little about your project, timeline and budget." required></textarea>
+            </label>
+            <button type="submit" class="btn btn-primary btn-block">
+              Send message
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <a href="#home" class="brand" aria-label="Abdulraheem — home"><span class="brand-mark">AR</span><span class="brand-dot">.</span></a>
+      <p>© 2026 Abdulraheem. Designed &amp; built with HTML + CSS.</p>
+      <a href="#home" class="to-top" aria-label="Back to top">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </a>
+    </div>
+  </footer>
+
+</body>
+</html>
