@@ -49,11 +49,13 @@ Two pages that mirror the real facebook.com design:
 
 ![Portfolio](screenshots/task3-portfolio.png)
 
-Single-page portfolio for Abdulraheem (BS Computer Science, Air University Islamabad; born in Multan):
+Single-page portfolio for Abdulraheem (BS Computer Science, Air University Islamabad; born in Multan), designed as an editorial personal site rather than a template:
 
-- Sections: hero with animated tagline, about, skills with animated proficiency bars (Web Development, SEO, Video Editing, other), services, projects, education and experience timeline, testimonials, contact form, footer.
-- Projects link to real GitHub repositories: Notes by Raheem, Real-time Chat App, Insta Downloader, CIRO crisis-response hackathon project, Prompt Formatter, and this lab's UI work.
-- Dark / light theme toggle, CSS-only hamburger menu on mobile, glassmorphism cards, hover and entrance animations, `prefers-reduced-motion` support.
+- Warm paper palette with one accent colour and a warm dark mode (checkbox + `:has()`); serif display type (Fraunces) with Manrope body text and JetBrains Mono labels.
+- Hero: the name rises in letter by letter, a rotating role line, the real photo inside a continuously rotating text ring (SVG `textPath`), a tools ticker, and direct email, phone, LinkedIn and GitHub links.
+- Sections: About, Work (six featured project cards with SVG mockups plus a compact list), Skills as grouped tag clouds, Experience and Education timelines with a scroll-drawn line, and Contact with a large email link and an HTML-only form.
+- Motion done in CSS only: staggered reveals, `animation-timeline: scroll()` progress bar and `view()` section reveals with visible fallbacks, `@property` count-up numbers, tilt/zoom hovers, `prefers-reduced-motion` support. CSS-only hamburger menu on phones.
+- Projects link to real GitHub repositories (Notes by Raheem, Real-time Chat App, CIRO, Insta Downloader, Amaan Hope Clinic, EduConnect, Prompt Formatter, this lab) with private work (NexaLAN, PostPilot, dv-downloader API) listed without links.
 
 ## Task 4 — Custom UI: "Nova Home" Smart Home Control Panel
 
