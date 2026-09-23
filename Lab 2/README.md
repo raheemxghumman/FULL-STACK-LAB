@@ -1,0 +1,86 @@
+# Full Stack Web Development — Lab 2
+
+**Student:** Abdulraheem · **Class:** BSCS-V-A (Shift-I) · **Air University, Islamabad**
+
+Five front-end tasks built with **pure HTML5 + CSS3 only** — no JavaScript, no frameworks, no external
+images or icon fonts. Every icon is hand-written inline SVG and every illustration is CSS or SVG, so each
+page works fully offline. All interactivity (tabs, toggles, dark mode, menus) is done with CSS alone
+(`:hover`, `:checked`, `:has()`, `:focus-within`, counters, animations).
+
+| # | Task | Source | Live preview |
+|---|------|--------|--------------|
+| 1 | Class Timetable — BSCS-V-A (Shift-I) | [`Task-1-Timetable/`](Task-1-Timetable/) | [Open](https://raheemxghumman.github.io/FULL-STACK-LAB/Lab%202/Task-1-Timetable/) |
+| 2 | Facebook Home Page (login + news feed) | [`Task-2-Facebook/`](Task-2-Facebook/) | [Login page](https://raheemxghumman.github.io/FULL-STACK-LAB/Lab%202/Task-2-Facebook/) · [News feed](https://raheemxghumman.github.io/FULL-STACK-LAB/Lab%202/Task-2-Facebook/home.html) |
+| 3 | Personal Portfolio | [`Task-3-Portfolio/`](Task-3-Portfolio/) | [Open](https://raheemxghumman.github.io/FULL-STACK-LAB/Lab%202/Task-3-Portfolio/) |
+| 4 | Custom UI — "Nova Home" Smart Home Control Panel | [`Task-4-Custom-UI/`](Task-4-Custom-UI/) | [Open](https://raheemxghumman.github.io/FULL-STACK-LAB/Lab%202/Task-4-Custom-UI/) |
+| 5 | IEEE Conference Paper Template | [`Task-5-IEEE-Paper/`](Task-5-IEEE-Paper/) | [Open](https://raheemxghumman.github.io/FULL-STACK-LAB/Lab%202/Task-5-IEEE-Paper/) |
+
+To run locally, open any task's `index.html` in a browser — nothing to install.
+
+---
+
+## Task 1 — Class Timetable
+
+![Timetable](screenshots/task1-timetable.png)
+
+A faithful recreation of the official aSc timetable sheet for **BSCS-V-A (Shift-I)**, then upgraded:
+
+- Semantic `<table>` with `colspan` for the three-hour lab blocks (AI Lab, OS Lab, Full Stack Lab).
+- Every course has its own colour with a legend; instructor, course and room in every cell; labs are striped with a "LAB · 3 HOURS" badge.
+- Sticky day column while scrolling sideways, hover lift on cells, a course summary section with weekly hours and rooms.
+- **Responsive:** below 820 px the same table automatically turns into a day-by-day card list (using `data-time` attributes and `::before`), with a CSS-only checkbox to force the week grid.
+- Print stylesheet fits the timetable on one landscape page.
+
+CSS concepts: custom properties, `color-mix()`, `:has()`, `position: sticky`, `repeating-linear-gradient`, `attr()`, media queries, `@media print`.
+
+## Task 2 — Facebook Home Page
+
+| Login page | News feed | Dark mode |
+|---|---|---|
+| ![Login](screenshots/task2-facebook-login.png) | ![Feed](screenshots/task2-facebook-feed.png) | ![Dark](screenshots/task2-facebook-dark.png) |
+
+Two pages that mirror the real facebook.com design:
+
+- **`index.html`** — the logged-out landing page: wordmark, tagline, login card, "Create new account", language and links footer. The **Log in** button opens the feed.
+- **`home.html`** — the logged-in News Feed: fixed top bar (search, five nav tabs, menu / Messenger / notifications badge, avatar), left sidebar with shortcuts, stories row, "What's on your mind" composer, posts with reactions, comments and Like / Comment / Share, reels row, and the right sidebar (sponsored, birthdays, contacts with online dots, group chats).
+- **Dark mode** toggle (moon icon) implemented with a hidden checkbox and `body:has(:checked)` swapping CSS variables.
+- Sticky, independently scrolling sidebars; hover states everywhere; breakpoints at 1260 / 900 / 600 px down to a phone layout.
+- All icons are one inline SVG sprite; post images are hand-drawn SVG scenes; avatars are CSS gradients.
+
+## Task 3 — Portfolio
+
+![Portfolio](screenshots/task3-portfolio.png)
+
+Single-page portfolio for Abdulraheem (BS Computer Science, Air University Islamabad; born in Multan):
+
+- Sections: hero with animated tagline, about, skills with animated proficiency bars (Web Development, SEO, Video Editing, other), services, projects, education and experience timeline, testimonials, contact form, footer.
+- Projects link to real GitHub repositories: Notes by Raheem, Real-time Chat App, Insta Downloader, CIRO crisis-response hackathon project, Prompt Formatter, and this lab's UI work.
+- Dark / light theme toggle, CSS-only hamburger menu on mobile, glassmorphism cards, hover and entrance animations, `prefers-reduced-motion` support.
+
+## Task 4 — Custom UI: "Nova Home" Smart Home Control Panel
+
+| Desktop | Phone |
+|---|---|
+| ![Nova Home](screenshots/task4-nova-home.png) | ![Nova Home mobile](screenshots/task4-nova-home-mobile.png) |
+
+A fully interactive smart-home dashboard with **zero JavaScript**:
+
+- Room tabs and scene chips (radio inputs + `:has()`), 22 iOS-style toggle switches — a switched-on card glows in its own accent colour, its icon lights up and its status text changes; fans and purifiers spin only while on.
+- Ceiling-light colour picker that re-tints the card through a `--light-color` custom property.
+- Thermostat dial drawn with `conic-gradient` and an animated registered `@property`, working +/− controls (hidden radios 18–26 °C).
+- Pure-CSS 7-day energy bar chart with grow-in animation and hover tooltips; weather widget with rotating sun, drifting cloud and falling rain; music player with play/pause icon swap, progress bar and equalizer; 3D flip security-camera card with scanline and blinking REC.
+- Light-mode toggle, container queries for the device cards, scroll-snap scenes row, `clamp()` typography, glassmorphism with `backdrop-filter`, `prefers-reduced-motion`, focus-visible rings.
+- Responsive: three-column shell at desktop, right panel stacks at tablet, sidebar becomes a bottom tab bar on phones.
+
+## Task 5 — IEEE Conference Paper Template
+
+![IEEE template](screenshots/task5-ieee-paper.png)
+
+A pixel-accurate HTML/CSS reproduction of the instructor's `conference-template-letter.docx`, using the measurements read from the Word file:
+
+- US Letter sheets (8.5 × 11 in) with 0.75 in top, 1 in bottom and 0.62 in side margins, two 3.5 in columns with a 0.25 in gutter, Times New Roman throughout.
+- 24 pt title, 11 pt author names in the four-per-row author grid, 9 pt bold abstract and keywords, 10 pt justified body text, 8 pt captions and references, 6 pt table footnote.
+- Headings numbered with **CSS counters**: small-caps centred Heading 1 (I., II., …), italic Heading 2 (A., B., …), italic run-in Heading 3 (1), 2)), unnumbered Heading 5 for Acknowledgment and References.
+- Bullet lists, a numbered equation with the number flush right, TABLE I with caption above and lettered footnote, Fig. 1 with caption below, the first-page funding-agency footnote, and a bracketed reference list with hanging indents.
+- Content is paginated by hand into four fixed-size pages exactly where Word breaks it, so **Ctrl + P** prints or saves a true Letter-size PDF (`@page` rules remove the on-screen chrome).
+- On small screens the sheets scale down so the whole page stays readable.
