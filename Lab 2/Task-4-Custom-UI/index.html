@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Nova Home – a fully interactive smart-home control panel built with pure HTML and CSS (no JavaScript).">
+  <title>Nova Home · Smart Home Control Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- =====================================================================
+       GLOBAL STATE INPUTS (CSS-only interactivity)
+       These hidden checkboxes / radios hold the "app state". The stylesheet
+       reads them with :has() and :checked – no JavaScript anywhere.
+       ===================================================================== -->
+  <input type="checkbox" id="light-mode" class="sr-only">
+
+  <!-- Sidebar navigation state -->
+  <input type="radio" name="nav" id="nav-home" class="sr-only" checked>
+  <input type="radio" name="nav" id="nav-rooms" class="sr-only">
+  <input type="radio" name="nav" id="nav-energy" class="sr-only">
+  <input type="radio" name="nav" id="nav-security" class="sr-only">
+  <input type="radio" name="nav" id="nav-settings" class="sr-only">
+
+  <!-- Room tab state -->
+  <input type="radio" name="room" id="tab-living" class="sr-only" checked>
+  <input type="radio" name="room" id="tab-bedroom" class="sr-only">
+  <input type="radio" name="room" id="tab-kitchen" class="sr-only">
+  <input type="radio" name="room" id="tab-study" class="sr-only">
+
+  <!-- =====================================================================
+       SVG ICON SPRITE (inline, referenced with <use>) – no external assets
+       ===================================================================== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-logo" viewBox="0 0 24 24"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M12 22V12M3 7l9 5 9-5"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></symbol>
+      <symbol id="i-rooms" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+      <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></symbol>
+      <symbol id="i-tv" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+      <symbol id="i-ac" viewBox="0 0 24 24"><path d="M12 2v20M4.9 7l14.2 10M4.9 17 19.1 7"/><path d="m12 2-2.2 2.2M12 2l2.2 2.2M12 22l-2.2-2.2M12 22l2.2-2.2"/></symbol>
+      <symbol id="i-speaker" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="14" r="4"/><circle cx="12" cy="6.5" r="1"/></symbol>
+      <symbol id="i-fan" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10c0-4-2-7-5-6s-1 5 5 6zM14 12c4 0 7-2 6-5s-5-1-6 5zM12 14c0 4 2 7 5 6s1-5-5-6zM10 12c-4 0-7 2-6 5s5 1 6-5z"/></symbol>
+      <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 2v2M10 2v2M14 2v2"/></symbol>
+      <symbol id="i-vacuum" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M3 12h3M12 18v3M18 12h3"/></symbol>
+      <symbol id="i-lamp" viewBox="0 0 24 24"><path d="M8 2h8l4 10H4z"/><path d="M12 12v7"/><path d="M8 22h8"/></symbol>
+      <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5 5 0 0 1 7 0"/><path d="M2 9a14 14 0 0 1 20 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></symbol>
+      <symbol id="i-curtain" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M12 3v18"/><path d="M5 3c2 6 2 12 0 18M19 3c-2 6-2 12 0 18"/></symbol>
+      <symbol id="i-wind" viewBox="0 0 24 24"><path d="M4 8h9a3 3 0 1 0-3-3"/><path d="M4 12h14a3 3 0 1 1-3 3"/><path d="M4 16h7a2 2 0 1 1-2 2"/></symbol>
+      <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .5-9 7 7 0 0 0-13.4 2A4 4 0 0 0 6 19z"/></symbol>
+      <symbol id="i-rain" viewBox="0 0 24 24"><path d="M16 13a4 4 0 0 0 .5-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 6 13z"/><path d="M8 16v3M12 16v4M16 16v3"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4v16l13-8z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor" stroke="none"/><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-next" viewBox="0 0 24 24"><path d="M5 4v16l10-8z" fill="currentColor" stroke="none"/><path d="M19 4v16"/></symbol>
+      <symbol id="i-prev" viewBox="0 0 24 24"><path d="M19 4v16L9 12z" fill="currentColor" stroke="none"/><path d="M5 4v16"/></symbol>
+      <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24"><path d="m15 10 5-3v10l-5-3"/><rect x="2" y="6" width="13" height="12" rx="2"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></symbol>
+      <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 2v6M15 2v6"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v5"/></symbol>
+      <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12a7 7 0 0 1-14 0c0-4.5 7-12 7-12z"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+      <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></symbol>
+      <symbol id="i-flip" viewBox="0 0 24 24"><path d="M3 7h13l-3-3M21 17H8l3 3"/></symbol>
+      <symbol id="i-door" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16"/><path d="M2 21h20"/><circle cx="15" cy="12" r="1" fill="currentColor"/></symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- Animated background blobs + grid (purely decorative) -->
+  <div class="bg" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <div class="app">
+
+    <!-- =================================================================
+         SIDEBAR – icon navigation (radio hack for the active indicator,
+         tooltips via ::after on hover)
+         ================================================================= -->
+    <aside class="sidebar">
+      <a class="logo" href="#top" aria-label="Nova Home">
+        <svg><use href="#i-logo"/></svg>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <label class="nav-btn" for="nav-home" data-tip="Home"><svg><use href="#i-home"/></svg></label>
+        <label class="nav-btn" for="nav-rooms" data-tip="Rooms"><svg><use href="#i-rooms"/></svg></label>
+        <label class="nav-btn" for="nav-energy" data-tip="Energy"><svg><use href="#i-bolt"/></svg></label>
+        <label class="nav-btn" for="nav-security" data-tip="Security"><svg><use href="#i-shield"/></svg></label>
+        <label class="nav-btn" for="nav-settings" data-tip="Settings"><svg><use href="#i-gear"/></svg></label>
+      </nav>
+      <div class="side-avatar" title="Abdulraheem">A</div>
+    </aside>
+
+    <!-- =================================================================
+         MAIN AREA
+         ================================================================= -->
+    <main class="main" id="top">
+
+      <!-- Header -->
+      <header class="topbar">
+        <div class="greet">
+          <h1>Good evening, <span>Abdulraheem</span></h1>
+          <p>Wednesday, 23 September 2026 · 4 members home</p>
+        </div>
+        <div class="topbar-right">
+          <span class="chip weather-chip"><svg><use href="#i-rain"/></svg> Islamabad · 24°C</span>
+          <label class="search" aria-label="Search">
+            <svg><use href="#i-search"/></svg>
+            <input type="search" placeholder="Search devices, rooms, scenes…">
+          </label>
+          <label class="icon-btn theme-toggle" for="light-mode" title="Toggle light mode">
+            <svg class="ico-moon"><use href="#i-moon"/></svg>
+            <svg class="ico-sun"><use href="#i-sun"/></svg>
+          </label>
+          <a class="icon-btn bell" href="#activity" title="Notifications">
+            <svg><use href="#i-bell"/></svg><b>3</b>
+          </a>
+          <div class="avatar" title="Abdulraheem">A<i></i></div>
+        </div>
+      </header>
+
+      <!-- Rooms tabs + Scenes -->
+      <section class="rooms-row">
+        <div class="tabs" role="tablist" aria-label="Rooms">
+          <label class="tab" for="tab-living">Living Room <b>7</b></label>
+          <label class="tab" for="tab-bedroom">Bedroom <b>5</b></label>
+          <label class="tab" for="tab-kitchen">Kitchen <b>5</b></label>
+          <label class="tab" for="tab-study">Study <b>5</b></label>
+        </div>
+
+        <div class="scenes" aria-label="Scenes">
+          <label class="scene"><input type="radio" name="scene"><svg><use href="#i-sun"/></svg>Good Morning</label>
+          <label class="scene"><input type="radio" name="scene" checked><svg><use href="#i-tv"/></svg>Movie Night</label>
+          <label class="scene"><input type="radio" name="scene"><svg><use href="#i-lock"/></svg>Away</label>
+          <label class="scene"><input type="radio" name="scene"><svg><use href="#i-moon"/></svg>Sleep</label>
+        </div>
+      </section>
+
+      <!-- =============================================================
+           DEVICE PANELS – one per room, shown via body:has(#tab-x:checked)
+           Each card: hidden checkbox + iOS-style switch; :has(:checked)
+           makes the card glow, lights the icon and swaps the status text.
+           ============================================================= -->
+
+      <!-- Living Room -->
+      <section class="panel panel-living" aria-label="Living Room devices">
+
+        <article class="dev dev-light">
+          <input type="checkbox" id="d-lr-lights" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-bulb"/></svg></span>
+            <label class="sw" for="d-lr-lights" aria-label="Toggle Ceiling Lights"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Ceiling Lights</h3>
+          <p class="dev-meta">6 bulbs · 72% brightness</p>
+          <p class="dev-status" data-on="On" data-off="Off"></p>
+          <div class="dev-extra">
+            <label class="range-row">
+              <span>Brightness</span>
+              <input type="range" min="0" max="100" value="72" aria-label="Brightness">
+            </label>
+            <div class="swatches" aria-label="Light colour">
+              <label class="swatch" style="--c:#ffb86b" title="Warm"><input type="radio" name="lcolor" id="c-warm" checked><span></span></label>
+              <label class="swatch" style="--c:#fff4d6" title="Daylight"><input type="radio" name="lcolor" id="c-day"><span></span></label>
+              <label class="swatch" style="--c:#7c5cff" title="Violet"><input type="radio" name="lcolor" id="c-violet"><span></span></label>
+              <label class="swatch" style="--c:#22d3ee" title="Cyan"><input type="radio" name="lcolor" id="c-cyan"><span></span></label>
+              <label class="swatch" style="--c:#34d399" title="Mint"><input type="radio" name="lcolor" id="c-mint"><span></span></label>
+              <label class="swatch" style="--c:#fb7185" title="Rose"><input type="radio" name="lcolor" id="c-rose"><span></span></label>
+            </div>
+          </div></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#22d3ee">
+          <input type="checkbox" id="d-lr-tv" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-tv"/></svg></span>
+            <label class="sw" for="d-lr-tv" aria-label="Toggle Smart TV"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Smart TV</h3>
+          <p class="dev-meta">Playing · Netflix</p>
+          <p class="dev-status" data-on="On" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#60a5fa">
+          <input type="checkbox" id="d-lr-ac" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-ac"/></svg></span>
+            <label class="sw" for="d-lr-ac" aria-label="Toggle Air Conditioner"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Air Conditioner</h3>
+          <p class="dev-meta">Cool · 22°C · Fan auto</p>
+          <p class="dev-status" data-on="Cooling" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#f472b6">
+          <input type="checkbox" id="d-lr-speaker" class="sw-in">
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-speaker"/></svg></span>
+            <label class="sw" for="d-lr-speaker" aria-label="Toggle Speaker"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Speaker</h3>
+          <p class="dev-meta">Nova Sound · Volume 35%</p>
+          <p class="dev-status" data-on="Playing" data-off="Idle"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#a78bfa">
+          <input type="checkbox" id="d-lr-curtains" class="sw-in">
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-curtain"/></svg></span>
+            <label class="sw" for="d-lr-curtains" aria-label="Toggle Curtains"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Curtains</h3>
+          <p class="dev-meta">Motorised · 2 windows</p>
+          <p class="dev-status" data-on="Open" data-off="Closed"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#34d399">
+          <input type="checkbox" id="d-lr-purifier" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico spin-slow"><svg><use href="#i-wind"/></svg></span>
+            <label class="sw" for="d-lr-purifier" aria-label="Toggle Air Purifier"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Air Purifier</h3>
+          <p class="dev-meta">AQI 42 · Good</p>
+          <p class="dev-status" data-on="Running" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#fbbf24">
+          <input type="checkbox" id="d-lr-lock" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-lock"/></svg></span>
+            <label class="sw" for="d-lr-lock" aria-label="Toggle Door Lock"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Front Door Lock</h3>
+          <p class="dev-meta">Auto-lock at 11:00 pm</p>
+          <p class="dev-status" data-on="Locked" data-off="Unlocked"></p></div>
+        </article>
+      </section>
+
+      <!-- Bedroom -->
+      <section class="panel panel-bedroom" aria-label="Bedroom devices">
+        <article class="dev" style="--dev-accent:#ffb86b">
+          <input type="checkbox" id="d-br-lamp" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-lamp"/></svg></span>
+            <label class="sw" for="d-br-lamp" aria-label="Toggle Bedside Lamp"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Bedside Lamp</h3>
+          <p class="dev-meta">Warm white · 40%</p>
+          <p class="dev-status" data-on="On" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#22d3ee">
+          <input type="checkbox" id="d-br-fan" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico spin"><svg><use href="#i-fan"/></svg></span>
+            <label class="sw" for="d-br-fan" aria-label="Toggle Ceiling Fan"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Ceiling Fan</h3>
+          <p class="dev-meta">Speed 3 of 5</p>
+          <p class="dev-status" data-on="Spinning" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#60a5fa">
+          <input type="checkbox" id="d-br-ac" class="sw-in">
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-ac"/></svg></span>
+            <label class="sw" for="d-br-ac" aria-label="Toggle Air Conditioner"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Air Conditioner</h3>
+          <p class="dev-meta">Scheduled · 10:30 pm</p>
+          <p class="dev-status" data-on="Cooling" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#22d3ee">
+          <input type="checkbox" id="d-br-tv" class="sw-in">
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-tv"/></svg></span>
+            <label class="sw" for="d-br-tv" aria-label="Toggle Smart TV"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Smart TV</h3>
+          <p class="dev-meta">Standby</p>
+          <p class="dev-status" data-on="On" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#a78bfa">
+          <input type="checkbox" id="d-br-curtains" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-curtain"/></svg></span>
+            <label class="sw" for="d-br-curtains" aria-label="Toggle Curtains"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Curtains</h3>
+          <p class="dev-meta">Opens at sunrise 6:05 am</p>
+          <p class="dev-status" data-on="Open" data-off="Closed"></p></div>
+        </article>
+      </section>
+
+      <!-- Kitchen -->
+      <section class="panel panel-kitchen" aria-label="Kitchen devices">
+        <article class="dev" style="--dev-accent:#f59e0b">
+          <input type="checkbox" id="d-kt-coffee" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-coffee"/></svg></span>
+            <label class="sw" for="d-kt-coffee" aria-label="Toggle Coffee Maker"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Coffee Maker</h3>
+          <p class="dev-meta">Espresso · ready in 2 min</p>
+          <p class="dev-status" data-on="Brewing" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#fff4d6">
+          <input type="checkbox" id="d-kt-lights" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-bulb"/></svg></span>
+            <label class="sw" for="d-kt-lights" aria-label="Toggle Kitchen Lights"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Kitchen Lights</h3>
+          <p class="dev-meta">4 spots · 100%</p>
+          <p class="dev-status" data-on="On" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#34d399">
+          <input type="checkbox" id="d-kt-vacuum" class="sw-in">
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico spin-slow"><svg><use href="#i-vacuum"/></svg></span>
+            <label class="sw" for="d-kt-vacuum" aria-label="Toggle Robot Vacuum"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Robot Vacuum</h3>
+          <p class="dev-meta">Docked · Battery 96%</p>
+          <p class="dev-status" data-on="Cleaning" data-off="Docked"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#60a5fa">
+          <input type="checkbox" id="d-kt-dish" class="sw-in">
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-drop"/></svg></span>
+            <label class="sw" for="d-kt-dish" aria-label="Toggle Dishwasher"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Dishwasher</h3>
+          <p class="dev-meta">Eco cycle · 1 h 40 min</p>
+          <p class="dev-status" data-on="Washing" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#34d399">
+          <input type="checkbox" id="d-kt-purifier" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico spin-slow"><svg><use href="#i-wind"/></svg></span>
+            <label class="sw" for="d-kt-purifier" aria-label="Toggle Air Purifier"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Air Purifier</h3>
+          <p class="dev-meta">AQI 38 · Good</p>
+          <p class="dev-status" data-on="Running" data-off="Off"></p></div>
+        </article>
+      </section>
+
+      <!-- Study -->
+      <section class="panel panel-study" aria-label="Study devices">
+        <article class="dev" style="--dev-accent:#ffb86b">
+          <input type="checkbox" id="d-st-lamp" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-lamp"/></svg></span>
+            <label class="sw" for="d-st-lamp" aria-label="Toggle Desk Lamp"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Desk Lamp</h3>
+          <p class="dev-meta">Focus mode · 4000 K</p>
+          <p class="dev-status" data-on="On" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#22d3ee">
+          <input type="checkbox" id="d-st-wifi" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-wifi"/></svg></span>
+            <label class="sw" for="d-st-wifi" aria-label="Toggle Wi-Fi Router"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Wi-Fi Router</h3>
+          <p class="dev-meta">Nova-5G · 14 devices</p>
+          <p class="dev-status" data-on="Online" data-off="Offline"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#a78bfa">
+          <input type="checkbox" id="d-st-plug" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-plug"/></svg></span>
+            <label class="sw" for="d-st-plug" aria-label="Toggle Smart Plug"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Smart Plug · PC</h3>
+          <p class="dev-meta">Drawing 180 W</p>
+          <p class="dev-status" data-on="On" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#22d3ee">
+          <input type="checkbox" id="d-st-fan" class="sw-in">
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico spin"><svg><use href="#i-fan"/></svg></span>
+            <label class="sw" for="d-st-fan" aria-label="Toggle Fan"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Pedestal Fan</h3>
+          <p class="dev-meta">Speed 1 of 3</p>
+          <p class="dev-status" data-on="Spinning" data-off="Off"></p></div>
+        </article>
+
+        <article class="dev" style="--dev-accent:#f472b6">
+          <input type="checkbox" id="d-st-speaker" class="sw-in" checked>
+          <div class="dev-body"><div class="dev-top">
+            <span class="dev-ico"><svg><use href="#i-speaker"/></svg></span>
+            <label class="sw" for="d-st-speaker" aria-label="Toggle Speaker"><span class="knob"></span></label>
+          </div>
+          <h3 class="dev-name">Speaker</h3>
+          <p class="dev-meta">Lo-Fi Focus · 20%</p>
+          <p class="dev-status" data-on="Playing" data-off="Idle"></p></div>
+        </article>
+      </section>
+
+      <!-- =============================================================
+           WIDGETS – thermostat, weather, music, energy, security camera
+           ============================================================= -->
+      <section class="widgets">
+
+        <!-- Thermostat: conic-gradient dial; +/- implemented with stacked
+             labels that point at the next/previous hidden radio -->
+        <article class="card thermo">
+          <input type="radio" name="temp" id="t-18" class="sr-only">
+          <input type="radio" name="temp" id="t-19" class="sr-only">
+          <input type="radio" name="temp" id="t-20" class="sr-only">
+          <input type="radio" name="temp" id="t-21" class="sr-only">
+          <input type="radio" name="temp" id="t-22" class="sr-only" checked>
+          <input type="radio" name="temp" id="t-23" class="sr-only">
+          <input type="radio" name="temp" id="t-24" class="sr-only">
+          <input type="radio" name="temp" id="t-25" class="sr-only">
+          <input type="radio" name="temp" id="t-26" class="sr-only">
+
+          <header class="card-head">
+            <h3><svg><use href="#i-thermo"/></svg> Thermostat</h3>
+            <span class="chip">Living room</span>
+          </header>
+
+          <div class="dial-wrap">
+            <div class="dial-ring"></div>
+            <div class="dial-inner">
+              <span class="temp"></span>
+              <span class="mode"></span>
+            </div>
+          </div>
+
+          <div class="thermo-ctl">
+            <span class="tbtn minus" aria-hidden="false">
+              <label for="t-18" aria-label="Decrease to 18"></label>
+              <label for="t-19" aria-label="Decrease to 19"></label>
+              <label for="t-20" aria-label="Decrease to 20"></label>
+              <label for="t-21" aria-label="Decrease to 21"></label>
+              <label for="t-22" aria-label="Decrease to 22"></label>
+              <label for="t-23" aria-label="Decrease to 23"></label>
+              <label for="t-24" aria-label="Decrease to 24"></label>
+              <label for="t-25" aria-label="Decrease to 25"></label>
+            </span>
+            <div class="thermo-info">
+              <span>Room 22° · Humidity 46%</span>
+              <small>Eco schedule active</small>
+            </div>
+            <span class="tbtn plus">
+              <label for="t-19" aria-label="Increase to 19"></label>
+              <label for="t-20" aria-label="Increase to 20"></label>
+              <label for="t-21" aria-label="Increase to 21"></label>
+              <label for="t-22" aria-label="Increase to 22"></label>
+              <label for="t-23" aria-label="Increase to 23"></label>
+              <label for="t-24" aria-label="Increase to 24"></label>
+              <label for="t-25" aria-label="Increase to 25"></label>
+              <label for="t-26" aria-label="Increase to 26"></label>
+            </span>
+          </div>
+        </article>
+
+        <!-- Weather: animated sun rays, drifting cloud, falling rain -->
+        <article class="card weather">
+          <header class="card-head">
+            <h3><svg><use href="#i-cloud"/></svg> Weather</h3>
+            <span class="chip">Islamabad</span>
+          </header>
+          <div class="w-body">
+            <div class="sky" aria-hidden="true">
+              <div class="sun"></div>
+              <div class="cloud"></div>
+              <div class="rain"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+            <div class="w-main">
+              <strong>24°C</strong>
+              <span>Light rain</span>
+              <small>Feels like 26° · Humidity 78%</small>
+            </div>
+          </div>
+          <ul class="w-days">
+            <li><span>Thu</span><svg><use href="#i-rain"/></svg><b>23°</b></li>
+            <li><span>Fri</span><svg><use href="#i-cloud"/></svg><b>25°</b></li>
+            <li><span>Sat</span><svg><use href="#i-sun"/></svg><b>29°</b></li>
+            <li><span>Sun</span><svg><use href="#i-sun"/></svg><b>30°</b></li>
+          </ul>
+        </article>
+
+        <!-- Music player: play/pause via checkbox, equalizer bars animate only while playing -->
+        <article class="card player">
+          <input type="checkbox" id="play" class="sr-only" checked>
+          <header class="card-head">
+            <h3><svg><use href="#i-speaker"/></svg> Now playing</h3>
+            <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          </header>
+          <div class="track">
+            <div class="art" aria-hidden="true"><svg><use href="#i-sparkle"/></svg></div>
+            <div class="track-info">
+              <strong>Lo-Fi Focus</strong>
+              <span>Nova Radio · Study mix</span>
+            </div>
+          </div>
+          <div class="progress" aria-hidden="true"><i></i></div>
+          <div class="times"><span>1:24</span><span>3:48</span></div>
+          <div class="controls">
+            <button type="button" class="ctl" aria-label="Previous"><svg><use href="#i-prev"/></svg></button>
+            <label class="ctl big" for="play" aria-label="Play / pause">
+              <svg class="ico-play"><use href="#i-play"/></svg>
+              <svg class="ico-pause"><use href="#i-pause"/></svg>
+            </label>
+            <button type="button" class="ctl" aria-label="Next"><svg><use href="#i-next"/></svg></button>
+          </div>
+        </article>
+
+        <!-- Energy: pure-CSS bar chart with grow animation and hover tooltips -->
+        <article class="card energy">
+          <header class="card-head">
+            <h3><svg><use href="#i-bolt"/></svg> Energy usage</h3>
+            <span class="chip down">−12% vs last week</span>
+          </header>
+          <div class="e-total"><strong>18.4</strong><span>kWh today</span><em>≈ Rs 640</em></div>
+          <div class="chart" role="img" aria-label="Energy usage for the last 7 days in kWh">
+            <div class="bar" style="--h:58%" data-kwh="17.3"><span>Thu</span></div>
+            <div class="bar" style="--h:72%" data-kwh="21.5"><span>Fri</span></div>
+            <div class="bar" style="--h:84%" data-kwh="25.1"><span>Sat</span></div>
+            <div class="bar" style="--h:66%" data-kwh="19.8"><span>Sun</span></div>
+            <div class="bar" style="--h:49%" data-kwh="14.6"><span>Mon</span></div>
+            <div class="bar" style="--h:55%" data-kwh="16.4"><span>Tue</span></div>
+            <div class="bar today" style="--h:62%" data-kwh="18.4"><span>Wed</span></div>
+          </div>
+          <ul class="e-legend">
+            <li><i style="--c:#7c5cff"></i>Climate 41%</li>
+            <li><i style="--c:#22d3ee"></i>Lighting 22%</li>
+            <li><i style="--c:#34d399"></i>Kitchen 19%</li>
+            <li><i style="--c:#ffb86b"></i>Other 18%</li>
+          </ul>
+        </article>
+
+        <!-- Security camera: 3D flip card (hover or the Details toggle) -->
+        <article class="card cam">
+          <input type="checkbox" id="cam-flip" class="sr-only">
+          <div class="flip">
+            <div class="flip-inner">
+              <div class="face front">
+                <div class="feed" aria-hidden="true">
+                  <div class="scan"></div>
+                  <span class="rec"><i></i>REC</span>
+                  <span class="cam-time">21:42:07</span>
+                  <svg class="door"><use href="#i-door"/></svg>
+                  <span class="cam-label">Front door · 1080p · Night vision</span>
+                </div>
+                <div class="cam-bar">
+                  <h3><svg><use href="#i-camera"/></svg> Security camera</h3>
+                  <label for="cam-flip" class="btn-sm"><svg><use href="#i-flip"/></svg> Details</label>
+                </div>
+              </div>
+              <div class="face back">
+                <h3>Front door camera</h3>
+                <ul class="cam-details">
+                  <li><span>Status</span><b class="ok">Armed · Recording</b></li>
+                  <li><span>Motion events today</span><b>4</b></li>
+                  <li><span>Last motion</span><b>19:36 · Delivery</b></li>
+                  <li><span>Storage</span><b>62% of 128 GB</b></li>
+                  <li><span>Battery</span><b>Wired</b></li>
+                </ul>
+                <div class="cam-actions">
+                  <a class="btn" href="#activity">View recordings</a>
+                  <label for="cam-flip" class="btn-sm ghost">Back</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <footer class="app-foot">
+        Built with pure HTML + CSS · Grid · Flexbox · Custom properties · :has() · Container queries · Animations · 3D transforms · conic-gradient · No JavaScript
+      </footer>
+    </main>
+
+    <!-- =================================================================
+         RIGHT PANEL – activity feed, energy tiles, members, quick actions
+         ================================================================= -->
+    <aside class="rightpanel" id="activity">
+
+      <section class="card side-card">
+        <header class="card-head">
+          <h3>Activity</h3>
+          <a href="#activity" class="link">See all</a>
+        </header>
+        <ul class="activity">
+          <li><i class="badge" style="--c:#fbbf24"><svg><use href="#i-lock"/></svg></i><div><b>Front door locked</b><span>Auto-lock · 21:40</span></div></li>
+          <li><i class="badge" style="--c:#fb7185"><svg><use href="#i-camera"/></svg></i><div><b>Motion detected</b><span>Front door camera · 19:36</span></div></li>
+          <li><i class="badge" style="--c:#22d3ee"><svg><use href="#i-ac"/></svg></i><div><b>AC set to 22°C</b><span>Living room · 18:05</span></div></li>
+          <li><i class="badge" style="--c:#34d399"><svg><use href="#i-vacuum"/></svg></i><div><b>Vacuum finished</b><span>Kitchen · 16:20 · 24 min</span></div></li>
+          <li><i class="badge" style="--c:#7c5cff"><svg><use href="#i-sparkle"/></svg></i><div><b>“Movie Night” scene ran</b><span>Living room · 20:00</span></div></li>
+        </ul>
+      </section>
+
+      <section class="card side-card">
+        <header class="card-head"><h3>Energy today</h3></header>
+        <div class="tiles">
+          <div class="tile"><span>Usage</span><b>18.4</b><small>kWh</small></div>
+          <div class="tile"><span>Solar</span><b>6.2</b><small>kWh</small></div>
+          <div class="tile"><span>Cost</span><b>640</b><small>PKR</small></div>
+        </div>
+      </section>
+
+      <section class="card side-card">
+        <header class="card-head"><h3>Members home</h3><span class="chip">4 / 5</span></header>
+        <div class="members">
+          <div class="stack">
+            <span style="--g:linear-gradient(135deg,#7c5cff,#22d3ee)">A</span>
+            <span style="--g:linear-gradient(135deg,#fb7185,#fbbf24)">S</span>
+            <span style="--g:linear-gradient(135deg,#34d399,#22d3ee)">H</span>
+            <span style="--g:linear-gradient(135deg,#f472b6,#a78bfa)">M</span>
+            <span class="away" style="--g:linear-gradient(135deg,#64748b,#94a3b8)">Z</span>
+          </div>
+          <p>Zain is away · Expected 23:15</p>
+        </div>
+      </section>
+
+      <section class="card side-card">
+        <header class="card-head"><h3>Quick actions</h3></header>
+        <div class="quick">
+          <a href="#top" class="qa"><svg><use href="#i-lock"/></svg>Lock all</a>
+          <a href="#top" class="qa"><svg><use href="#i-bulb"/></svg>Lights off</a>
+          <a href="#top" class="qa"><svg><use href="#i-vacuum"/></svg>Vacuum</a>
+          <a href="#top" class="qa"><svg><use href="#i-power"/></svg>Away mode</a>
+        </div>
+      </section>
+
+    </aside>
+  </div>
+</body>
+</html>
