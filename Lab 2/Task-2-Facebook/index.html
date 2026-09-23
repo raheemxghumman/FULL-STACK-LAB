@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Facebook home page clone (logged-out landing page) built with pure HTML and CSS.">
+  <title>Facebook – log in or sign up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+
+  <!-- ============ HERO: wordmark + tagline + login card ============ -->
+  <main class="login-hero">
+    <div class="login-hero__inner">
+
+      <section class="login-intro">
+        <h1 class="wordmark">facebook</h1>
+        <p class="tagline">Facebook helps you connect and share with the people in your life.</p>
+      </section>
+
+      <section class="login-panel">
+        <!-- Inputs have no "name" so nothing is put in the URL; Log in simply opens the feed. -->
+        <form class="login-card" action="home.html" method="get">
+          <input type="text" placeholder="Email address or phone number" aria-label="Email address or phone number" autocomplete="username">
+          <input type="password" placeholder="Password" aria-label="Password" autocomplete="current-password">
+          <button type="submit" class="btn btn--primary">Log in</button>
+          <a class="login-card__forgot" href="#">Forgotten password?</a>
+          <hr class="login-card__divider">
+          <a class="btn btn--success" href="#">Create new account</a>
+        </form>
+        <p class="login-create"><a href="#">Create a Page</a> for a celebrity, brand or business.</p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ============ FOOTER: languages + links ============ -->
+  <footer class="login-footer">
+    <div class="login-footer__inner">
+      <ul class="login-footer__langs">
+        <li>English (UK)</li>
+        <li><a href="#" lang="ur">اردو</a></li>
+        <li><a href="#" lang="pa">پنجابی</a></li>
+        <li><a href="#" lang="ps">پښتو</a></li>
+        <li><a href="#" lang="es">Español</a></li>
+        <li><a href="#" lang="fr">Français</a></li>
+        <li><a href="#" lang="de">Deutsch</a></li>
+        <li><a href="#" lang="zh-Hans">中文(简体)</a></li>
+        <li><a href="#" lang="ar">العربية</a></li>
+        <li><a href="#" lang="pt-BR">Português (Brasil)</a></li>
+        <li><a class="login-footer__plus" href="#" aria-label="More languages">+</a></li>
+      </ul>
+      <hr class="login-footer__rule">
+      <ul class="login-footer__links">
+        <li><a href="#">Sign Up</a></li>
+        <li><a href="#">Log in</a></li>
+        <li><a href="#">Messenger</a></li>
+        <li><a href="#">Facebook Lite</a></li>
+        <li><a href="#">Video</a></li>
+        <li><a href="#">Meta Pay</a></li>
+        <li><a href="#">Meta Store</a></li>
+        <li><a href="#">Meta Quest</a></li>
+        <li><a href="#">Ray-Ban Meta</a></li>
+        <li><a href="#">Meta AI</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Threads</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Privacy Centre</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Create ad</a></li>
+        <li><a href="#">Create Page</a></li>
+        <li><a href="#">Developers</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Cookies</a></li>
+        <li><a href="#">AdChoices</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Help</a></li>
+        <li><a href="#">Contact uploading and non-users</a></li>
+      </ul>
+      <p class="login-footer__copy">Meta © 2026</p>
+    </div>
+  </footer>
+
+</body>
+</html>

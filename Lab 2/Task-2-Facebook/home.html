@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Facebook News Feed clone (logged-in home page) built with pure HTML and CSS — no JavaScript.">
+  <title>(3) Facebook</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="feed-page">
+
+  <!-- Dark-mode state lives in this checkbox; the label in the header toggles it (see style.css §8). -->
+  <input type="checkbox" id="dark" class="sr-only">
+
+  <!-- ============ SVG ICON SPRITE (referenced with <use href="#…">) ============ -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M12 2.6 1.9 11.4a1 1 0 0 0 .65 1.76H4.5V20a1.5 1.5 0 0 0 1.5 1.5h4v-6.3h4v6.3h4A1.5 1.5 0 0 0 19.5 20v-6.84h1.95a1 1 0 0 0 .65-1.76Z"/></symbol>
+    <symbol id="i-video" viewBox="0 0 24 24"><path d="M3.5 4h17A2.5 2.5 0 0 1 23 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-17A2.5 2.5 0 0 1 1 17.5v-11A2.5 2.5 0 0 1 3.5 4Z"/><path d="M9.5 8.3v7.4a.6.6 0 0 0 .92.5l5.9-3.7a.6.6 0 0 0 0-1l-5.9-3.7a.6.6 0 0 0-.92.5Z" fill="var(--card)"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 3h16l2 6.2a3.2 3.2 0 0 1-6.1 1.3A3.2 3.2 0 0 1 12 12a3.2 3.2 0 0 1-3.9-1.5A3.2 3.2 0 0 1 2 9.2Z"/><path d="M3.5 12.6a4.7 4.7 0 0 0 4.6-.5 4.7 4.7 0 0 0 7.8 0 4.7 4.7 0 0 0 4.6.5V20a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 20Z"/><path d="M9.5 21.5v-5.2a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5.2Z" fill="var(--card)"/></symbol>
+    <symbol id="i-groups" viewBox="0 0 24 24"><circle cx="8.5" cy="7.5" r="3.5"/><circle cx="17" cy="8.5" r="2.8"/><path d="M1.5 19.5a7 7 0 0 1 14 0v1.5h-14Z"/><path d="M16.2 21v-1.5a8.9 8.9 0 0 0-1.7-5.2A4.8 4.8 0 0 1 22.5 18v3Z"/></symbol>
+    <symbol id="i-gaming" viewBox="0 0 24 24"><path d="M7.5 6h9a5.5 5.5 0 0 1 5.45 6.3l-.7 4.8a2.7 2.7 0 0 1-4.75 1.4l-2-2.5h-5l-2 2.5a2.7 2.7 0 0 1-4.75-1.4l-.7-4.8A5.5 5.5 0 0 1 7.5 6Z"/><path d="M6.5 9.8h1.6v1.7h1.7v1.6H8.1v1.7H6.5v-1.7H4.8v-1.6h1.7Z" fill="var(--card)"/><circle cx="16.2" cy="10.6" r="1.1" fill="var(--card)"/><circle cx="18.5" cy="12.9" r="1.1" fill="var(--card)"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><path d="M2.5 2.5h5.2v5.2H2.5zM9.4 2.5h5.2v5.2H9.4zM16.3 2.5h5.2v5.2h-5.2zM2.5 9.4h5.2v5.2H2.5zM9.4 9.4h5.2v5.2H9.4zM16.3 9.4h5.2v5.2h-5.2zM2.5 16.3h5.2v5.2H2.5zM9.4 16.3h5.2v5.2H9.4zM16.3 16.3h5.2v5.2h-5.2z"/></symbol>
+    <symbol id="i-messenger" viewBox="0 0 24 24"><path d="M12 2C6.4 2 2 6.1 2 11.4c0 3 1.4 5.6 3.7 7.3V22l3.5-1.9c.9.2 1.8.4 2.8.4 5.6 0 10-4.1 10-9.4S17.6 2 12 2Zm1 12.7-2.5-2.7L5.5 14.7l5.5-5.8 2.6 2.7 4.9-2.7Z"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M12 2a6.5 6.5 0 0 0-6.5 6.5v3.7l-1.8 3.3a1.2 1.2 0 0 0 1.05 1.8h14.5a1.2 1.2 0 0 0 1.05-1.8l-1.8-3.3V8.5A6.5 6.5 0 0 0 12 2Zm-2.8 16.8a2.8 2.8 0 0 0 5.6 0Z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><path d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4.3 4.3-1.4 1.4-4.3-4.3A7.5 7.5 0 1 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm7.9 9h-3.4a15.7 15.7 0 0 0-1.3-5.5A8 8 0 0 1 19.9 11ZM12 4.1c1 1.3 1.9 3.8 2.3 6.9H9.7c.4-3.1 1.3-5.6 2.3-6.9ZM4.1 13h3.4c.1 2 .6 3.9 1.3 5.5A8 8 0 0 1 4.1 13Zm3.4-2H4.1a8 8 0 0 1 4.7-5.5A15.7 15.7 0 0 0 7.5 11ZM12 19.9c-1-1.3-1.9-3.8-2.3-6.9h4.6c-.4 3.1-1.3 5.6-2.3 6.9Zm3.2-1.4c.7-1.6 1.2-3.5 1.3-5.5h3.4a8 8 0 0 1-4.7 5.5Z"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></symbol>
+    <symbol id="i-like" viewBox="0 0 24 24"><path d="M2.5 10.5h4v10h-4zM7.5 11.2l4-8.2a2.6 2.6 0 0 1 2.4 2.6v3.4h5.2a2.6 2.6 0 0 1 2.5 3.2l-1.6 6.6a2.6 2.6 0 0 1-2.5 2H7.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
+    <symbol id="i-comment" viewBox="0 0 24 24"><path d="M12 2.8c-5.5 0-10 3.9-10 8.7 0 2.4 1.1 4.6 2.9 6.1L4 21.5l4.6-2c1 .3 2.2.5 3.4.5 5.5 0 10-3.9 10-8.7S17.5 2.8 12 2.8Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M13.5 5.5v4C7 9.5 3.5 13.5 2.5 19.5c2.5-3.5 6-5 11-5v4l8-6.5Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
+    <symbol id="i-thumb" viewBox="0 0 24 24"><path d="M2 10h4v11H2zM7 10.6 11.2 3a2.4 2.4 0 0 1 2.3 2.4V9h5.3a2.4 2.4 0 0 1 2.3 3l-1.7 6.7A2.4 2.4 0 0 1 17 21H7Z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21 3.6 12.6A5.3 5.3 0 0 1 11 5l1 1 1-1a5.3 5.3 0 0 1 7.4 7.6Z"/></symbol>
+    <symbol id="i-care" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#f7b125"/><circle cx="8.6" cy="9.2" r="1.3" fill="#4a3300"/><circle cx="15.4" cy="9.2" r="1.3" fill="#4a3300"/><path d="M12 19 8.5 15.6a2.2 2.2 0 0 1 3.1-3.1l.4.4.4-.4a2.2 2.2 0 0 1 3.1 3.1Z" fill="#f33e58"/></symbol>
+    <symbol id="i-live" viewBox="0 0 24 24"><path d="M3 5.5h11a2.5 2.5 0 0 1 2.5 2.5v8a2.5 2.5 0 0 1-2.5 2.5H3A2.5 2.5 0 0 1 .5 16V8A2.5 2.5 0 0 1 3 5.5Zm15 4.2 5.5-3.2v11l-5.5-3.2Z"/></symbol>
+    <symbol id="i-photo" viewBox="0 0 24 24"><rect x="2" y="3.5" width="20" height="17" rx="3"/><path d="m4.5 18 4.6-6 3.2 4 2.4-3 4.8 5Z" fill="var(--card)"/><circle cx="8.5" cy="8.5" r="2" fill="var(--card)"/></symbol>
+    <symbol id="i-smile" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-3.5 6a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-8 6h9a4.5 4.5 0 0 1-9 0Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7Z"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m5.3 8.3 1.4-1.4L12 12.2l5.3-5.3 1.4 1.4L12 15Z"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5v5.4l3.8 2.3-1 1.7L11 13V7Z"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 2.5h12a1.5 1.5 0 0 1 1.5 1.5v18l-7.5-4.5L4.5 22V4A1.5 1.5 0 0 1 6 2.5Z"/></symbol>
+    <symbol id="i-play-tri" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5Z"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h2.5A1.5 1.5 0 0 1 21 5.5v14a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5v-14A1.5 1.5 0 0 1 4.5 4H7Zm-2 7v10h14V9Z"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 20h18v1.5H3zM4 18v-7h3.5v7zm6 0V5h3.5v13zm6 0V8h3.5v10z"/></symbol>
+    <symbol id="i-cake" viewBox="0 0 24 24"><path d="M12 2.2c-.9 1.4-1.7 2.4-1.7 3.4a1.7 1.7 0 0 0 3.4 0c0-1-.8-2-1.7-3.4ZM11 8.5h2V11h-2ZM4 13a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1.6c-.7.5-1.3.7-2 .7-1.3 0-2-1.1-3-1.1s-1.7 1.1-3 1.1-2-1.1-3-1.1S7.3 15.3 6 15.3c-.7 0-1.3-.2-2-.7Zm0 3.7c.7.4 1.3.6 2 .6 1.3 0 2-1.1 3-1.1s1.7 1.1 3 1.1 2-1.1 3-1.1 1.7 1.1 3 1.1c.7 0 1.3-.2 2-.6V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M9 4h6l1.5 2.5H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2h3.5Zm3 5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm0 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Z"/></symbol>
+    <symbol id="i-gif" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-weight="700" font-family="Arial, sans-serif" fill="currentColor">GIF</text></symbol>
+    <symbol id="i-sticker" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v9l-7 7H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm9 16 5-5h-3a2 2 0 0 0-2 2Z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M12 5c5 0 9 3.5 11 7-2 3.5-6 7-11 7S3 15.5 1 12c2-3.5 6-7 11-7Zm0 3.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/></symbol>
+  </svg>
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="topbar__left">
+      <a class="logo" href="home.html" aria-label="Facebook home">f</a>
+      <label class="search">
+        <svg class="icon"><use href="#i-search"/></svg>
+        <input type="search" placeholder="Search Facebook" aria-label="Search Facebook">
+      </label>
+    </div>
+
+    <nav class="topbar__nav" aria-label="Primary">
+      <a class="nav-tab is-active" href="home.html" title="Home"><svg class="icon"><use href="#i-home"/></svg></a>
+      <a class="nav-tab" href="#" title="Video"><svg class="icon"><use href="#i-video"/></svg></a>
+      <a class="nav-tab" href="#" title="Marketplace"><svg class="icon"><use href="#i-store"/></svg></a>
+      <a class="nav-tab" href="#" title="Groups"><svg class="icon"><use href="#i-groups"/></svg></a>
+      <a class="nav-tab" href="#" title="Gaming"><svg class="icon"><use href="#i-gaming"/></svg></a>
+    </nav>
+
+    <div class="topbar__right">
+      <button class="icon-btn menu-btn" type="button" title="Menu"><svg class="icon"><use href="#i-grid"/></svg></button>
+      <button class="icon-btn" type="button" title="Messenger"><svg class="icon"><use href="#i-messenger"/></svg></button>
+      <button class="icon-btn" type="button" title="Notifications"><svg class="icon"><use href="#i-bell"/></svg><span class="badge">3</span></button>
+      <label class="icon-btn theme-toggle" for="dark" title="Toggle dark mode">
+        <svg class="icon icon--moon"><use href="#i-moon"/></svg>
+        <svg class="icon icon--sun"><use href="#i-sun"/></svg>
+      </label>
+      <a class="avatar g-me" href="#" title="Abdulraheem">A</a>
+    </div>
+  </header>
+
+  <div class="page">
+
+    <!-- ============ LEFT SIDEBAR ============ -->
+    <aside class="sidebar sidebar--left" aria-label="Menu">
+      <ul class="menu">
+        <li><a class="menu__row" href="#"><span class="avatar avatar--sm g-me">A</span>Abdulraheem</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-blue"><svg class="icon"><use href="#i-groups"/></svg></span>Friends</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-blue"><svg class="icon"><use href="#i-clock"/></svg></span>Memories</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-purple"><svg class="icon"><use href="#i-bookmark"/></svg></span>Saved</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-blue"><svg class="icon"><use href="#i-groups"/></svg></span>Groups</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-blue"><svg class="icon"><use href="#i-play-tri"/></svg></span>Video</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-blue"><svg class="icon"><use href="#i-store"/></svg></span>Marketplace</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-red"><svg class="icon"><use href="#i-calendar"/></svg></span>Events</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-teal"><svg class="icon"><use href="#i-chart"/></svg></span>Ads Manager</a></li>
+        <li><a class="menu__row" href="#"><span class="menu__icon mi-grey"><svg class="icon"><use href="#i-chevron"/></svg></span>See more</a></li>
+      </ul>
+
+      <hr class="sidebar__divider">
+      <h3 class="sidebar__title">Your shortcuts</h3>
+      <ul class="menu">
+        <li><a class="menu__row" href="#"><span class="avatar avatar--sm avatar--square g-au">AU</span>BSCS Air University 2024</a></li>
+        <li><a class="menu__row" href="#"><span class="avatar avatar--sm avatar--square g-wd">WD</span>Web Developers Pakistan</a></li>
+        <li><a class="menu__row" href="#"><span class="avatar avatar--sm avatar--square g-ve">VE</span>Video Editing Community</a></li>
+      </ul>
+
+      <p class="sidebar__legal">
+        <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Advertising</a> · <a href="#">Ad Choices</a> · <a href="#">Cookies</a> · <a href="#">More</a> · Meta © 2026
+      </p>
+    </aside>
+
+    <!-- ============ CENTER FEED ============ -->
+    <main class="feed">
+
+      <!-- Stories -->
+      <section class="stories" aria-label="Stories">
+        <article class="story story--create">
+          <div class="story__bg">
+            <svg viewBox="0 0 140 190" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-me" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1877f2"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+              <rect width="140" height="190" fill="url(#st-me)"/>
+              <circle cx="70" cy="78" r="30" fill="#fff" opacity=".9"/>
+              <path d="M22 190c0-32 22-52 48-52s48 20 48 52Z" fill="#fff" opacity=".9"/>
+            </svg>
+          </div>
+          <span class="story__plus"><svg class="icon"><use href="#i-plus"/></svg></span>
+          <span class="story__name">Create story</span>
+        </article>
+
+        <article class="story">
+          <div class="story__bg">
+            <svg viewBox="0 0 140 250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f2027"/><stop offset=".6" stop-color="#2c5364"/><stop offset="1" stop-color="#f7b267"/></linearGradient></defs>
+              <rect width="140" height="250" fill="url(#st-1)"/>
+              <circle cx="100" cy="70" r="16" fill="#fff6d5"/>
+              <path d="M0 190 40 140l30 40 25-30 45 50v50H0Z" fill="#12242c"/>
+            </svg>
+          </div>
+          <span class="avatar story__avatar g-1">AK</span>
+          <span class="story__name">Ahmed Khan</span>
+        </article>
+
+        <article class="story">
+          <div class="story__bg">
+            <svg viewBox="0 0 140 250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a9e"/><stop offset="1" stop-color="#fad0c4"/></linearGradient></defs>
+              <rect width="140" height="250" fill="url(#st-2)"/>
+              <circle cx="40" cy="110" r="26" fill="#fff" opacity=".55"/><circle cx="92" cy="150" r="38" fill="#fff" opacity=".4"/><circle cx="110" cy="70" r="18" fill="#fff" opacity=".5"/>
+            </svg>
+          </div>
+          <span class="avatar story__avatar g-2">SM</span>
+          <span class="story__name">Sara Malik</span>
+        </article>
+
+        <article class="story">
+          <div class="story__bg">
+            <svg viewBox="0 0 140 250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b3d91"/><stop offset="1" stop-color="#1e63d6"/></linearGradient></defs>
+              <rect width="140" height="250" fill="url(#st-3)"/>
+              <g fill="#fff" opacity=".9"><rect x="30" y="150" width="80" height="60"/><path d="M25 150 70 110l45 40Z"/><rect x="62" y="175" width="16" height="35" fill="#1e63d6"/></g>
+              <text x="70" y="90" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="16">AIR UNIVERSITY</text>
+            </svg>
+          </div>
+          <span class="avatar story__avatar g-au">AU</span>
+          <span class="story__name">Air University CS</span>
+        </article>
+
+        <article class="story">
+          <div class="story__bg">
+            <svg viewBox="0 0 140 250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#134e5e"/><stop offset="1" stop-color="#71b280"/></linearGradient></defs>
+              <rect width="140" height="250" fill="url(#st-4)"/>
+              <g stroke="#fff" stroke-width="3" fill="none" opacity=".8"><circle cx="70" cy="120" r="34"/><circle cx="70" cy="120" r="18"/><path d="M70 60v20M70 160v20M10 120h20M110 120h20"/></g>
+            </svg>
+          </div>
+          <span class="avatar story__avatar g-4">HA</span>
+          <span class="story__name">Hamza Ali</span>
+        </article>
+      </section>
+
+      <!-- Composer -->
+      <section class="card composer" aria-label="Create post">
+        <div class="composer__top">
+          <span class="avatar g-me">A</span>
+          <a class="composer__input" href="#">What's on your mind, Abdulraheem?</a>
+        </div>
+        <div class="composer__actions">
+          <button class="composer__action" type="button"><span class="c-live"><svg class="icon"><use href="#i-live"/></svg></span>Live video</button>
+          <button class="composer__action" type="button"><span class="c-photo"><svg class="icon"><use href="#i-photo"/></svg></span>Photo/video</button>
+          <button class="composer__action" type="button"><span class="c-feel"><svg class="icon"><use href="#i-smile"/></svg></span>Feeling/activity</button>
+        </div>
+      </section>
+
+      <!-- Post 1: page post with a code-editor image + comments -->
+      <article class="card post">
+        <header class="post__head">
+          <span class="avatar g-au">AU</span>
+          <div class="post__meta">
+            <a class="post__author" href="#">Air University Islamabad</a>
+            <div class="post__time">2 h · <svg class="icon"><use href="#i-globe"/></svg></div>
+          </div>
+          <button class="post__more" type="button" title="More options"><svg class="icon"><use href="#i-dots"/></svg></button>
+        </header>
+        <p class="post__text">Full Stack Web Development Lab in action! 💻 Our BSCS-V students are building complete web interfaces with nothing but HTML &amp; CSS this week. Proud of the creativity on display in Lab 5, A Block.
+<a href="#">#AirUniversity</a> <a href="#">#WebDevelopment</a> <a href="#">#BSCS</a></p>
+        <div class="post__media">
+          <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Screenshot of a code editor showing an HTML file">
+            <rect width="680" height="400" fill="#1e1e2e"/>
+            <rect width="680" height="38" fill="#181825"/>
+            <circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+            <rect x="96" y="8" width="130" height="22" rx="5" fill="#313244"/>
+            <text x="161" y="23" fill="#cdd6f4" font-family="Consolas, 'Courier New', monospace" font-size="12.5" text-anchor="middle">index.html</text>
+            <rect x="0" y="38" width="44" height="338" fill="#181825"/>
+            <g font-family="Consolas, 'Courier New', monospace" font-size="15.5">
+              <g fill="#585b70" text-anchor="end">
+                <text x="32" y="70">1</text><text x="32" y="96">2</text><text x="32" y="122">3</text><text x="32" y="148">4</text><text x="32" y="174">5</text><text x="32" y="200">6</text><text x="32" y="226">7</text><text x="32" y="252">8</text><text x="32" y="278">9</text><text x="32" y="304">10</text><text x="32" y="330">11</text><text x="32" y="356">12</text>
+              </g>
+              <text x="60" y="70"><tspan fill="#cba6f7">&lt;!DOCTYPE</tspan><tspan fill="#fab387"> html</tspan><tspan fill="#cba6f7">&gt;</tspan></text>
+              <text x="60" y="96"><tspan fill="#89b4fa">&lt;html</tspan><tspan fill="#f9e2af"> lang</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"en"</tspan><tspan fill="#89b4fa">&gt;</tspan></text>
+              <text x="60" y="122" fill="#89b4fa">&lt;head&gt;</text>
+              <text x="84" y="148"><tspan fill="#89b4fa">&lt;title&gt;</tspan><tspan fill="#cdd6f4">Full Stack Lab 2</tspan><tspan fill="#89b4fa">&lt;/title&gt;</tspan></text>
+              <text x="84" y="174"><tspan fill="#89b4fa">&lt;link</tspan><tspan fill="#f9e2af"> rel</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"stylesheet"</tspan><tspan fill="#f9e2af"> href</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"style.css"</tspan><tspan fill="#89b4fa">&gt;</tspan></text>
+              <text x="60" y="200" fill="#89b4fa">&lt;/head&gt;</text>
+              <text x="60" y="226" fill="#89b4fa">&lt;body&gt;</text>
+              <text x="84" y="252"><tspan fill="#89b4fa">&lt;header</tspan><tspan fill="#f9e2af"> class</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"topbar"</tspan><tspan fill="#89b4fa">&gt;</tspan></text>
+              <text x="108" y="278"><tspan fill="#89b4fa">&lt;h1&gt;</tspan><tspan fill="#cdd6f4">Hello, Air University</tspan><tspan fill="#89b4fa">&lt;/h1&gt;</tspan></text>
+              <text x="84" y="304" fill="#89b4fa">&lt;/header&gt;</text>
+              <text x="84" y="330" fill="#6c7086" font-style="italic">&lt;!-- no JavaScript needed --&gt;</text>
+              <text x="60" y="356" fill="#89b4fa">&lt;/body&gt;</text>
+            </g>
+            <rect x="372" y="317" width="2" height="18" fill="#f5e0dc"/>
+            <rect y="376" width="680" height="24" fill="#11111b"/>
+            <text x="14" y="392" fill="#a6adc8" font-family="Consolas, 'Courier New', monospace" font-size="11.5">main*    HTML    UTF-8    Ln 11, Col 36</text>
+            <text x="666" y="392" fill="#a6adc8" font-family="Consolas, 'Courier New', monospace" font-size="11.5" text-anchor="end">Spaces: 2</text>
+          </svg>
+        </div>
+        <div class="post__stats">
+          <div class="reactions">
+            <div class="reactions__icons">
+              <span class="reaction reaction--like"><svg class="icon"><use href="#i-thumb"/></svg></span>
+              <span class="reaction reaction--love"><svg class="icon"><use href="#i-heart"/></svg></span>
+              <span class="reaction reaction--care"><svg class="icon"><use href="#i-care"/></svg></span>
+            </div>
+            <span>1.2K</span>
+          </div>
+          <div class="post__stats-right"><span>84 comments</span><span>37 shares</span></div>
+        </div>
+        <div class="post__actions">
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-like"/></svg>Like</button>
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-comment"/></svg>Comment</button>
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-share"/></svg>Share</button>
+        </div>
+        <div class="comments">
+          <div class="comment">
+            <span class="avatar avatar--xs g-2">SM</span>
+            <div>
+              <div class="comment__bubble"><span class="comment__author">Sara Malik</span>The timetable design task was actually fun 😄 Mine has colour-coded courses now.</div>
+              <div class="comment__meta"><span>1 h</span><a href="#">Like</a><a href="#">Reply</a></div>
+            </div>
+          </div>
+          <div class="comment">
+            <span class="avatar avatar--xs g-4">HA</span>
+            <div>
+              <div class="comment__bubble"><span class="comment__author">Hamza Ali</span>Lab 5 A Block has never looked this productive 🔥</div>
+              <div class="comment__meta"><span>42 min</span><a href="#">Like</a><a href="#">Reply</a></div>
+            </div>
+          </div>
+          <div class="comment-box">
+            <span class="avatar avatar--xs g-me">A</span>
+            <label class="comment-box__input">
+              <input type="text" placeholder="Write a comment…" aria-label="Write a comment">
+              <span class="comment-box__icons">
+                <span title="Emoji"><svg class="icon"><use href="#i-smile"/></svg></span>
+                <span title="Attach a photo or video"><svg class="icon"><use href="#i-camera"/></svg></span>
+                <span title="Comment with a GIF"><svg class="icon"><use href="#i-gif"/></svg></span>
+                <span title="Comment with a sticker"><svg class="icon"><use href="#i-sticker"/></svg></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 2: friend's photo post (Multan sunset) -->
+      <article class="card post">
+        <header class="post__head">
+          <span class="avatar g-1">AK</span>
+          <div class="post__meta">
+            <a class="post__author" href="#">Ahmed Khan</a>
+            <div class="post__time">Yesterday at 6:42 PM · <svg class="icon"><use href="#i-globe"/></svg></div>
+          </div>
+          <button class="post__more" type="button" title="More options"><svg class="icon"><use href="#i-dots"/></svg></button>
+        </header>
+        <p class="post__text">Sunset over the Chenab, Multan. No filter needed 🌅 Home is home ❤️ — feeling grateful.</p>
+        <div class="post__media">
+          <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sunset over the river in Multan with the shrine silhouette">
+            <defs>
+              <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1b1140"/><stop offset=".45" stop-color="#b3325a"/><stop offset=".78" stop-color="#f27a3d"/><stop offset="1" stop-color="#ffd27a"/></linearGradient>
+              <linearGradient id="water" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f6a35c"/><stop offset="1" stop-color="#3a1f5c"/></linearGradient>
+              <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff2b0"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="680" height="302" fill="url(#sky)"/>
+            <circle cx="450" cy="235" r="130" fill="url(#glow)" opacity=".85"/>
+            <circle cx="450" cy="240" r="46" fill="#ffe9a3"/>
+            <g fill="#3a1a4f" opacity=".85">
+              <rect x="0" y="262" width="680" height="42"/>
+              <rect x="30" y="238" width="26" height="30"/><rect x="70" y="248" width="40" height="20"/><rect x="130" y="230" width="18" height="40"/>
+              <rect x="560" y="244" width="30" height="24"/><rect x="610" y="236" width="20" height="32"/><rect x="640" y="250" width="40" height="18"/>
+            </g>
+            <g fill="#1d0e2e">
+              <rect x="270" y="212" width="140" height="92"/>
+              <path d="M285 212v-38h110v38Z"/>
+              <path d="M300 174a40 40 0 0 1 80 0Z"/>
+              <rect x="337" y="116" width="6" height="20"/><circle cx="340" cy="114" r="4"/>
+              <rect x="262" y="150" width="10" height="154"/><path d="M258 152h18l-9-16Z"/>
+              <rect x="408" y="150" width="10" height="154"/><path d="M404 152h18l-9-16Z"/>
+              <rect x="292" y="164" width="8" height="10"/><rect x="380" y="164" width="8" height="10"/><rect x="336" y="164" width="8" height="10"/>
+            </g>
+            <g transform="translate(110 302)" fill="#150a24">
+              <path d="M0 0q6-60 14-110" stroke="#150a24" stroke-width="7" fill="none" stroke-linecap="round"/>
+              <g transform="translate(14 -112)">
+                <ellipse cx="26" rx="30" ry="7" transform="rotate(-165)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-135)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-105)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-75)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-45)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-15)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(15)"/>
+              </g>
+            </g>
+            <g transform="translate(600 302) scale(.8)" fill="#150a24">
+              <path d="M0 0q-6-60-14-110" stroke="#150a24" stroke-width="7" fill="none" stroke-linecap="round"/>
+              <g transform="translate(-14 -112)">
+                <ellipse cx="26" rx="30" ry="7" transform="rotate(-165)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-135)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-105)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-75)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-45)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-15)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(15)"/>
+              </g>
+            </g>
+            <rect y="302" width="680" height="118" fill="url(#water)"/>
+            <g fill="#ffe9a3" opacity=".45">
+              <rect x="420" y="312" width="60" height="4" rx="2"/><rect x="405" y="326" width="90" height="4" rx="2"/><rect x="430" y="342" width="50" height="4" rx="2"/><rect x="400" y="360" width="100" height="4" rx="2"/><rect x="440" y="380" width="40" height="4" rx="2"/><rect x="415" y="398" width="70" height="4" rx="2"/>
+            </g>
+            <g fill="#120818"><path d="M180 352h70l-10 12h-50Z"/><rect x="214" y="322" width="3" height="30"/><path d="M217 324l26 22h-26Z"/></g>
+            <g fill="none" stroke="#2a1440" stroke-width="2" stroke-linecap="round"><path d="M520 120q6-6 12 0 6-6 12 0"/><path d="M548 104q5-5 10 0 5-5 10 0"/><path d="M500 140q5-5 10 0 5-5 10 0"/></g>
+          </svg>
+        </div>
+        <div class="post__stats">
+          <div class="reactions">
+            <div class="reactions__icons">
+              <span class="reaction reaction--love"><svg class="icon"><use href="#i-heart"/></svg></span>
+              <span class="reaction reaction--like"><svg class="icon"><use href="#i-thumb"/></svg></span>
+            </div>
+            <span>348</span>
+          </div>
+          <div class="post__stats-right"><span>26 comments</span><span>4 shares</span></div>
+        </div>
+        <div class="post__actions">
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-like"/></svg>Like</button>
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-comment"/></svg>Comment</button>
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-share"/></svg>Share</button>
+        </div>
+        <div class="comments">
+          <div class="comment-box">
+            <span class="avatar avatar--xs g-me">A</span>
+            <label class="comment-box__input">
+              <input type="text" placeholder="Write a comment…" aria-label="Write a comment">
+              <span class="comment-box__icons">
+                <span title="Emoji"><svg class="icon"><use href="#i-smile"/></svg></span>
+                <span title="Attach a photo or video"><svg class="icon"><use href="#i-camera"/></svg></span>
+                <span title="Comment with a GIF"><svg class="icon"><use href="#i-gif"/></svg></span>
+                <span title="Comment with a sticker"><svg class="icon"><use href="#i-sticker"/></svg></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 3: my own text-on-colour post -->
+      <article class="card post">
+        <header class="post__head">
+          <span class="avatar g-me">A</span>
+          <div class="post__meta">
+            <a class="post__author" href="#">Abdulraheem</a>
+            <div class="post__time">5 h · <svg class="icon"><use href="#i-globe"/></svg></div>
+          </div>
+          <button class="post__more" type="button" title="More options"><svg class="icon"><use href="#i-dots"/></svg></button>
+        </header>
+        <p class="post__bgtext">Just finished my first CSS-only smart home dashboard 🔥 Zero JavaScript. Who says you need JS for interactivity?</p>
+        <div class="post__stats">
+          <div class="reactions">
+            <div class="reactions__icons">
+              <span class="reaction reaction--like"><svg class="icon"><use href="#i-thumb"/></svg></span>
+              <span class="reaction reaction--love"><svg class="icon"><use href="#i-heart"/></svg></span>
+            </div>
+            <span>97</span>
+          </div>
+          <div class="post__stats-right"><span>12 comments</span><span>2 shares</span></div>
+        </div>
+        <div class="post__actions">
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-like"/></svg>Like</button>
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-comment"/></svg>Comment</button>
+          <button class="post__action" type="button"><svg class="icon"><use href="#i-share"/></svg>Share</button>
+        </div>
+        <div class="comments">
+          <div class="comment">
+            <span class="avatar avatar--xs g-6">BA</span>
+            <div>
+              <div class="comment__bubble"><span class="comment__author">Bilal Ahmed</span>:has() and :checked doing all the heavy lifting I assume 😎 Share the repo!</div>
+              <div class="comment__meta"><span>3 h</span><a href="#">Like</a><a href="#">Reply</a></div>
+            </div>
+          </div>
+          <div class="comment-box">
+            <span class="avatar avatar--xs g-me">A</span>
+            <label class="comment-box__input">
+              <input type="text" placeholder="Write a comment…" aria-label="Write a comment">
+              <span class="comment-box__icons">
+                <span title="Emoji"><svg class="icon"><use href="#i-smile"/></svg></span>
+                <span title="Attach a photo or video"><svg class="icon"><use href="#i-camera"/></svg></span>
+                <span title="Comment with a GIF"><svg class="icon"><use href="#i-gif"/></svg></span>
+                <span title="Comment with a sticker"><svg class="icon"><use href="#i-sticker"/></svg></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 4: Reels and short videos -->
+      <section class="card" aria-label="Reels and short videos">
+        <h2 class="card__title">Reels and short videos <a href="#">See all</a></h2>
+        <div class="reels">
+          <article class="reel">
+            <div class="reel__bg">
+              <svg viewBox="0 0 200 355" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs><linearGradient id="rl-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1b3d"/><stop offset="1" stop-color="#3b6fd8"/></linearGradient></defs>
+                <rect width="200" height="355" fill="url(#rl-1)"/>
+                <g fill="#fff" opacity=".9"><circle cx="150" cy="60" r="12"/><circle cx="40" cy="40" r="2"/><circle cx="80" cy="90" r="1.5"/><circle cx="120" cy="30" r="1.5"/><circle cx="170" cy="120" r="2"/></g>
+                <path d="M0 280 40 250l30 20 30-40 40 40 30-30 30 40v75H0Z" fill="#0a1229"/>
+                <g fill="#f5f5f5"><path d="M55 250 100 160l45 90Z"/><rect x="42" y="200" width="6" height="52"/><rect x="152" y="200" width="6" height="52"/><rect x="70" y="180" width="4" height="70"/><rect x="126" y="180" width="4" height="70"/></g>
+              </svg>
+            </div>
+            <span class="reel__play"><svg class="icon"><use href="#i-play-tri"/></svg></span>
+            <div class="reel__info"><div class="reel__views"><svg class="icon"><use href="#i-eye"/></svg>12K</div><div class="reel__title">Islamabad in 15 seconds</div></div>
+          </article>
+          <article class="reel">
+            <div class="reel__bg">
+              <svg viewBox="0 0 200 355" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs><linearGradient id="rl-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4b0f7a"/><stop offset="1" stop-color="#c026d3"/></linearGradient></defs>
+                <rect width="200" height="355" fill="url(#rl-2)"/>
+                <g class="spin" fill="none" stroke="#fff" stroke-width="3" opacity=".85"><rect x="60" y="120" width="80" height="80" rx="12"/><rect x="72" y="132" width="56" height="56" rx="8" transform="rotate(45 100 160)"/><circle cx="100" cy="160" r="14"/></g>
+                <text x="100" y="260" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="18">@keyframes</text>
+              </svg>
+            </div>
+            <span class="reel__play"><svg class="icon"><use href="#i-play-tri"/></svg></span>
+            <div class="reel__info"><div class="reel__views"><svg class="icon"><use href="#i-eye"/></svg>4.5K</div><div class="reel__title">CSS animation tricks</div></div>
+          </article>
+          <article class="reel">
+            <div class="reel__bg">
+              <svg viewBox="0 0 200 355" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs><linearGradient id="rl-3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a2e0e"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs>
+                <rect width="200" height="355" fill="url(#rl-3)"/>
+                <ellipse cx="100" cy="230" rx="70" ry="26" fill="#3b1d0a"/>
+                <ellipse cx="100" cy="222" rx="70" ry="26" fill="#f4e4c1"/>
+                <ellipse cx="100" cy="218" rx="52" ry="18" fill="#c2410c"/>
+                <g fill="#16a34a"><circle cx="80" cy="212" r="5"/><circle cx="112" cy="220" r="4"/><circle cx="96" cy="208" r="3.5"/></g>
+                <g stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"><path d="M70 150q6-14 0-28"/><path d="M100 140q6-14 0-28"/><path d="M130 150q6-14 0-28"/></g>
+              </svg>
+            </div>
+            <span class="reel__play"><svg class="icon"><use href="#i-play-tri"/></svg></span>
+            <div class="reel__info"><div class="reel__views"><svg class="icon"><use href="#i-eye"/></svg>890</div><div class="reel__title">Multan street food tour</div></div>
+          </article>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ============ RIGHT SIDEBAR ============ -->
+    <aside class="sidebar sidebar--right" aria-label="Sponsored, birthdays and contacts">
+
+      <h3 class="rs__title">Sponsored</h3>
+      <a class="ad" href="#">
+        <span class="ad__thumb">
+          <svg viewBox="0 0 116 116" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs><linearGradient id="ad-1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+            <rect width="116" height="116" fill="url(#ad-1)"/>
+            <rect x="22" y="34" width="72" height="46" rx="4" fill="#0f172a"/><rect x="26" y="38" width="64" height="38" fill="#1e293b"/>
+            <g fill="#38bdf8"><rect x="32" y="44" width="30" height="4" rx="2"/><rect x="32" y="52" width="44" height="4" rx="2" fill="#a5b4fc"/><rect x="32" y="60" width="22" height="4" rx="2" fill="#86efac"/><rect x="32" y="68" width="38" height="4" rx="2"/></g>
+            <rect x="14" y="80" width="88" height="6" rx="3" fill="#cbd5e1"/>
+          </svg>
+        </span>
+        <span><span class="ad__title">Full Stack Bootcamp 2026 — HTML, CSS, React &amp; Node</span><br><span class="ad__domain">devacademy.pk</span></span>
+      </a>
+      <a class="ad" href="#">
+        <span class="ad__thumb">
+          <svg viewBox="0 0 116 116" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs><linearGradient id="ad-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f97316"/><stop offset="1" stop-color="#ef4444"/></linearGradient></defs>
+            <rect width="116" height="116" fill="url(#ad-2)"/>
+            <circle cx="58" cy="58" r="34" fill="#fff"/>
+            <text x="58" y="52" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="20" fill="#ef4444">30%</text>
+            <text x="58" y="70" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="11" fill="#7c2d12">STUDENT OFF</text>
+          </svg>
+        </span>
+        <span><span class="ad__title">Student laptop deals — up to 30% off this semester</span><br><span class="ad__domain">techmart.pk</span></span>
+      </a>
+
+      <hr class="sidebar__divider">
+      <h3 class="rs__title">Birthdays</h3>
+      <a class="birthday" href="#">
+        <span class="menu__icon"><svg class="icon"><use href="#i-cake"/></svg></span>
+        <span><b>Ahmed Khan</b> and <b>2 others</b> have birthdays today.</span>
+      </a>
+
+      <hr class="sidebar__divider">
+      <h3 class="rs__title">Contacts
+        <span class="rs__tools">
+          <span title="Search by name"><svg class="icon"><use href="#i-search"/></svg></span>
+          <span title="Options"><svg class="icon"><use href="#i-dots"/></svg></span>
+        </span>
+      </h3>
+      <ul>
+        <li><a class="contact contact--online" href="#"><span class="avatar avatar--sm g-1">AK</span>Ahmed Khan</a></li>
+        <li><a class="contact contact--online" href="#"><span class="avatar avatar--sm g-2">SM</span>Sara Malik</a></li>
+        <li><a class="contact" href="#"><span class="avatar avatar--sm g-4">HA</span>Hamza Ali</a></li>
+        <li><a class="contact contact--online" href="#"><span class="avatar avatar--sm g-5">AN</span>Ayesha Noor</a></li>
+        <li><a class="contact" href="#"><span class="avatar avatar--sm g-6">BA</span>Bilal Ahmed</a></li>
+        <li><a class="contact contact--online" href="#"><span class="avatar avatar--sm g-7">ZR</span>Zain Raza</a></li>
+        <li><a class="contact" href="#"><span class="avatar avatar--sm g-8">FS</span>Fatima Sheikh</a></li>
+        <li><a class="contact contact--online" href="#"><span class="avatar avatar--sm g-9">UT</span>Usman Tariq</a></li>
+      </ul>
+
+      <hr class="sidebar__divider">
+      <h3 class="rs__title">Group conversations</h3>
+      <ul>
+        <li><a class="contact" href="#"><span class="contact__group"><span class="avatar avatar--xs g-au">AU</span><span class="avatar avatar--xs g-2">SM</span></span>BSCS-V-A Study Group</a></li>
+        <li><a class="contact" href="#"><span class="contact__group"><span class="avatar avatar--xs g-4">HA</span><span class="avatar avatar--xs g-10">HQ</span></span>FSWD Lab Partners</a></li>
+        <li><a class="contact" href="#"><span class="menu__icon mi-grey"><svg class="icon"><use href="#i-plus"/></svg></span>Create new group</a></li>
+      </ul>
+
+    </aside>
+
+  </div>
+</body>
+</html>
