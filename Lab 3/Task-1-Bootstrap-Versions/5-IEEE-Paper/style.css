@@ -1,0 +1,395 @@
+/* ==========================================================================
+   IEEE Conference Paper Template (US Letter) — Bootstrap 5.3 version
+   of the official IEEE "conference-template-letter.docx".
+   Author: Abdulraheem
+   Loaded AFTER bootstrap.min.css. Bootstrap supplies the navbar, the author
+   grid, the table, the figure and the flex/position utilities; this file keeps
+   what Bootstrap cannot do: exact page geometry, CSS multi-column body text,
+   IEEE point sizes (overriding Bootstrap's reboot) and heading counters.
+   --------------------------------------------------------------------------
+   Measurements taken directly from the Word template:
+     page          8.5 in x 11 in   (612 pt x 792 pt)
+     margins       top 54 pt (0.75 in) · bottom 72 pt (1 in) · sides 44.65 pt
+     text block    522.7 pt wide  ->  two 252.35 pt columns, 18 pt gutter
+     paper title   24 pt          author names 11 pt      body 10 pt
+     abstract      9 pt bold      captions / refs 8 pt    table footnote 6 pt
+     Heading 1     small caps, centred, "I." numbering
+     Heading 2     italic, "A." numbering        Heading 3  italic run-in, "1)"
+     Heading 5     small caps, centred, unnumbered (Acknowledgment, References)
+   ========================================================================== */
+
+/* ---- 0. Design tokens --------------------------------------------------- */
+:root {
+  --serif: "Times New Roman", Times, "Liberation Serif", "Nimbus Roman", serif;
+  --ui: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+
+  --page-w: 612pt;
+  --page-h: 792pt;
+  --m-top: 54pt;
+  --m-bottom: 72pt;
+  --m-side: 44.65pt;
+  --gutter: 18pt;
+  --col-w: 252.35pt;               /* (612 - 2*44.65 - 18) / 2 */
+
+  --fs-body: 10pt;   --lh-body: 11.4pt;
+  --fs-abs: 9pt;     --lh-abs: 10.4pt;
+  --fs-small: 8pt;   --lh-small: 9pt;
+
+  --desk: #4b5563;
+  --ink: #000;
+}
+
+/* ---- 1. Screen chrome (the grey "desk" behind the sheets) --------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--desk); }
+
+body {
+  background: var(--desk);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Everything inside the sheets uses Times New Roman in black, and a
+   neutral line-height (Bootstrap's reboot sets 1.5 on body). */
+.paper {
+  font-family: var(--serif);
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+/* The toolbar is a Bootstrap .navbar (see index.html). */
+kbd { font-size: .75em; }
+
+.paper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 16px 48px;
+}
+
+/* ---- 2. The sheet ------------------------------------------------------- */
+.page {
+  position: relative;
+  width: var(--page-w);
+  height: var(--page-h);
+  padding: var(--m-top) var(--m-side) var(--m-bottom);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.35), 0 18px 40px -16px rgba(0,0,0,.55);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex: none;
+}
+
+/* page number (screen only helper, hidden in print like the real template) */
+.page::after {
+  content: counter(page-no);
+  counter-increment: page-no;
+  position: absolute;
+  right: 10pt; bottom: 6pt;
+  font-family: var(--ui);
+  font-size: 9px;
+  color: #9ca3af;
+}
+.paper { counter-reset: page-no; }
+
+/* ---- 3. Front matter (title, subtitle, authors) ------------------------- */
+.front { text-align: center; flex: none; }
+
+.paper-title {
+  font-size: 24pt;
+  font-weight: normal;
+  line-height: 1.15;
+  margin: 0 0 6pt;
+}
+.paper-subtitle {
+  font-size: 14pt;
+  line-height: 1.15;
+  margin: 0 0 6pt;
+}
+
+/* Author block = Bootstrap grid (.row .row-cols-4). Only the gutter is tuned
+   to the template's 10.8 pt column spacing, and vertical gutter removed. */
+.authors {
+  --bs-gutter-x: 10.8pt;
+  --bs-gutter-y: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.author { margin: 0; }
+.author .name {
+  font-size: 11pt;
+  line-height: 1.15;
+  margin: 18pt 0 2pt;
+  display: block;
+}
+.author .affil {
+  display: block;
+  font-size: 10pt;
+  font-style: italic;
+  line-height: 1.15;
+}
+.author .affil.email { font-style: normal; }
+
+/* ---- 4. Two-column body ------------------------------------------------- */
+.cols {
+  flex: 1 1 auto;
+  min-height: 0;
+  column-count: 2;
+  column-gap: var(--gutter);
+  column-fill: auto;          /* fill column 1 completely, then column 2 (like Word) */
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.front + .cols { margin-top: 18pt; }   /* gap after the author block */
+
+.cols > *:first-child { margin-top: 0; }
+
+/* body paragraphs */
+.cols p {
+  margin: 0 0 6pt;
+  text-indent: 14.4pt;
+}
+.cols p.continued { text-indent: 0; }     /* second half of a paragraph split across a page/column */
+.cols p.noindent { text-indent: 0; }
+
+/* abstract + keywords */
+.abstract, .keywords {
+  font-size: var(--fs-abs);
+  line-height: var(--lh-abs);
+  font-weight: bold;
+  text-indent: 13.6pt;
+  margin: 0 0 10pt;
+}
+.keywords { margin-bottom: 6pt; font-style: italic; }
+.abstract .runin, .keywords .runin { font-style: italic; }
+
+/* ---- 5. Headings (numbered with CSS counters) --------------------------- */
+/* Counters live on .paper so numbering continues across page boxes;
+   headings use counter-set (not counter-reset) to zero the sub-level. */
+.paper { counter-reset: page-no h1 h2 h3; }
+
+h2.ieee-h1 {
+  counter-increment: h1;
+  counter-set: h2 0 h3 0;
+  font-size: 10pt;
+  font-weight: normal;
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.15;
+  margin: 8pt 0 4pt;
+  break-after: avoid;
+}
+h2.ieee-h1::before { content: counter(h1, upper-roman) ".\2003"; }
+
+h3.ieee-h2 {
+  counter-increment: h2;
+  counter-set: h3 0;
+  font-size: 10pt;
+  font-weight: normal;
+  font-style: italic;
+  text-align: left;
+  line-height: 1.15;
+  margin: 6pt 0 3pt;
+  break-after: avoid;
+}
+h3.ieee-h2::before { content: counter(h2, upper-alpha) ".\2003"; }
+
+/* Heading 3 is a run-in heading: italic, numbered "1)", followed by a colon */
+.ieee-h3 {
+  counter-increment: h3;
+  font-style: italic;
+}
+.ieee-h3::before { content: counter(h3) ")\2002"; }
+
+/* Heading 5: component heads (Acknowledgment, References) — unnumbered */
+h2.ieee-h5 {
+  font-size: 10pt;
+  font-weight: normal;
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.15;
+  margin: 8pt 0 4pt;
+  break-after: avoid;
+}
+
+/* ---- 6. Lists, equations, tables, figures ------------------------------- */
+ul.bullets {
+  margin: 0 0 6pt;
+  padding: 0 0 0 28.8pt;
+  list-style: none;
+}
+ul.bullets li {
+  position: relative;
+  margin: 0 0 3pt;
+  text-indent: 0;
+}
+ul.bullets li::before {
+  content: "\2022";
+  position: absolute;
+  left: -14.4pt;
+}
+
+.equation {
+  display: flex;
+  align-items: center;
+  margin: 12pt 0;
+  line-height: 10.8pt;
+  break-inside: avoid;
+}
+.equation .math { flex: 1; text-align: center; font-style: italic; }
+.equation .math i { font-style: normal; }     /* Greek letters are upright */
+.equation .eqno { flex: none; }
+
+.table-head {
+  font-size: var(--fs-small);
+  line-height: 10.8pt;
+  font-variant: small-caps;
+  text-align: center;
+  margin: 12pt 0 6pt;
+  text-indent: 0;
+  break-after: avoid;
+}
+.table-head .label::after { content: "\2003"; }
+
+/* Bootstrap .table .table-bordered .table-sm, re-tuned through its own CSS
+   variables: black 0.5 pt rules, transparent cells, no bottom margin. */
+table.ieee {
+  --bs-border-color: #000;
+  --bs-border-width: 0.5pt;
+  --bs-table-bg: transparent;
+  --bs-table-color: #000;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  line-height: 9.6pt;
+  margin: 0 0 3pt;
+  break-inside: avoid;
+}
+table.ieee th, table.ieee td {
+  border: 0.5pt solid #000;
+  padding: 2pt 3pt;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: normal;
+}
+table.ieee th.colhead { font-weight: bold; }
+table.ieee th.subhead { font-style: italic; font-size: 7.5pt; }
+table.ieee td { text-align: left; }
+table.ieee sup { font-size: 6pt; line-height: 0; }
+
+.table-footnote {
+  font-size: 6pt;
+  line-height: 7pt;
+  text-align: right;
+  margin: 0 0 10pt;
+  text-indent: 0;
+  padding-right: 3pt;
+}
+
+figure.ieee {
+  margin: 8pt 0 10pt;
+  break-inside: avoid;
+}
+figure.ieee .figure-box {
+  border: 0.5pt solid #000;
+  padding: 12pt 10pt;
+  font-size: var(--fs-small);
+  line-height: 10pt;
+  text-align: justify;
+  min-height: 130pt;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8pt;
+}
+/* Bootstrap's .figure-caption is grey and 0.875em; IEEE wants black 8 pt */
+figure.ieee figcaption.figure-caption {
+  color: var(--ink);
+  font-size: var(--fs-small);
+  line-height: 9.6pt;
+  text-align: justify;
+  margin-top: 4pt;
+}
+
+/* ---- 7. References ------------------------------------------------------ */
+ol.references {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: ref;
+  font-size: var(--fs-small);
+  line-height: 9pt;
+}
+ol.references li {
+  counter-increment: ref;
+  position: relative;
+  padding-left: 18pt;
+  margin: 0 0 2.5pt;
+  text-indent: 0;
+}
+ol.references li::before {
+  content: "[" counter(ref) "]";
+  position: absolute;
+  left: 0;
+}
+ol.references.cont { counter-reset: ref 1; }   /* list continued on the next page starts at [2] */
+
+/* ---- 8. First-page footnote (funding agency text box) ------------------- */
+.sponsor {
+  position: absolute;
+  left: var(--m-side);
+  bottom: var(--m-bottom);
+  width: var(--col-w);
+  font-size: var(--fs-small);
+  line-height: 9.6pt;
+  text-indent: 14.4pt;
+  text-align: left;
+  padding-top: 3pt;
+  background: #fff;
+}
+.sponsor::before {
+  content: "";
+  display: block;
+  width: 72pt;
+  border-top: 0.5pt solid #000;
+  margin-bottom: 3pt;
+  margin-left: -14.4pt;
+}
+
+/* explicit column / page control helpers used by the markup */
+.col-break { break-before: column; }
+.cols p.split-end { margin-bottom: 0; text-align-last: justify; }   /* first half of a hand-split paragraph */
+
+/* ---- 9. Responsive preview (scale the sheet down on narrow screens) ----- */
+/* The sheet keeps its true size for print; on screens narrower than the
+   sheet we scale it with a zoom so the whole page stays visible. */
+@media (max-width: 880px) {
+  .paper { padding: 16px 8px 32px; gap: 16px; }
+  .page { zoom: 0.62; }
+}
+@media (max-width: 560px) {
+  .page { zoom: 0.46; }
+}
+
+/* ---- 10. Print: exact US Letter pages, no chrome ------------------------ */
+@media print {
+  @page { size: 8.5in 11in; margin: 0; }
+  html, body { background: #fff; }
+  .toolbar { display: none; }
+  .paper { display: block; padding: 0; gap: 0; }
+  .page {
+    box-shadow: none;
+    margin: 0;
+    zoom: 1;
+    break-after: page;
+    page-break-after: always;
+  }
+  .page:last-child { break-after: auto; page-break-after: auto; }
+  .page::after { display: none; }
+}

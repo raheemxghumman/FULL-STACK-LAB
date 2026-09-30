@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<!--
+  Facebook News Feed — Lab 3 (Bootstrap version of Lab 2, Task 2)
+  Bootstrap 5.3 features used on this page:
+    • Navbar (fixed-top) with brand, input-group search, nav-link active states
+    • Grid: container-fluid, row, col-xl-3 / col-lg-6 / col-md-8, g-*, responsive display (d-none d-lg-block)
+    • position-sticky sidebars, list-group / list-group-flush / list-group-item-action
+    • Cards (card-header / card-body / card-footer), badges (rounded-pill, position-absolute translate-middle)
+    • Dropdowns (avatar menu, post "…" menus), Modal ("Create post"), Offcanvas (mobile menu)
+    • Collapse ("View comments"), Tooltips (contacts), Toasts ("Post saved" / "Shared")
+    • btn-group + btn-check (Like toggle), ratio (post media), color modes via data-bs-theme (dark mode)
+    • Utilities: spacing, flex, gap, rounded, shadow, text, bg-body-tertiary, overflow, position
+    • Bootstrap Icons
+-->
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Facebook News Feed recreated with Bootstrap 5 for Full Stack Web Development Lab 3.">
+  <title>(3) Facebook</title>
+  <script>
+    // Apply the saved colour mode before the page paints (avoids a white flash in dark mode)
+    try { document.documentElement.setAttribute('data-bs-theme', localStorage.getItem('fb-theme') || 'light'); } catch (e) {}
+  </script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body class="fb-feed-page">
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar fixed-top bg-body shadow-sm py-0 fb-navbar" aria-label="Main">
+    <div class="container-fluid px-2 px-sm-3 flex-nowrap">
+
+      <!-- Left: hamburger (small screens), logo, search -->
+      <div class="d-flex align-items-center gap-2 fb-nav-left">
+        <button class="btn fb-circle-btn d-xl-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas" aria-controls="menuOffcanvas" aria-label="Open menu">
+          <i class="bi bi-list fs-5"></i>
+        </button>
+        <a class="navbar-brand m-0 p-0" href="home.html" aria-label="Facebook home">
+          <svg class="fb-logo" viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="20" fill="#1877f2"/>
+            <path d="M22.3 40V25.6h4.8l.7-5.6h-5.5v-3.6c0-1.6.5-2.7 2.8-2.7h3V8.7c-.5-.1-2.3-.2-4.3-.2-4.3 0-7.2 2.6-7.2 7.4V20H11.8v5.6h4.8V40z" fill="#fff"/>
+          </svg>
+        </a>
+        <form class="d-none d-md-block" role="search" action="#">
+          <div class="input-group rounded-pill fb-search">
+            <span class="input-group-text border-0 bg-transparent pe-1"><i class="bi bi-search text-secondary"></i></span>
+            <input class="form-control border-0 bg-transparent shadow-none ps-1" type="search" placeholder="Search Facebook" aria-label="Search Facebook">
+          </div>
+        </form>
+        <button class="btn fb-circle-btn d-md-none" type="button" aria-label="Search"><i class="bi bi-search"></i></button>
+      </div>
+
+      <!-- Centre: main tabs -->
+      <ul class="nav flex-nowrap justify-content-center fb-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active" href="home.html" aria-current="page" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Home"><i class="bi bi-house-door-fill"></i></a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Video"><i class="bi bi-play-btn"></i></a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Marketplace"><i class="bi bi-shop"></i></a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Groups"><i class="bi bi-people"></i></a></li>
+        <li class="nav-item d-none d-sm-block"><a class="nav-link" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Gaming"><i class="bi bi-controller"></i></a></li>
+      </ul>
+
+      <!-- Right: menu, messenger, notifications, account -->
+      <div class="d-flex align-items-center gap-2 fb-nav-right">
+        <button class="btn fb-circle-btn d-none d-lg-inline-flex" type="button" aria-label="Menu"><i class="bi bi-grid-3x3-gap-fill"></i></button>
+        <button class="btn fb-circle-btn position-relative" type="button" aria-label="Messenger, 1 unread">
+          <i class="bi bi-messenger"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger fb-badge">1</span>
+        </button>
+        <button class="btn fb-circle-btn position-relative" type="button" aria-label="Notifications, 3 unread">
+          <i class="bi bi-bell-fill"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger fb-badge">3</span>
+        </button>
+        <button class="btn fb-circle-btn d-none d-sm-inline-flex" type="button" id="themeToggle" aria-label="Toggle dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Dark mode">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+
+        <div class="dropdown">
+          <button class="btn p-0 border-0 rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account">
+            <span class="fb-avatar fb-avatar-40 av-me">A</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2 fb-account-menu">
+            <li>
+              <a class="dropdown-item rounded d-flex align-items-center gap-2 py-2" href="#">
+                <span class="fb-avatar fb-avatar-36 av-me">A</span>
+                <span class="fw-semibold">Abdulraheem</span>
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item rounded py-2" href="#"><i class="bi bi-person-circle me-2"></i>Profile</a></li>
+            <li><a class="dropdown-item rounded py-2" href="#"><i class="bi bi-gear-fill me-2"></i>Settings &amp; privacy</a></li>
+            <li><button class="dropdown-item rounded py-2" type="button" id="themeToggleMenu"><i class="bi bi-moon-fill me-2"></i><span class="theme-label">Dark mode</span></button></li>
+            <li><a class="dropdown-item rounded py-2" href="#"><i class="bi bi-question-circle-fill me-2"></i>Help &amp; support</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item rounded py-2" href="index.html"><i class="bi bi-box-arrow-right me-2"></i>Log out</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= OFFCANVAS MENU (small screens) ================= -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="menuOffcanvas" aria-labelledby="menuOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title fs-4 fw-bold" id="menuOffcanvasLabel">Menu</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body pt-0">
+      <div class="list-group list-group-flush fb-menu">
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-avatar fb-avatar-36 av-me">A</span>Abdulraheem</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-people-fill"></i></span>Friends</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-clock-history"></i></span>Memories</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon fb-purple"><i class="bi bi-bookmark-fill"></i></span>Saved</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-people"></i></span>Groups</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-play-btn-fill"></i></span>Video</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-shop"></i></span>Marketplace</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-danger"><i class="bi bi-calendar-event-fill"></i></span>Events</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-info"><i class="bi bi-bar-chart-fill"></i></span>Ads Manager</a>
+        <button type="button" class="list-group-item list-group-item-action border-0 rounded js-theme-toggle"><span class="fb-menu-icon"><i class="bi bi-moon-fill"></i></span><span class="theme-label">Dark mode</span></button>
+      </div>
+      <hr>
+      <h3 class="fs-6 text-secondary fw-semibold px-2">Your shortcuts</h3>
+      <div class="list-group list-group-flush fb-menu">
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-avatar fb-avatar-36 fb-square av-au">AU</span>BSCS Air University 2024</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-avatar fb-avatar-36 fb-square av-4">WD</span>Web Developers Pakistan</a>
+        <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-avatar fb-avatar-36 fb-square av-2">VE</span>Video Editing Community</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE LAYOUT ================= -->
+  <div class="container-fluid fb-layout">
+    <div class="row justify-content-center g-3 g-xl-4">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="col-xl-3 d-none d-xl-block" aria-label="Shortcuts">
+        <div class="position-sticky fb-sticky">
+          <div class="list-group list-group-flush fb-menu">
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-avatar fb-avatar-36 av-me">A</span>Abdulraheem</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-people-fill"></i></span>Friends</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-clock-history"></i></span>Memories</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon fb-purple"><i class="bi bi-bookmark-fill"></i></span>Saved</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-people"></i></span>Groups</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-play-btn-fill"></i></span>Video</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-shop"></i></span>Marketplace</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-danger"><i class="bi bi-calendar-event-fill"></i></span>Events</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-info"><i class="bi bi-bar-chart-fill"></i></span>Ads Manager</a>
+            <a href="#moreMenu" class="list-group-item list-group-item-action border-0 rounded" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="moreMenu"><span class="fb-menu-icon fb-grey"><i class="bi bi-chevron-down"></i></span>See more</a>
+            <div class="collapse" id="moreMenu">
+              <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-success"><i class="bi bi-flag-fill"></i></span>Pages</a>
+              <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-warning"><i class="bi bi-star-fill"></i></span>Favourites</a>
+              <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-menu-icon text-primary"><i class="bi bi-controller"></i></span>Play games</a>
+            </div>
+          </div>
+          <hr class="mx-2">
+          <h3 class="fs-6 text-secondary fw-semibold px-2">Your shortcuts</h3>
+          <div class="list-group list-group-flush fb-menu">
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-avatar fb-avatar-36 fb-square av-au">AU</span>BSCS Air University 2024</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-avatar fb-avatar-36 fb-square av-4">WD</span>Web Developers Pakistan</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded"><span class="fb-avatar fb-avatar-36 fb-square av-2">VE</span>Video Editing Community</a>
+          </div>
+          <p class="small text-secondary px-2 mt-3 fb-legal">Privacy · Terms · Advertising · Ad Choices · Cookies · More · Meta © 2026</p>
+        </div>
+      </aside>
+
+      <!-- CENTRE FEED -->
+      <main class="col-md-10 col-lg-7 col-xl-6 fb-feed" aria-label="News Feed">
+
+        <!-- Stories: horizontal scrolling flex row of cards -->
+        <section class="d-flex gap-2 overflow-x-auto pb-1 mb-3 fb-stories" aria-label="Stories">
+          <a href="#" class="card border-0 shadow-sm flex-shrink-0 overflow-hidden text-decoration-none fb-story fb-story-create">
+            <svg class="fb-story-top" viewBox="0 0 140 190" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-me" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1877f2"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+              <rect width="140" height="190" fill="url(#st-me)"/>
+              <circle cx="70" cy="78" r="30" fill="#fff" opacity=".9"/>
+              <path d="M22 190c0-32 22-52 48-52s48 20 48 52Z" fill="#fff" opacity=".9"/>
+            </svg>
+            <div class="card-body position-relative text-center p-2 pt-4">
+              <span class="position-absolute top-0 start-50 translate-middle fb-story-plus"><i class="bi bi-plus-lg"></i></span>
+              <span class="small fw-semibold text-body">Create story</span>
+            </div>
+          </a>
+
+          <a href="#" class="card border-0 shadow-sm flex-shrink-0 overflow-hidden text-decoration-none fb-story">
+            <svg viewBox="0 0 140 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f2027"/><stop offset=".6" stop-color="#2c5364"/><stop offset="1" stop-color="#f7b267"/></linearGradient></defs>
+              <rect width="140" height="250" fill="url(#st-1)"/>
+              <circle cx="100" cy="70" r="16" fill="#fff6d5"/>
+              <path d="M0 190 40 140l30 40 25-30 45 50v50H0Z" fill="#12242c"/>
+            </svg>
+            <span class="fb-avatar fb-avatar-40 fb-story-avatar av-1">AK</span>
+            <span class="fb-story-name">Ahmed Khan</span>
+          </a>
+
+          <a href="#" class="card border-0 shadow-sm flex-shrink-0 overflow-hidden text-decoration-none fb-story">
+            <svg viewBox="0 0 140 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a9e"/><stop offset="1" stop-color="#fad0c4"/></linearGradient></defs>
+              <rect width="140" height="250" fill="url(#st-2)"/>
+              <circle cx="40" cy="110" r="26" fill="#fff" opacity=".55"/><circle cx="92" cy="150" r="38" fill="#fff" opacity=".4"/><circle cx="110" cy="70" r="18" fill="#fff" opacity=".5"/>
+            </svg>
+            <span class="fb-avatar fb-avatar-40 fb-story-avatar av-2">SM</span>
+            <span class="fb-story-name">Sara Malik</span>
+          </a>
+
+          <a href="#" class="card border-0 shadow-sm flex-shrink-0 overflow-hidden text-decoration-none fb-story">
+            <svg viewBox="0 0 140 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b3d91"/><stop offset="1" stop-color="#1e63d6"/></linearGradient></defs>
+              <rect width="140" height="250" fill="url(#st-3)"/>
+              <g fill="#fff" opacity=".9"><rect x="30" y="150" width="80" height="60"/><path d="M25 150 70 110l45 40Z"/><rect x="62" y="175" width="16" height="35" fill="#1e63d6"/></g>
+              <text x="70" y="90" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="16">AIR UNIVERSITY</text>
+            </svg>
+            <span class="fb-avatar fb-avatar-40 fb-story-avatar av-au">AU</span>
+            <span class="fb-story-name">Air University CS</span>
+          </a>
+
+          <a href="#" class="card border-0 shadow-sm flex-shrink-0 overflow-hidden text-decoration-none fb-story">
+            <svg viewBox="0 0 140 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><linearGradient id="st-4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#134e5e"/><stop offset="1" stop-color="#71b280"/></linearGradient></defs>
+              <rect width="140" height="250" fill="url(#st-4)"/>
+              <g stroke="#fff" stroke-width="3" fill="none" opacity=".8"><circle cx="70" cy="120" r="34"/><circle cx="70" cy="120" r="18"/><path d="M70 60v20M70 160v20M10 120h20M110 120h20"/></g>
+            </svg>
+            <span class="fb-avatar fb-avatar-40 fb-story-avatar av-4">HA</span>
+            <span class="fb-story-name">Hamza Ali</span>
+          </a>
+        </section>
+
+        <!-- Composer (opens the Create post modal) -->
+        <section class="card border-0 shadow-sm mb-3 fb-card" aria-label="Create a post">
+          <div class="card-body pb-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="fb-avatar fb-avatar-40 av-me flex-shrink-0">A</span>
+              <button type="button" class="btn rounded-pill flex-grow-1 text-start text-secondary fb-composer-input" data-bs-toggle="modal" data-bs-target="#postModal">
+                What's on your mind, Abdulraheem?
+              </button>
+            </div>
+            <hr class="my-2">
+            <div class="d-flex">
+              <button type="button" class="btn flex-fill fw-semibold text-secondary fb-hover-btn" data-bs-toggle="modal" data-bs-target="#postModal"><i class="bi bi-camera-video-fill text-danger fs-5 me-1 align-middle"></i><span class="d-none d-sm-inline">Live video</span><span class="d-sm-none">Live</span></button>
+              <button type="button" class="btn flex-fill fw-semibold text-secondary fb-hover-btn" data-bs-toggle="modal" data-bs-target="#postModal"><i class="bi bi-images text-success fs-5 me-1 align-middle"></i><span class="d-none d-sm-inline">Photo/video</span><span class="d-sm-none">Photo</span></button>
+              <button type="button" class="btn flex-fill fw-semibold text-secondary fb-hover-btn" data-bs-toggle="modal" data-bs-target="#postModal"><i class="bi bi-emoji-smile-fill text-warning fs-5 me-1 align-middle"></i><span class="d-none d-sm-inline">Feeling/activity</span><span class="d-sm-none">Feeling</span></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Post 1: page post with a code editor image and comments ===== -->
+        <article class="card border-0 shadow-sm mb-3 fb-card fb-post">
+          <div class="card-header bg-transparent border-0 d-flex align-items-center gap-2 pt-3 pb-2">
+            <span class="fb-avatar fb-avatar-40 av-au">AU</span>
+            <div class="flex-grow-1 lh-sm">
+              <a href="#" class="fw-semibold text-body text-decoration-none">Air University Islamabad</a> <i class="bi bi-patch-check-fill text-primary small"></i>
+              <div class="small text-secondary">2 h · <i class="bi bi-globe-americas"></i></div>
+            </div>
+            <div class="dropdown">
+              <button class="btn fb-circle-btn fb-circle-btn-sm bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Post options"><i class="bi bi-three-dots"></i></button>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2">
+                <li><button class="dropdown-item rounded js-toast" data-msg="Post saved to your collection." type="button"><i class="bi bi-bookmark me-2"></i>Save post</button></li>
+                <li><button class="dropdown-item rounded js-hide-post" type="button"><i class="bi bi-x-square me-2"></i>Hide post</button></li>
+                <li><button class="dropdown-item rounded js-toast" data-msg="Thanks, we'll review this post." type="button"><i class="bi bi-flag me-2"></i>Report post</button></li>
+              </ul>
+            </div>
+          </div>
+          <div class="card-body pt-0 pb-2">
+            <p class="card-text mb-0">Full Stack Web Development Lab in action! 💻 Our BSCS-V students rebuilt their Lab 2 interfaces with <strong>Bootstrap 5</strong> this week. Proud of the creativity on display in Lab 5, A Block.
+              <a href="#" class="text-decoration-none">#AirUniversity</a> <a href="#" class="text-decoration-none">#WebDevelopment</a> <a href="#" class="text-decoration-none">#Bootstrap</a></p>
+          </div>
+          <div class="ratio fb-ratio-code">
+            <svg viewBox="0 0 680 400" role="img" aria-label="Screenshot of a code editor showing an HTML file that loads Bootstrap">
+              <rect width="680" height="400" fill="#1e1e2e"/>
+              <rect width="680" height="38" fill="#181825"/>
+              <circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+              <rect x="96" y="8" width="130" height="22" rx="5" fill="#313244"/>
+              <text x="161" y="23" fill="#cdd6f4" font-family="Consolas, 'Courier New', monospace" font-size="12.5" text-anchor="middle">home.html</text>
+              <rect x="0" y="38" width="44" height="338" fill="#181825"/>
+              <g font-family="Consolas, 'Courier New', monospace" font-size="15.5">
+                <g fill="#585b70" text-anchor="end">
+                  <text x="32" y="70">1</text><text x="32" y="96">2</text><text x="32" y="122">3</text><text x="32" y="148">4</text><text x="32" y="174">5</text><text x="32" y="200">6</text><text x="32" y="226">7</text><text x="32" y="252">8</text><text x="32" y="278">9</text><text x="32" y="304">10</text><text x="32" y="330">11</text><text x="32" y="356">12</text>
+                </g>
+                <text x="60" y="70"><tspan fill="#cba6f7">&lt;!DOCTYPE</tspan><tspan fill="#fab387"> html</tspan><tspan fill="#cba6f7">&gt;</tspan></text>
+                <text x="60" y="96"><tspan fill="#89b4fa">&lt;html</tspan><tspan fill="#f9e2af"> data-bs-theme</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"dark"</tspan><tspan fill="#89b4fa">&gt;</tspan></text>
+                <text x="60" y="122" fill="#89b4fa">&lt;head&gt;</text>
+                <text x="84" y="148"><tspan fill="#89b4fa">&lt;link</tspan><tspan fill="#f9e2af"> href</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"bootstrap.min.css"</tspan><tspan fill="#89b4fa">&gt;</tspan></text>
+                <text x="60" y="174" fill="#89b4fa">&lt;/head&gt;</text>
+                <text x="60" y="200" fill="#89b4fa">&lt;body&gt;</text>
+                <text x="84" y="226"><tspan fill="#89b4fa">&lt;nav</tspan><tspan fill="#f9e2af"> class</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"navbar fixed-top"</tspan><tspan fill="#89b4fa">&gt;</tspan></text>
+                <text x="84" y="252"><tspan fill="#89b4fa">&lt;div</tspan><tspan fill="#f9e2af"> class</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"row g-3"</tspan><tspan fill="#89b4fa">&gt;</tspan></text>
+                <text x="108" y="278"><tspan fill="#89b4fa">&lt;div</tspan><tspan fill="#f9e2af"> class</tspan><tspan fill="#cdd6f4">=</tspan><tspan fill="#a6e3a1">"col-lg-6 card"</tspan><tspan fill="#89b4fa">&gt;</tspan></text>
+                <text x="84" y="304" fill="#89b4fa">&lt;/div&gt;</text>
+                <text x="84" y="330" fill="#6c7086" font-style="italic">&lt;!-- grid, cards, modals, offcanvas --&gt;</text>
+                <text x="60" y="356" fill="#89b4fa">&lt;/body&gt;</text>
+              </g>
+              <rect x="400" y="317" width="2" height="18" fill="#f5e0dc"/>
+              <rect y="376" width="680" height="24" fill="#11111b"/>
+              <text x="14" y="392" fill="#a6adc8" font-family="Consolas, 'Courier New', monospace" font-size="11.5">main*    HTML    UTF-8    Ln 11, Col 44</text>
+              <text x="666" y="392" fill="#a6adc8" font-family="Consolas, 'Courier New', monospace" font-size="11.5" text-anchor="end">Spaces: 2</text>
+            </svg>
+          </div>
+          <div class="card-body py-2">
+            <div class="d-flex align-items-center justify-content-between small text-secondary">
+              <span class="d-flex align-items-center gap-1">
+                <span class="fb-reactions"><span class="fb-react bg-primary"><i class="bi bi-hand-thumbs-up-fill"></i></span><span class="fb-react bg-danger"><i class="bi bi-heart-fill"></i></span><span class="fb-react bg-warning"><i class="bi bi-emoji-heart-eyes-fill"></i></span></span>
+                <span class="js-like-count" data-base="1200">1.2K</span>
+              </span>
+              <span>
+                <a class="text-secondary text-decoration-none" data-bs-toggle="collapse" href="#comments-1" role="button" aria-expanded="true" aria-controls="comments-1">84 comments</a> · 37 shares
+              </span>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent px-3 py-1">
+            <div class="btn-group w-100 fb-actions" role="group" aria-label="Post actions">
+              <input type="checkbox" class="btn-check js-like" id="like-1" autocomplete="off">
+              <label class="btn fb-hover-btn fw-semibold text-secondary" for="like-1"><i class="bi bi-hand-thumbs-up me-1"></i>Like</label>
+              <button type="button" class="btn fb-hover-btn fw-semibold text-secondary js-focus-comment" data-target="#comment-input-1"><i class="bi bi-chat me-1"></i>Comment</button>
+              <button type="button" class="btn fb-hover-btn fw-semibold text-secondary js-toast" data-msg="Shared to your feed."><i class="bi bi-share me-1"></i>Share</button>
+            </div>
+          </div>
+          <div class="card-body pt-2">
+            <div class="collapse show" id="comments-1">
+              <div class="d-flex gap-2 mb-2">
+                <span class="fb-avatar fb-avatar-32 av-2 flex-shrink-0">SM</span>
+                <div>
+                  <div class="bg-body-tertiary rounded-4 px-3 py-2 fb-bubble">
+                    <div class="fw-semibold small">Sara Malik</div>
+                    <div class="small">The Bootstrap grid made the timetable responsive in like 10 minutes 😄</div>
+                  </div>
+                  <div class="small text-secondary ms-2 mt-1"><span class="me-2">1 h</span><a href="#" class="fw-semibold text-secondary text-decoration-none me-2">Like</a><a href="#" class="fw-semibold text-secondary text-decoration-none">Reply</a></div>
+                </div>
+              </div>
+              <div class="d-flex gap-2 mb-2">
+                <span class="fb-avatar fb-avatar-32 av-4 flex-shrink-0">HA</span>
+                <div>
+                  <div class="bg-body-tertiary rounded-4 px-3 py-2 fb-bubble">
+                    <div class="fw-semibold small">Hamza Ali</div>
+                    <div class="small">Offcanvas menus are my new favourite thing 🔥</div>
+                  </div>
+                  <div class="small text-secondary ms-2 mt-1"><span class="me-2">42 min</span><a href="#" class="fw-semibold text-secondary text-decoration-none me-2">Like</a><a href="#" class="fw-semibold text-secondary text-decoration-none">Reply</a></div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+              <span class="fb-avatar fb-avatar-32 av-me flex-shrink-0">A</span>
+              <div class="input-group input-group-sm rounded-pill overflow-hidden bg-body-tertiary fb-comment-box">
+                <input type="text" class="form-control border-0 bg-transparent shadow-none ps-3" id="comment-input-1" placeholder="Write a comment…" aria-label="Write a comment">
+                <span class="input-group-text border-0 bg-transparent text-secondary gap-2 pe-3"><i class="bi bi-emoji-smile"></i><i class="bi bi-camera"></i><i class="bi bi-filetype-gif"></i><i class="bi bi-sticky"></i></span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== Post 2: friend's photo post (Multan sunset) ===== -->
+        <article class="card border-0 shadow-sm mb-3 fb-card fb-post">
+          <div class="card-header bg-transparent border-0 d-flex align-items-center gap-2 pt-3 pb-2">
+            <span class="fb-avatar fb-avatar-40 av-1">AK</span>
+            <div class="flex-grow-1 lh-sm">
+              <a href="#" class="fw-semibold text-body text-decoration-none">Ahmed Khan</a>
+              <div class="small text-secondary">Yesterday at 6:42 PM · <i class="bi bi-globe-americas"></i></div>
+            </div>
+            <div class="dropdown">
+              <button class="btn fb-circle-btn fb-circle-btn-sm bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Post options"><i class="bi bi-three-dots"></i></button>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2">
+                <li><button class="dropdown-item rounded js-toast" data-msg="Post saved to your collection." type="button"><i class="bi bi-bookmark me-2"></i>Save post</button></li>
+                <li><button class="dropdown-item rounded js-hide-post" type="button"><i class="bi bi-x-square me-2"></i>Hide post</button></li>
+                <li><button class="dropdown-item rounded js-toast" data-msg="Thanks, we'll review this post." type="button"><i class="bi bi-flag me-2"></i>Report post</button></li>
+              </ul>
+            </div>
+          </div>
+          <div class="card-body pt-0 pb-2">
+            <p class="card-text mb-0">Sunset over the Chenab, Multan. No filter needed 🌅 Home is home ❤️ — feeling grateful.</p>
+          </div>
+          <div class="ratio fb-ratio-photo">
+            <svg viewBox="0 0 680 420" role="img" aria-label="Sunset over the river in Multan with the shrine silhouette">
+              <defs>
+                <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1b1140"/><stop offset=".45" stop-color="#b3325a"/><stop offset=".78" stop-color="#f27a3d"/><stop offset="1" stop-color="#ffd27a"/></linearGradient>
+                <linearGradient id="water" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f6a35c"/><stop offset="1" stop-color="#3a1f5c"/></linearGradient>
+                <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff2b0"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+              </defs>
+              <rect width="680" height="302" fill="url(#sky)"/>
+              <circle cx="450" cy="235" r="130" fill="url(#glow)" opacity=".85"/>
+              <circle cx="450" cy="240" r="46" fill="#ffe9a3"/>
+              <g fill="#3a1a4f" opacity=".85">
+                <rect x="0" y="262" width="680" height="42"/>
+                <rect x="30" y="238" width="26" height="30"/><rect x="70" y="248" width="40" height="20"/><rect x="130" y="230" width="18" height="40"/>
+                <rect x="560" y="244" width="30" height="24"/><rect x="610" y="236" width="20" height="32"/><rect x="640" y="250" width="40" height="18"/>
+              </g>
+              <g fill="#1d0e2e">
+                <rect x="270" y="212" width="140" height="92"/>
+                <path d="M285 212v-38h110v38Z"/>
+                <path d="M300 174a40 40 0 0 1 80 0Z"/>
+                <rect x="337" y="116" width="6" height="20"/><circle cx="340" cy="114" r="4"/>
+                <rect x="262" y="150" width="10" height="154"/><path d="M258 152h18l-9-16Z"/>
+                <rect x="408" y="150" width="10" height="154"/><path d="M404 152h18l-9-16Z"/>
+                <rect x="292" y="164" width="8" height="10"/><rect x="380" y="164" width="8" height="10"/><rect x="336" y="164" width="8" height="10"/>
+              </g>
+              <g transform="translate(110 302)" fill="#150a24">
+                <path d="M0 0q6-60 14-110" stroke="#150a24" stroke-width="7" fill="none" stroke-linecap="round"/>
+                <g transform="translate(14 -112)">
+                  <ellipse cx="26" rx="30" ry="7" transform="rotate(-165)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-135)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-105)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-75)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-45)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-15)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(15)"/>
+                </g>
+              </g>
+              <g transform="translate(600 302) scale(.8)" fill="#150a24">
+                <path d="M0 0q-6-60-14-110" stroke="#150a24" stroke-width="7" fill="none" stroke-linecap="round"/>
+                <g transform="translate(-14 -112)">
+                  <ellipse cx="26" rx="30" ry="7" transform="rotate(-165)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-135)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-105)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-75)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-45)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(-15)"/><ellipse cx="26" rx="30" ry="7" transform="rotate(15)"/>
+                </g>
+              </g>
+              <rect y="302" width="680" height="118" fill="url(#water)"/>
+              <g fill="#ffe9a3" opacity=".45">
+                <rect x="420" y="312" width="60" height="4" rx="2"/><rect x="405" y="326" width="90" height="4" rx="2"/><rect x="430" y="342" width="50" height="4" rx="2"/><rect x="400" y="360" width="100" height="4" rx="2"/><rect x="440" y="380" width="40" height="4" rx="2"/><rect x="415" y="398" width="70" height="4" rx="2"/>
+              </g>
+              <g fill="#120818"><path d="M180 352h70l-10 12h-50Z"/><rect x="214" y="322" width="3" height="30"/><path d="M217 324l26 22h-26Z"/></g>
+              <g fill="none" stroke="#2a1440" stroke-width="2" stroke-linecap="round"><path d="M520 120q6-6 12 0 6-6 12 0"/><path d="M548 104q5-5 10 0 5-5 10 0"/><path d="M500 140q5-5 10 0 5-5 10 0"/></g>
+            </svg>
+          </div>
+          <div class="card-body py-2">
+            <div class="d-flex align-items-center justify-content-between small text-secondary">
+              <span class="d-flex align-items-center gap-1">
+                <span class="fb-reactions"><span class="fb-react bg-danger"><i class="bi bi-heart-fill"></i></span><span class="fb-react bg-primary"><i class="bi bi-hand-thumbs-up-fill"></i></span></span>
+                <span class="js-like-count" data-base="348">348</span>
+              </span>
+              <span>
+                <a class="text-secondary text-decoration-none" data-bs-toggle="collapse" href="#comments-2" role="button" aria-expanded="false" aria-controls="comments-2">View 2 comments</a> · 4 shares
+              </span>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent px-3 py-1">
+            <div class="btn-group w-100 fb-actions" role="group" aria-label="Post actions">
+              <input type="checkbox" class="btn-check js-like" id="like-2" autocomplete="off">
+              <label class="btn fb-hover-btn fw-semibold text-secondary" for="like-2"><i class="bi bi-hand-thumbs-up me-1"></i>Like</label>
+              <button type="button" class="btn fb-hover-btn fw-semibold text-secondary js-focus-comment" data-target="#comment-input-2"><i class="bi bi-chat me-1"></i>Comment</button>
+              <button type="button" class="btn fb-hover-btn fw-semibold text-secondary js-toast" data-msg="Shared to your feed."><i class="bi bi-share me-1"></i>Share</button>
+            </div>
+          </div>
+          <div class="card-body pt-2">
+            <div class="collapse" id="comments-2">
+              <div class="d-flex gap-2 mb-2">
+                <span class="fb-avatar fb-avatar-32 av-me flex-shrink-0">A</span>
+                <div>
+                  <div class="bg-body-tertiary rounded-4 px-3 py-2 fb-bubble">
+                    <div class="fw-semibold small">Abdulraheem</div>
+                    <div class="small">Miss this view from Islamabad 🥲</div>
+                  </div>
+                  <div class="small text-secondary ms-2 mt-1"><span class="me-2">20 h</span><a href="#" class="fw-semibold text-secondary text-decoration-none me-2">Like</a><a href="#" class="fw-semibold text-secondary text-decoration-none">Reply</a></div>
+                </div>
+              </div>
+              <div class="d-flex gap-2 mb-2">
+                <span class="fb-avatar fb-avatar-32 av-5 flex-shrink-0">AN</span>
+                <div>
+                  <div class="bg-body-tertiary rounded-4 px-3 py-2 fb-bubble">
+                    <div class="fw-semibold small">Ayesha Noor</div>
+                    <div class="small">Multan sunsets hit different 🌇</div>
+                  </div>
+                  <div class="small text-secondary ms-2 mt-1"><span class="me-2">18 h</span><a href="#" class="fw-semibold text-secondary text-decoration-none me-2">Like</a><a href="#" class="fw-semibold text-secondary text-decoration-none">Reply</a></div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+              <span class="fb-avatar fb-avatar-32 av-me flex-shrink-0">A</span>
+              <div class="input-group input-group-sm rounded-pill overflow-hidden bg-body-tertiary fb-comment-box">
+                <input type="text" class="form-control border-0 bg-transparent shadow-none ps-3" id="comment-input-2" placeholder="Write a comment…" aria-label="Write a comment">
+                <span class="input-group-text border-0 bg-transparent text-secondary gap-2 pe-3"><i class="bi bi-emoji-smile"></i><i class="bi bi-camera"></i><i class="bi bi-filetype-gif"></i><i class="bi bi-sticky"></i></span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== Post 3: text-on-colour status ===== -->
+        <article class="card border-0 shadow-sm mb-3 fb-card fb-post">
+          <div class="card-header bg-transparent border-0 d-flex align-items-center gap-2 pt-3 pb-2">
+            <span class="fb-avatar fb-avatar-40 av-me">A</span>
+            <div class="flex-grow-1 lh-sm">
+              <a href="#" class="fw-semibold text-body text-decoration-none">Abdulraheem</a>
+              <div class="small text-secondary">5 h · <i class="bi bi-people-fill"></i></div>
+            </div>
+            <div class="dropdown">
+              <button class="btn fb-circle-btn fb-circle-btn-sm bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Post options"><i class="bi bi-three-dots"></i></button>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2">
+                <li><button class="dropdown-item rounded js-toast" data-msg="Post saved to your collection." type="button"><i class="bi bi-bookmark me-2"></i>Save post</button></li>
+                <li><button class="dropdown-item rounded js-hide-post" type="button"><i class="bi bi-x-square me-2"></i>Hide post</button></li>
+                <li><button class="dropdown-item rounded" type="button"><i class="bi bi-pencil me-2"></i>Edit post</button></li>
+              </ul>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-center text-center text-white fw-bold px-4 fb-bg-post">
+            Rebuilt all five Lab 2 tasks with Bootstrap 5 this week 🔥 Grid, cards, modals, offcanvas and toasts: the same designs, half the custom CSS.
+          </div>
+          <div class="card-body py-2">
+            <div class="d-flex align-items-center justify-content-between small text-secondary">
+              <span class="d-flex align-items-center gap-1">
+                <span class="fb-reactions"><span class="fb-react bg-primary"><i class="bi bi-hand-thumbs-up-fill"></i></span><span class="fb-react bg-danger"><i class="bi bi-heart-fill"></i></span></span>
+                <span class="js-like-count" data-base="96">96</span>
+              </span>
+              <span>12 comments · 2 shares</span>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent px-3 py-1">
+            <div class="btn-group w-100 fb-actions" role="group" aria-label="Post actions">
+              <input type="checkbox" class="btn-check js-like" id="like-3" autocomplete="off" checked>
+              <label class="btn fb-hover-btn fw-semibold text-secondary" for="like-3"><i class="bi bi-hand-thumbs-up me-1"></i>Like</label>
+              <button type="button" class="btn fb-hover-btn fw-semibold text-secondary js-focus-comment" data-target="#comment-input-3"><i class="bi bi-chat me-1"></i>Comment</button>
+              <button type="button" class="btn fb-hover-btn fw-semibold text-secondary js-toast" data-msg="Shared to your feed."><i class="bi bi-share me-1"></i>Share</button>
+            </div>
+          </div>
+          <div class="card-body pt-2">
+            <div class="d-flex gap-2 align-items-center">
+              <span class="fb-avatar fb-avatar-32 av-me flex-shrink-0">A</span>
+              <div class="input-group input-group-sm rounded-pill overflow-hidden bg-body-tertiary fb-comment-box">
+                <input type="text" class="form-control border-0 bg-transparent shadow-none ps-3" id="comment-input-3" placeholder="Write a comment…" aria-label="Write a comment">
+                <span class="input-group-text border-0 bg-transparent text-secondary gap-2 pe-3"><i class="bi bi-emoji-smile"></i><i class="bi bi-camera"></i><i class="bi bi-filetype-gif"></i><i class="bi bi-sticky"></i></span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== Reels ===== -->
+        <section class="card border-0 shadow-sm mb-4 fb-card" aria-label="Reels and short videos">
+          <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3">
+            <h2 class="fs-6 fw-bold mb-0"><i class="bi bi-film text-danger me-2"></i>Reels and short videos</h2>
+            <a href="#" class="small text-decoration-none">See all</a>
+          </div>
+          <div class="card-body pt-1">
+            <div class="row g-2">
+              <div class="col-4">
+                <a href="#" class="d-block position-relative rounded-3 overflow-hidden fb-reel">
+                  <div class="ratio fb-ratio-reel">
+                    <svg viewBox="0 0 200 355" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                      <defs><linearGradient id="rl-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1b3d"/><stop offset="1" stop-color="#3b6fd8"/></linearGradient></defs>
+                      <rect width="200" height="355" fill="url(#rl-1)"/>
+                      <g fill="#fff" opacity=".9"><circle cx="150" cy="60" r="12"/><circle cx="40" cy="40" r="2"/><circle cx="80" cy="90" r="1.5"/><circle cx="120" cy="30" r="1.5"/><circle cx="170" cy="120" r="2"/></g>
+                      <path d="M0 280 40 250l30 20 30-40 40 40 30-30 30 40v75H0Z" fill="#0a1229"/>
+                      <g fill="#f5f5f5"><path d="M55 250 100 160l45 90Z"/><rect x="42" y="200" width="6" height="52"/><rect x="152" y="200" width="6" height="52"/><rect x="70" y="180" width="4" height="70"/><rect x="126" y="180" width="4" height="70"/></g>
+                    </svg>
+                  </div>
+                  <span class="position-absolute top-50 start-50 translate-middle fb-reel-play"><i class="bi bi-play-fill"></i></span>
+                  <span class="position-absolute bottom-0 start-0 p-2 text-white small fw-semibold lh-sm fb-reel-info"><i class="bi bi-eye me-1"></i>12K<br>Islamabad in 15 seconds</span>
+                </a>
+              </div>
+              <div class="col-4">
+                <a href="#" class="d-block position-relative rounded-3 overflow-hidden fb-reel">
+                  <div class="ratio fb-ratio-reel">
+                    <svg viewBox="0 0 200 355" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                      <defs><linearGradient id="rl-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4b0f7a"/><stop offset="1" stop-color="#7952b3"/></linearGradient></defs>
+                      <rect width="200" height="355" fill="url(#rl-2)"/>
+                      <rect x="55" y="115" width="90" height="90" rx="18" fill="#fff" opacity=".95"/>
+                      <text x="100" y="182" text-anchor="middle" fill="#7952b3" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="62">B</text>
+                      <text x="100" y="260" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="18">Bootstrap 5</text>
+                    </svg>
+                  </div>
+                  <span class="position-absolute top-50 start-50 translate-middle fb-reel-play"><i class="bi bi-play-fill"></i></span>
+                  <span class="position-absolute bottom-0 start-0 p-2 text-white small fw-semibold lh-sm fb-reel-info"><i class="bi bi-eye me-1"></i>4.5K<br>Grid in 60 seconds</span>
+                </a>
+              </div>
+              <div class="col-4">
+                <a href="#" class="d-block position-relative rounded-3 overflow-hidden fb-reel">
+                  <div class="ratio fb-ratio-reel">
+                    <svg viewBox="0 0 200 355" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                      <defs><linearGradient id="rl-3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a2e0e"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs>
+                      <rect width="200" height="355" fill="url(#rl-3)"/>
+                      <ellipse cx="100" cy="230" rx="70" ry="26" fill="#3b1d0a"/>
+                      <ellipse cx="100" cy="222" rx="70" ry="26" fill="#f4e4c1"/>
+                      <ellipse cx="100" cy="218" rx="52" ry="18" fill="#c2410c"/>
+                      <g fill="#16a34a"><circle cx="80" cy="212" r="5"/><circle cx="112" cy="220" r="4"/><circle cx="96" cy="208" r="3.5"/></g>
+                      <g stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"><path d="M70 150q6-14 0-28"/><path d="M100 140q6-14 0-28"/><path d="M130 150q6-14 0-28"/></g>
+                    </svg>
+                  </div>
+                  <span class="position-absolute top-50 start-50 translate-middle fb-reel-play"><i class="bi bi-play-fill"></i></span>
+                  <span class="position-absolute bottom-0 start-0 p-2 text-white small fw-semibold lh-sm fb-reel-info"><i class="bi bi-eye me-1"></i>890<br>Multan street food tour</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- RIGHT SIDEBAR -->
+      <aside class="col-lg-4 col-xl-3 d-none d-lg-block" aria-label="Sponsored, birthdays and contacts">
+        <div class="position-sticky fb-sticky">
+          <h3 class="fs-6 text-secondary fw-semibold px-2 mb-2">Sponsored</h3>
+          <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex gap-3 align-items-center py-2">
+              <svg class="fb-ad-thumb rounded-3 flex-shrink-0" viewBox="0 0 116 116" aria-hidden="true">
+                <defs><linearGradient id="ad-1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+                <rect width="116" height="116" fill="url(#ad-1)"/>
+                <rect x="22" y="34" width="72" height="46" rx="4" fill="#0f172a"/><rect x="26" y="38" width="64" height="38" fill="#1e293b"/>
+                <g fill="#38bdf8"><rect x="32" y="44" width="30" height="4" rx="2"/><rect x="32" y="52" width="44" height="4" rx="2" fill="#a5b4fc"/><rect x="32" y="60" width="22" height="4" rx="2" fill="#86efac"/><rect x="32" y="68" width="38" height="4" rx="2"/></g>
+                <rect x="14" y="80" width="88" height="6" rx="3" fill="#cbd5e1"/>
+              </svg>
+              <span class="lh-sm"><span class="fw-semibold small">Full Stack Bootcamp 2026 — HTML, CSS, Bootstrap &amp; Node</span><br><span class="small text-secondary">devacademy.pk</span></span>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex gap-3 align-items-center py-2">
+              <svg class="fb-ad-thumb rounded-3 flex-shrink-0" viewBox="0 0 116 116" aria-hidden="true">
+                <defs><linearGradient id="ad-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f97316"/><stop offset="1" stop-color="#ef4444"/></linearGradient></defs>
+                <rect width="116" height="116" fill="url(#ad-2)"/>
+                <circle cx="58" cy="58" r="34" fill="#fff"/>
+                <text x="58" y="56" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="20" fill="#ef4444">30%</text>
+                <text x="58" y="72" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="10" fill="#7c2d12">STUDENTS</text>
+              </svg>
+              <span class="lh-sm"><span class="fw-semibold small">Student laptop deals — up to 30% off this semester</span><br><span class="small text-secondary">techmart.pk</span></span>
+            </a>
+          </div>
+
+          <hr class="mx-2">
+          <h3 class="fs-6 text-secondary fw-semibold px-2 mb-2">Birthdays</h3>
+          <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex gap-2 align-items-center px-2 py-2">
+            <i class="bi bi-gift-fill fs-3 text-primary"></i>
+            <span class="small"><strong>Ahmed Khan</strong> and <strong>2 others</strong> have birthdays today.</span>
+          </a>
+
+          <hr class="mx-2">
+          <div class="d-flex align-items-center justify-content-between px-2 mb-1">
+            <h3 class="fs-6 text-secondary fw-semibold mb-0">Contacts</h3>
+            <span class="text-secondary d-flex gap-3"><i class="bi bi-camera-video-fill"></i><i class="bi bi-search"></i><i class="bi bi-three-dots"></i></span>
+          </div>
+          <div class="list-group list-group-flush fb-contacts">
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Active now"><span class="position-relative"><span class="fb-avatar fb-avatar-36 av-1">AK</span><span class="position-absolute bottom-0 end-0 p-1 bg-success border border-2 border-body rounded-circle"><span class="visually-hidden">Online</span></span></span>Ahmed Khan</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Active now"><span class="position-relative"><span class="fb-avatar fb-avatar-36 av-2">SM</span><span class="position-absolute bottom-0 end-0 p-1 bg-success border border-2 border-body rounded-circle"><span class="visually-hidden">Online</span></span></span>Sara Malik</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Active 12 min ago"><span class="position-relative"><span class="fb-avatar fb-avatar-36 av-4">HA</span></span>Hamza Ali</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Active now"><span class="position-relative"><span class="fb-avatar fb-avatar-36 av-5">AN</span><span class="position-absolute bottom-0 end-0 p-1 bg-success border border-2 border-body rounded-circle"><span class="visually-hidden">Online</span></span></span>Ayesha Noor</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Active 1 h ago"><span class="position-relative"><span class="fb-avatar fb-avatar-36 av-6">BA</span></span>Bilal Ahmed</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Active now"><span class="position-relative"><span class="fb-avatar fb-avatar-36 av-7">ZR</span><span class="position-absolute bottom-0 end-0 p-1 bg-success border border-2 border-body rounded-circle"><span class="visually-hidden">Online</span></span></span>Zain Raza</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Active 3 h ago"><span class="position-relative"><span class="fb-avatar fb-avatar-36 av-8">FS</span></span>Fatima Sheikh</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Active now"><span class="position-relative"><span class="fb-avatar fb-avatar-36 av-3">UR</span><span class="position-absolute bottom-0 end-0 p-1 bg-success border border-2 border-body rounded-circle"><span class="visually-hidden">Online</span></span></span>Usman Rauf</a>
+          </div>
+
+          <hr class="mx-2">
+          <h3 class="fs-6 text-secondary fw-semibold px-2 mb-1">Group conversations</h3>
+          <div class="list-group list-group-flush fb-contacts">
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1"><span class="fb-avatar fb-avatar-36 av-au">B5</span>BSCS-V-A Class</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1"><span class="fb-avatar fb-avatar-36 av-6">FS</span>Full Stack Lab Group</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 rounded d-flex align-items-center gap-2 py-1"><span class="fb-menu-icon fb-grey"><i class="bi bi-plus-lg"></i></span>Create new group</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ================= CREATE POST MODAL ================= -->
+  <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header justify-content-center position-relative">
+          <h2 class="modal-title fs-5 fw-bold" id="postModalTitle">Create post</h2>
+          <button type="button" class="btn-close position-absolute end-0 me-3 rounded-circle bg-body-tertiary p-2" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <span class="fb-avatar fb-avatar-40 av-me">A</span>
+            <div class="lh-sm">
+              <div class="fw-semibold">Abdulraheem</div>
+              <select class="form-select form-select-sm py-0 bg-body-tertiary border-0 fw-semibold fb-audience" aria-label="Audience">
+                <option>🌍 Public</option>
+                <option selected>👥 Friends</option>
+                <option>🔒 Only me</option>
+              </select>
+            </div>
+          </div>
+          <label for="postText" class="visually-hidden">What's on your mind?</label>
+          <textarea class="form-control border-0 shadow-none fs-4 px-0" id="postText" rows="4" placeholder="What's on your mind, Abdulraheem?"></textarea>
+          <div class="border rounded-3 d-flex align-items-center justify-content-between px-3 py-2 mt-2">
+            <span class="fw-semibold small">Add to your post</span>
+            <span class="d-flex gap-3 fs-5">
+              <i class="bi bi-images text-success" data-bs-toggle="tooltip" data-bs-title="Photo/video"></i>
+              <i class="bi bi-person-plus-fill text-primary" data-bs-toggle="tooltip" data-bs-title="Tag people"></i>
+              <i class="bi bi-emoji-smile-fill text-warning" data-bs-toggle="tooltip" data-bs-title="Feeling/activity"></i>
+              <i class="bi bi-geo-alt-fill text-danger" data-bs-toggle="tooltip" data-bs-title="Check in"></i>
+              <i class="bi bi-filetype-gif text-info" data-bs-toggle="tooltip" data-bs-title="GIF"></i>
+            </span>
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-primary w-100 fw-semibold" id="publishPost" disabled>Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TOAST ================= -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="fbToast" class="toast align-items-center border-0 shadow" role="status" aria-live="polite" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-success fs-5"></i><span id="fbToastMsg">Done.</span></div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

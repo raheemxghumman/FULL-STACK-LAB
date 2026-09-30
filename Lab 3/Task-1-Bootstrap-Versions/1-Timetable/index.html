@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!--
+  BSCS-V-A (Shift-I) Timetable - Bootstrap 5.3 version (Lab 3, Task 1)
+  Author: Abdulraheem
+
+  Bootstrap features used on this page:
+    - Layout:      .container-xxl, .card / .card-body / .card-footer (the "sheet"), .row / .col-* (header)
+    - Tables:      .table, .table-bordered, .table-responsive, .table-light (header row),
+                   .align-middle, .text-center, lab cells shaded with .bg-body-tertiary
+    - Utilities:   d-flex, justify-content-between, align-items-*, gap-2, fw-bold, fw-normal, small,
+                   display-6, text-body-secondary, text-nowrap, visually-hidden, py-* / px-* / m*-*,
+                   shadow-sm, rounded-0, border-0, bg-transparent
+    - Components:  .btn .btn-outline-secondary .btn-sm (Print button), Tooltips (lab blocks)
+    - Print:       .d-print-none hides the toolbar when printing
+    - Icons:       Bootstrap Icons (printer, info-circle)
+  style.css only sets row heights, font sizes that match the aSc sheet, and the landscape print page.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Class timetable for BSCS-V-A (Shift-I), Air University Islamabad, Fall 2026. Built with Bootstrap 5.">
+  <title>BSCS-V-A (Shift-I) Timetable · Bootstrap</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-body-tertiary">
+
+  <main class="container-xxl py-4">
+
+    <!-- Toolbar (hidden when printing) -->
+    <div class="d-flex justify-content-between align-items-center gap-2 mb-3 d-print-none">
+      <span class="small text-body-secondary"><i class="bi bi-info-circle me-1"></i>Hover a lab block for details</span>
+      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+        <i class="bi bi-printer me-1"></i>Print
+      </button>
+    </div>
+
+    <!-- The sheet -->
+    <div class="card shadow-sm rounded-0">
+      <div class="card-body px-3 px-md-4 pt-3 pb-2">
+
+        <!-- Header: same content as the official aSc sheet -->
+        <div class="row align-items-end g-0 mb-2">
+          <div class="col-12 col-md-2 order-2 order-md-1 small text-body-secondary text-center text-md-start">Air University</div>
+          <div class="col-12 col-md-8 order-1 order-md-2 text-center">
+            <h1 class="display-6 fw-normal mb-0 text-nowrap">BSCS-V-A (Shift-I)</h1>
+          </div>
+          <div class="d-none d-md-block col-md-2 order-md-3"></div>
+        </div>
+
+        <!-- Timetable: rows = days, columns = one-hour slots; labs span 3 slots (colspan="3") -->
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle text-center mb-0 timetable">
+            <caption class="visually-hidden">BSCS-V-A (Shift-I) weekly timetable, Monday to Friday, 08:00 to 17:00</caption>
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="day-col"></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">08:00am-09:00am</span><span class="d-block slot-sub text-body-secondary">8:00 - 9:00</span></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">09:00am-10:00am</span><span class="d-block slot-sub text-body-secondary">9:00 - 10:00</span></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">10:00am-11:00am</span><span class="d-block slot-sub text-body-secondary">10:00 - 11:00</span></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">11:00am-12:00pm</span><span class="d-block slot-sub text-body-secondary">11:00 - 12:00</span></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">12:00pm-01:00pm</span><span class="d-block slot-sub text-body-secondary">12:00 - 1:00</span></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">01:00pm-02:00pm</span><span class="d-block slot-sub text-body-secondary">1:00 - 2:00</span></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">02:00pm-03:00pm</span><span class="d-block slot-sub text-body-secondary">2:00 - 3:00</span></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">03:00pm-04:00pm</span><span class="d-block slot-sub text-body-secondary">3:00 - 4:00</span></th>
+                <th scope="col" class="fw-normal"><span class="d-block slot">04:00pm-05:00pm</span><span class="d-block slot-sub text-body-secondary">4:00 - 5:00</span></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- MONDAY -->
+              <tr>
+                <th scope="row" class="day fw-normal">Mo</th>
+                <td><span class="d-block teacher text-body-secondary">CS-Ms Maryam Wardah</span><span class="d-block fw-bold course">Artificial Intelligence</span><span class="d-block room">C-205 (Shift-I)</span></td>
+                <td><span class="d-block teacher text-body-secondary">CS-Ms Warda Aslam / CS-Ms Eeman Fatima</span><span class="d-block fw-bold course">Operating Systems</span><span class="d-block room">Lecture Hall 01</span></td>
+                <td><span class="d-block teacher text-body-secondary">CS-Mr Muhammad Junaid Nazar</span><span class="d-block fw-bold course">Design and Analysis of Algorithms</span><span class="d-block room">C-202 (Shift-I)</span></td>
+                <td><span class="d-block teacher text-body-secondary">Maths-Dr Waqas Sarwar Abbasi</span><span class="d-block fw-bold course">Linear Algebra</span><span class="d-block room">C-301 (Shift-I)</span></td>
+                <td></td>
+                <td><span class="d-block teacher text-body-secondary">AUSOM-Ms Ayesha Munir-VFM</span><span class="d-block fw-bold course">Introduction to Management</span><span class="d-block room">C-303 (Shift-I)</span></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              <!-- TUESDAY -->
+              <tr>
+                <th scope="row" class="day fw-normal">Tu</th>
+                <td colspan="3" class="lab" data-bs-toggle="tooltip" data-bs-title="3-hour lab · 08:00 – 11:00">
+                  <span class="d-block teacher-lg">CS-Ms Maryam Wardah</span>
+                  <span class="d-block course-lg">Artificial Intelligence Lab</span>
+                  <span class="d-block room">Lab 5 A Block (Shift-I)</span>
+                </td>
+                <td></td>
+                <td><span class="d-block teacher text-body-secondary">Maths-Dr Waqas Sarwar Abbasi</span><span class="d-block fw-bold course">Linear Algebra</span><span class="d-block room">C-203 (Shift-I)</span></td>
+                <td><span class="d-block teacher text-body-secondary">CS-Mr Muhammad Junaid Nazar</span><span class="d-block fw-bold course">Design and Analysis of Algorithms</span><span class="d-block room">C-302 (Shift-I)</span></td>
+                <td><span class="d-block teacher text-body-secondary">CS-Ms Warda Aslam / CS-Ms Eeman Fatima</span><span class="d-block fw-bold course">Operating Systems</span><span class="d-block room">Lecture Hall 01</span></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              <!-- WEDNESDAY -->
+              <tr>
+                <th scope="row" class="day fw-normal">We</th>
+                <td><span class="d-block teacher text-body-secondary">CS-Mr Muhammad Junaid Nazar</span><span class="d-block fw-bold course">Design and Analysis of Algorithms</span><span class="d-block room">C-302 (Shift-I)</span></td>
+                <td></td>
+                <td></td>
+                <td colspan="3" class="lab" data-bs-toggle="tooltip" data-bs-title="3-hour lab · 11:00 – 02:00">
+                  <span class="d-block teacher-lg">CS-Ms Warda Aslam</span>
+                  <span class="d-block course-lg">Operating Systems Lab</span>
+                  <span class="d-block room">Lab 13 C Block (3rd Floor) (Shift-I)</span>
+                </td>
+                <td><span class="d-block teacher text-body-secondary">CS-Mr Hafiz Obiad Ullah Khan / CS-Mr Asim Ali Fayyaz</span><span class="d-block fw-bold course">Full Stack Web Development</span><span class="d-block room">Lecture Hall 01</span></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              <!-- THURSDAY -->
+              <tr>
+                <th scope="row" class="day fw-normal">Th</th>
+                <td></td>
+                <td><span class="d-block teacher text-body-secondary">CS-Ms Maryam Wardah</span><span class="d-block fw-bold course">Artificial Intelligence</span><span class="d-block room">C-202 (Shift-I)</span></td>
+                <td></td>
+                <td colspan="3" class="lab" data-bs-toggle="tooltip" data-bs-title="3-hour lab · 11:00 – 02:00">
+                  <span class="d-block teacher-lg">CS-Mr Hafiz Obiad Ullah Khan</span>
+                  <span class="d-block course-lg">Full Stack Web Development Lab</span>
+                  <span class="d-block room">Lab 5 A Block (Shift-I)</span>
+                </td>
+                <td><span class="d-block teacher text-body-secondary">CS-Mr Hafiz Obiad Ullah Khan / CS-Mr Asim Ali Fayyaz</span><span class="d-block fw-bold course">Full Stack Web Development</span><span class="d-block room">Lecture Hall 01</span></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              <!-- FRIDAY -->
+              <tr>
+                <th scope="row" class="day fw-normal">Fr</th>
+                <td></td>
+                <td></td>
+                <td><span class="d-block teacher text-body-secondary">AUSOM-Ms Ayesha Munir-VFM</span><span class="d-block fw-bold course">Introduction to Management</span><span class="d-block room">C-302 (Shift-I)</span></td>
+                <td><span class="d-block teacher text-body-secondary">Maths-Dr Waqas Sarwar Abbasi</span><span class="d-block fw-bold course">Linear Algebra</span><span class="d-block room">C-301 (Shift-I)</span></td>
+                <td><span class="d-block teacher text-body-secondary">CS-Ms Eeman Fatima</span><span class="d-block fw-bold course">Advisory Class</span><span class="d-block room">C-202 (Shift-I)</span></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Footer line, as on the printed sheet -->
+      <div class="card-footer bg-transparent border-0 d-flex justify-content-between small text-body-secondary px-3 px-md-4 pt-0 pb-3">
+        <span>Timetable generated: 03/09/2026</span>
+        <span>aSc Timetables</span>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Enable Bootstrap tooltips on the three lab blocks
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      .forEach(function (el) { new bootstrap.Tooltip(el); });
+  </script>
+</body>
+</html>

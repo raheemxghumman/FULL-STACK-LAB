@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240">
+                <defs><linearGradient id="p4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#450a0a"/><stop offset="1" stop-color="#7f1d1d"/></linearGradient></defs>
+                <rect width="400" height="240" fill="url(#p4)"/>
+                <rect x="40" y="26" width="320" height="188" rx="12" fill="#0f172a"/>
+                <path d="M40 60h320M40 100h320M40 140h320M40 180h320M90 26v188M150 26v188M210 26v188M270 26v188M330 26v188" stroke="#1e293b" stroke-width="1"/>
+                <path d="M70 150c10-40 40-70 90-70s70 10 100 0 60 10 70 40-20 60-60 60-60-20-100-10-90 20-100-20z" fill="#1e293b"/>
+                <path d="M300 130L220 150 140 120" stroke="#22d3ee" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+                <circle cx="140" cy="120" r="22" fill="#ef4444" opacity=".15"/><circle cx="140" cy="120" r="12" fill="#ef4444" opacity=".35"/><circle cx="140" cy="120" r="5" fill="#ef4444"/>
+                <circle cx="220" cy="150" r="18" fill="#f59e0b" opacity=".15"/><circle cx="220" cy="150" r="9" fill="#f59e0b" opacity=".35"/><circle cx="220" cy="150" r="4" fill="#f59e0b"/>
+                <circle cx="300" cy="130" r="14" fill="#22d3ee" opacity=".2"/><circle cx="300" cy="130" r="4" fill="#22d3ee"/>
+                <rect x="236" y="38" width="112" height="60" rx="8" fill="#1e293b" opacity=".95"/>
+                <rect x="246" y="48" width="14" height="14" rx="3" fill="#ef4444"/><rect x="266" y="50" width="70" height="5" rx="2.5" fill="#e2e8f0"/><rect x="266" y="60" width="50" height="4" rx="2" fill="#94a3b8"/>
+                <rect x="246" y="72" width="90" height="6" rx="3" fill="#334155"/><rect x="246" y="72" width="60" height="6" rx="3" fill="#ef4444"/>
+                <rect x="246" y="84" width="90" height="6" rx="3" fill="#334155"/><rect x="246" y="84" width="40" height="6" rx="3" fill="#f59e0b"/>
+                <rect x="52" y="38" width="64" height="18" rx="9" fill="#22d3ee"/><text x="84" y="51" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a" font-family="JetBrains Mono, Consolas, monospace">AI LIVE</text>
+              </svg>

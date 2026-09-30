@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<!--
+  Lab 3 · Task 1 · Portfolio rebuilt with Bootstrap 5.3
+  Author: Abdulraheem
+
+  Bootstrap features used on this page:
+    - Layout: container, grid (row / col-lg-* / row-cols-*), gutters (g-*), display & flex utilities
+    - Navbar: navbar-expand-lg, sticky-top, collapse (hamburger), nav-link active state
+    - Scrollspy: data-bs-spy="scroll" on <body> highlights the current section in the navbar
+    - Colour modes: data-bs-theme="light|dark" toggled with a tiny script (saved in localStorage)
+    - Components: badges, buttons, cards (card-img-top, card-body, card-footer), modals (one per
+      featured project), list-group, accordion, tooltips, floating labels (form-floating),
+      form validation (needs-validation / was-validated), ratio helper, rounded-circle, shadow
+    - Utilities: spacing (p-*, m-*), text utilities, borders, position utilities, visually-hidden
+  Custom CSS (style.css) only adds the personality: fonts, paper palette, name reveal,
+  rotating text ring, ticker and hover motion.
+-->
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Abdulraheem — web developer, SEO and video editor from Multan, studying Computer Science at Air University, Islamabad. Built with Bootstrap 5.">
+  <title>Abdulraheem — Web Developer, SEO &amp; Video Editor</title>
+
+  <!-- apply the saved theme before first paint (avoids a flash of the wrong theme) -->
+  <script>
+    try {
+      var t = localStorage.getItem('ar-theme');
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-bs-theme', t);
+    } catch (e) {}
+  </script>
+
+  <!-- Bootstrap 5.3.3 + Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Google Fonts (fallbacks defined in style.css) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Manrope:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- Scrollspy: the navbar links highlight as each section scrolls into view -->
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-root-margin="0px 0px -45%" data-bs-smooth-scroll="true" tabindex="0">
+
+  <!-- ============================================================
+       NAVBAR (Bootstrap navbar + collapse)
+       ============================================================ -->
+  <nav id="mainNav" class="navbar navbar-expand-lg sticky-top site-nav" aria-label="Primary">
+    <div class="container">
+      <a class="navbar-brand logo" href="#top">AR<i>.</i></a>
+
+      <div class="d-flex align-items-center gap-2 order-lg-last">
+        <button id="themeToggle" class="btn btn-sm btn-theme rounded-pill" type="button" aria-label="Toggle dark mode" data-bs-toggle="tooltip" data-bs-title="Toggle dark mode">
+          <i class="bi bi-moon-stars-fill icon-dark"></i><i class="bi bi-sun-fill icon-light"></i>
+        </button>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks" aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navLinks">
+        <ul class="navbar-nav mx-auto gap-lg-3">
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#work">Work</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+
+    <!-- ============================================================
+         HERO (grid: col-lg-7 text + col-lg-5 photo)
+         ============================================================ -->
+    <header class="hero py-5">
+      <div class="container py-lg-4">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7 order-2 order-lg-1">
+            <p class="kicker mono mb-4"><span class="dot"></span>Currently · 5th semester · BS Computer Science · Air University, Islamabad</p>
+
+            <!-- each letter is its own span so the name can rise in one letter at a time -->
+            <h1 class="name mb-3" aria-label="Abdulraheem">
+              <span aria-hidden="true"><span class="l" style="--i:0">A</span><span class="l" style="--i:1">b</span><span class="l" style="--i:2">d</span><span class="l" style="--i:3">u</span><span class="l" style="--i:4">l</span><span class="l" style="--i:5">r</span><span class="l" style="--i:6">a</span><span class="l" style="--i:7">h</span><span class="l" style="--i:8">e</span><span class="l" style="--i:9">e</span><span class="l" style="--i:10">m</span><span class="l accent" style="--i:11">.</span></span>
+            </h1>
+
+            <p class="role mb-4">
+              <span>I build things as a</span>
+              <span class="rotator" aria-label="Web Developer, SEO Specialist, Video Editor, CS Student">
+                <span class="rotator-track" aria-hidden="true">
+                  <span>Web Developer</span><span>SEO Specialist</span><span>Video Editor</span><span>CS Student</span><span>Web Developer</span>
+                </span>
+              </span>
+            </p>
+
+            <p class="lead-copy mb-4">
+              From Multan, based in Islamabad. I build full-stack web apps, make them findable on Google,
+              and edit the videos that go with them. Lately I'm spending my time on
+              <strong>computer vision</strong> and <strong>AI agents</strong>.
+            </p>
+
+            <!-- contact links as Bootstrap pill badges/buttons -->
+            <div class="d-flex flex-wrap gap-2">
+              <a class="btn btn-pill rounded-pill" href="mailto:raheemxghumman@gmail.com"><i class="bi bi-envelope"></i> raheemxghumman@gmail.com</a>
+              <a class="btn btn-pill rounded-pill" href="tel:+923318886868"><i class="bi bi-telephone"></i> +92 331 8886868</a>
+              <a class="btn btn-pill rounded-pill" href="https://www.linkedin.com/in/abdulxraheem/" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i> LinkedIn</a>
+              <a class="btn btn-pill rounded-pill" href="https://github.com/raheemxghumman" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> GitHub</a>
+            </div>
+          </div>
+
+          <div class="col-lg-5 order-1 order-lg-2">
+            <div class="hero-photo mx-auto">
+              <svg class="ring" viewBox="0 0 420 420" aria-hidden="true">
+                <defs><path id="ringpath" d="M210,210 m-190,0 a190,190 0 1,1 380,0 a190,190 0 1,1 -380,0"/></defs>
+                <text textLength="1190" lengthAdjust="spacing"><textPath href="#ringpath">Available for freelance · Islamabad, Pakistan · Web · SEO · Video · Computer Science ·</textPath></text>
+              </svg>
+              <img src="assets/profile.jpg" class="rounded-circle shadow" alt="Abdulraheem, portrait at night in a red polo shirt" width="400" height="400">
+              <span class="badge photo-tag mono">Multan → Islamabad</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ticker -->
+    <div class="ticker border-top border-bottom py-3" aria-hidden="true">
+      <div class="ticker-track mono">
+        <span>HTML</span><span>CSS</span><span>Bootstrap</span><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>Socket.IO</span><span>Supabase</span><span>C# / .NET</span><span>Python</span><span>C++</span><span>SEO</span><span>Premiere Pro</span><span>After Effects</span><span>DaVinci Resolve</span><span>Figma</span>
+        <span>HTML</span><span>CSS</span><span>Bootstrap</span><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>Socket.IO</span><span>Supabase</span><span>C# / .NET</span><span>Python</span><span>C++</span><span>SEO</span><span>Premiere Pro</span><span>After Effects</span><span>DaVinci Resolve</span><span>Figma</span>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         01 — ABOUT
+         ============================================================ -->
+    <section id="about" class="section py-5">
+      <div class="container py-lg-4">
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3"><p class="index mono">01 — About</p></div>
+          <div class="col-lg-9"><h2 class="section-title">A developer who also knows <em>why</em> people click.</h2></div>
+        </div>
+
+        <div class="row g-5">
+          <div class="col-lg-7 offset-lg-3 col-xl-5">
+            <blockquote class="pull mb-4">I grew up in Multan, moved to Islamabad for university, and somewhere in between started building the websites I used to edit videos for.</blockquote>
+            <p>I'm a Computer Science student at Air University. The video work came first: thumbnails and edits for YouTube creators and small businesses. The web work followed, and with it SEO, because a site nobody can find isn't finished.</p>
+            <p class="mb-0">These days I build full-stack apps with React and Node, ship .NET projects for coursework and clients, and run <strong>Notes by Raheem</strong>, a notes-sharing platform I made for students like me. Outside of that I'm reading up on computer vision and building small agents.</p>
+          </div>
+          <div class="col-lg-9 offset-lg-3 col-xl-4 offset-xl-0">
+            <ul class="list-group list-group-flush facts">
+              <li class="list-group-item px-0"><span class="mono d-block">Based in</span><strong>Islamabad, Pakistan</strong></li>
+              <li class="list-group-item px-0"><span class="mono d-block">From</span><strong>Multan, Pakistan</strong></li>
+              <li class="list-group-item px-0"><span class="mono d-block">Studying</span><strong>BS Computer Science, Air University · 5th semester</strong></li>
+              <li class="list-group-item px-0"><span class="mono d-block">Interested in</span><strong>Computer vision, AI agents, the web</strong></li>
+              <li class="list-group-item px-0"><span class="mono d-block">Open to</span><strong>Freelance projects &amp; internships</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         02 — WORK (card grid + modals + list-group)
+         ============================================================ -->
+    <section id="work" class="section py-5">
+      <div class="container py-lg-4">
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3"><p class="index mono">02 — Work<br><span class="text-body-secondary">12 projects · 6 featured</span></p></div>
+          <div class="col-lg-9"><h2 class="section-title">Things I've <em>built</em>, from dashboards to downloaders.</h2></div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+          <div class="col">
+            <article class="card project h-100">
+              <div class="thumb"><img src="assets/thumb-notes.svg" class="card-img-top" alt="Dashboard mock-up of Notes by Raheem"></div>
+              <div class="card-body">
+                <p class="index mono d-flex justify-content-between"><span>01</span><span>2026 · Platform</span></p>
+                <h3 class="card-title h4">Notes by Raheem</h3>
+                <p class="card-text">A notes-sharing website for students with Student, Admin and Owner dashboards.</p>
+                <div class="d-flex flex-wrap gap-1"><span class="badge tag">HTML</span><span class="badge tag">CSS</span><span class="badge tag">JavaScript</span><span class="badge tag">Dashboards</span></div>
+              </div>
+              <div class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex gap-3">
+                <button class="btn btn-link link-accent p-0" data-bs-toggle="modal" data-bs-target="#modalNotes">Details <i class="bi bi-arrow-right"></i></button>
+                <a class="link-accent" href="https://github.com/raheemxghumman/Notes-by-Raheem" target="_blank" rel="noopener noreferrer">GitHub <i class="bi bi-arrow-up-right"></i></a>
+              </div>
+            </article>
+          </div>
+
+          <div class="col">
+            <article class="card project h-100">
+              <div class="thumb"><img src="assets/thumb-chat.svg" class="card-img-top" alt="Chat window mock-up"></div>
+              <div class="card-body">
+                <p class="index mono d-flex justify-content-between"><span>02</span><span>2026 · Full-stack</span></p>
+                <h3 class="card-title h4">Real-time Chat App</h3>
+                <p class="card-text">Sign up, log in, see who's online and chat live, with image uploads and themes.</p>
+                <div class="d-flex flex-wrap gap-1"><span class="badge tag">React</span><span class="badge tag">Express</span><span class="badge tag">MongoDB</span><span class="badge tag">Socket.IO</span></div>
+              </div>
+              <div class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex gap-3">
+                <button class="btn btn-link link-accent p-0" data-bs-toggle="modal" data-bs-target="#modalChat">Details <i class="bi bi-arrow-right"></i></button>
+                <a class="link-accent" href="https://github.com/raheemxghumman/chat-app" target="_blank" rel="noopener noreferrer">GitHub <i class="bi bi-arrow-up-right"></i></a>
+              </div>
+            </article>
+          </div>
+
+          <div class="col">
+            <article class="card project h-100">
+              <div class="thumb"><img src="assets/thumb-ciro.svg" class="card-img-top" alt="Crisis map mock-up"></div>
+              <div class="card-body">
+                <p class="index mono d-flex justify-content-between"><span>03</span><span>2026 · Hackathon</span></p>
+                <h3 class="card-title h4">CIRO</h3>
+                <p class="card-text">Crisis Intelligence &amp; Response Orchestrator: AI-powered crisis detection and response planning.</p>
+                <div class="d-flex flex-wrap gap-1"><span class="badge tag">AI agents</span><span class="badge tag">Google ADK</span><span class="badge tag">Firebase</span><span class="badge tag">Cloud Run</span></div>
+              </div>
+              <div class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex gap-3">
+                <button class="btn btn-link link-accent p-0" data-bs-toggle="modal" data-bs-target="#modalCiro">Details <i class="bi bi-arrow-right"></i></button>
+                <a class="link-accent" href="https://github.com/raheemxghumman/hackathon_ciro" target="_blank" rel="noopener noreferrer">GitHub <i class="bi bi-arrow-up-right"></i></a>
+              </div>
+            </article>
+          </div>
+
+          <div class="col">
+            <article class="card project h-100">
+              <div class="thumb"><img src="assets/thumb-insta.svg" class="card-img-top" alt="Downloader app mock-up"></div>
+              <div class="card-body">
+                <p class="index mono d-flex justify-content-between"><span>04</span><span>2026 · Web app</span></p>
+                <h3 class="card-title h4">Insta Downloader</h3>
+                <p class="card-text">Paste a public reel link, preview it, download it; the backend streams the file.</p>
+                <div class="d-flex flex-wrap gap-1"><span class="badge tag">React</span><span class="badge tag">Vite</span><span class="badge tag">Node.js</span><span class="badge tag">Express</span></div>
+              </div>
+              <div class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex gap-3">
+                <button class="btn btn-link link-accent p-0" data-bs-toggle="modal" data-bs-target="#modalInsta">Details <i class="bi bi-arrow-right"></i></button>
+                <a class="link-accent" href="https://github.com/raheemxghumman/insta-downloader" target="_blank" rel="noopener noreferrer">GitHub <i class="bi bi-arrow-up-right"></i></a>
+              </div>
+            </article>
+          </div>
+
+          <div class="col">
+            <article class="card project h-100">
+              <div class="thumb"><img src="assets/thumb-nexalan.svg" class="card-img-top" alt="Desktop chat mock-up of NexaLAN"></div>
+              <div class="card-body">
+                <p class="index mono d-flex justify-content-between"><span>05</span><span>2026 · .NET</span></p>
+                <h3 class="card-title h4">NexaLAN</h3>
+                <p class="card-text">A LAN-first communication and collaboration platform for software houses. No internet needed.</p>
+                <div class="d-flex flex-wrap gap-1"><span class="badge tag">.NET 10</span><span class="badge tag">Blazor Server</span><span class="badge tag">C#</span><span class="badge tag">SignalR</span></div>
+              </div>
+              <div class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex gap-3">
+                <button class="btn btn-link link-accent p-0" data-bs-toggle="modal" data-bs-target="#modalNexa">Details <i class="bi bi-arrow-right"></i></button>
+                <span class="text-body-secondary small align-self-center"><i class="bi bi-lock"></i> Private repo</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="col">
+            <article class="card project h-100">
+              <div class="thumb"><img src="assets/thumb-labui.svg" class="card-img-top" alt="Facebook clone and Nova Home dashboard mock-ups"></div>
+              <div class="card-body">
+                <p class="index mono d-flex justify-content-between"><span>06</span><span>2026 · Lab work</span></p>
+                <h3 class="card-title h4">Facebook Clone &amp; Nova Home</h3>
+                <p class="card-text">Full Stack lab work: a Facebook feed and a smart-home dashboard, in pure CSS and in Bootstrap.</p>
+                <div class="d-flex flex-wrap gap-1"><span class="badge tag">HTML5</span><span class="badge tag">CSS3</span><span class="badge tag">Bootstrap 5</span></div>
+              </div>
+              <div class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex gap-3">
+                <button class="btn btn-link link-accent p-0" data-bs-toggle="modal" data-bs-target="#modalLab">Details <i class="bi bi-arrow-right"></i></button>
+                <a class="link-accent" href="https://github.com/raheemxghumman/FULL-STACK-LAB" target="_blank" rel="noopener noreferrer">GitHub <i class="bi bi-arrow-up-right"></i></a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- the rest, as a Bootstrap list-group -->
+        <div class="d-flex justify-content-between align-items-end mt-5 mb-3">
+          <h3 class="h4 mb-0 serif">More projects</h3>
+          <span class="mono small text-body-secondary">private repos are marked</span>
+        </div>
+        <div class="list-group list-group-flush more-list">
+          <div class="list-group-item d-flex flex-wrap align-items-center gap-3 px-0">
+            <span class="mono idx">07</span><strong class="title">PostPilot</strong>
+            <span class="stack text-body-secondary flex-grow-1">Social post planning &amp; publishing · React · Supabase · browser extension</span>
+            <span class="badge rounded-pill text-bg-secondary"><i class="bi bi-lock"></i> Private</span>
+          </div>
+          <div class="list-group-item d-flex flex-wrap align-items-center gap-3 px-0">
+            <span class="mono idx">08</span><strong class="title">dv-downloader API</strong>
+            <span class="stack text-body-secondary flex-grow-1">Multi-platform media downloader API (TikTok, SnackVideo, Kwai, Kuaishou) · PHP · MySQL</span>
+            <span class="badge rounded-pill text-bg-secondary"><i class="bi bi-lock"></i> Private</span>
+          </div>
+          <a class="list-group-item list-group-item-action d-flex flex-wrap align-items-center gap-3 px-0" href="https://github.com/raheemxghumman/Amaan-Hope-Clinic" target="_blank" rel="noopener noreferrer">
+            <span class="mono idx">09</span><strong class="title">Amaan Hope Clinic</strong>
+            <span class="stack text-body-secondary flex-grow-1">Clinic website built from a design handoff · HTML · CSS · JavaScript</span>
+            <span class="link-accent">GitHub <i class="bi bi-arrow-up-right"></i></span>
+          </a>
+          <a class="list-group-item list-group-item-action d-flex flex-wrap align-items-center gap-3 px-0" href="https://github.com/raheemxghumman/EduConnect" target="_blank" rel="noopener noreferrer">
+            <span class="mono idx">10</span><strong class="title">EduConnect</strong>
+            <span class="stack text-body-secondary flex-grow-1">Education platform · C# · .NET · Blazor</span>
+            <span class="link-accent">GitHub <i class="bi bi-arrow-up-right"></i></span>
+          </a>
+          <a class="list-group-item list-group-item-action d-flex flex-wrap align-items-center gap-3 px-0" href="https://github.com/raheemxghumman/prompt-formatter" target="_blank" rel="noopener noreferrer">
+            <span class="mono idx">11</span><strong class="title">Prompt Formatter</strong>
+            <span class="stack text-body-secondary flex-grow-1">Browser tool that formats image/video prompts into bulk-generator formats · HTML · CSS · JS</span>
+            <span class="link-accent">GitHub <i class="bi bi-arrow-up-right"></i></span>
+          </a>
+          <div class="list-group-item d-flex flex-wrap align-items-center gap-3 px-0">
+            <span class="mono idx">12</span><strong class="title">ML Image Classification</strong>
+            <span class="stack text-body-secondary flex-grow-1">Machine-learning image classifier · Python · computer vision</span>
+            <span class="badge rounded-pill text-bg-light border">Coursework</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         03 — SKILLS (cards + badges)
+         ============================================================ -->
+    <section id="skills" class="section py-5">
+      <div class="container py-lg-4">
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3"><p class="index mono">03 — Skills</p></div>
+          <div class="col-lg-9"><h2 class="section-title">Build it, make it <em>rank</em>, make it watchable.</h2></div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+          <div class="col">
+            <div class="card skill-card h-100"><div class="card-body p-4">
+              <p class="mono small text-body-secondary mb-1">Web development</p>
+              <h3 class="h4 serif mb-3">Front-end to back-end</h3>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge skill">HTML5</span><span class="badge skill">CSS3</span><span class="badge skill">Bootstrap</span><span class="badge skill">JavaScript</span><span class="badge skill">TypeScript</span><span class="badge skill">React</span><span class="badge skill">Vite</span><span class="badge skill">Tailwind CSS</span><span class="badge skill">Node.js</span><span class="badge skill">Express</span><span class="badge skill">MongoDB</span><span class="badge skill">Socket.IO</span><span class="badge skill">REST APIs</span><span class="badge skill">Supabase</span><span class="badge skill">Firebase</span><span class="badge skill">PHP</span><span class="badge skill">WordPress</span>
+              </div>
+            </div></div>
+          </div>
+          <div class="col">
+            <div class="card skill-card h-100"><div class="card-body p-4">
+              <p class="mono small text-body-secondary mb-1">SEO</p>
+              <h3 class="h4 serif mb-3">Getting found</h3>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge skill">Keyword research</span><span class="badge skill">On-page SEO</span><span class="badge skill">Technical SEO</span><span class="badge skill">Google Search Console</span><span class="badge skill">Google Analytics 4</span><span class="badge skill">Core Web Vitals</span><span class="badge skill">Content strategy</span>
+              </div>
+            </div></div>
+          </div>
+          <div class="col">
+            <div class="card skill-card h-100"><div class="card-body p-4">
+              <p class="mono small text-body-secondary mb-1">Video &amp; design</p>
+              <h3 class="h4 serif mb-3">Editing and visuals</h3>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge skill">Adobe Premiere Pro</span><span class="badge skill">After Effects</span><span class="badge skill">DaVinci Resolve</span><span class="badge skill">CapCut</span><span class="badge skill">Thumbnail design</span><span class="badge skill">Colour grading</span><span class="badge skill">Figma</span>
+              </div>
+            </div></div>
+          </div>
+          <div class="col">
+            <div class="card skill-card h-100"><div class="card-body p-4">
+              <p class="mono small text-body-secondary mb-1">Programming &amp; CS</p>
+              <h3 class="h4 serif mb-3">Under the hood</h3>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge skill">C++</span><span class="badge skill">C# / .NET</span><span class="badge skill">Blazor</span><span class="badge skill">Python</span><span class="badge skill">Data structures &amp; algorithms</span><span class="badge skill">OOP</span><span class="badge skill">Computer vision</span><span class="badge skill">ML basics</span><span class="badge skill">Git &amp; GitHub</span>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         04 — EXPERIENCE & EDUCATION (Bootstrap accordions)
+         ============================================================ -->
+    <section id="experience" class="section py-5">
+      <div class="container py-lg-4">
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3"><p class="index mono">04 — Experience</p></div>
+          <div class="col-lg-9"><h2 class="section-title">Where I've <em>worked</em> and what I'm studying.</h2></div>
+        </div>
+
+        <div class="row g-5">
+          <div class="col-lg-6">
+            <h3 class="h5 mono text-uppercase mb-3"><i class="bi bi-briefcase me-2"></i>Experience</h3>
+            <div class="accordion timeline-acc" id="accExp">
+              <div class="accordion-item">
+                <h4 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#exp1" aria-expanded="true" aria-controls="exp1">
+                    <span><span class="mono date d-block">2026 — present</span>Founder, Notes by Raheem</span>
+                  </button>
+                </h4>
+                <div id="exp1" class="accordion-collapse collapse show" data-bs-parent="#accExp">
+                  <div class="accordion-body">
+                    <p class="text-body-secondary mb-2">Notes-sharing platform for students</p>
+                    <ul class="mb-0"><li>Built the platform with Student, Admin and Owner dashboards.</li><li>Started with exam-guide sites for my own class (CN, COAL, SE, Civics mids).</li></ul>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h4 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#exp2" aria-expanded="false" aria-controls="exp2">
+                    <span><span class="mono date d-block">2025 — present</span>Freelance Web Developer &amp; SEO</span>
+                  </button>
+                </h4>
+                <div id="exp2" class="accordion-collapse collapse" data-bs-parent="#accExp">
+                  <div class="accordion-body">
+                    <p class="text-body-secondary mb-2">Client websites, web apps and search optimisation</p>
+                    <ul class="mb-0"><li>Client sites such as Amaan Hope Clinic, built from design handoffs.</li><li>Downloader web apps and their backend APIs.</li><li>On-page and technical SEO with Search Console and GA4 reporting.</li></ul>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h4 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#exp3" aria-expanded="false" aria-controls="exp3">
+                    <span><span class="mono date d-block">2024 — 2025</span>Software Development Intern</span>
+                  </button>
+                </h4>
+                <div id="exp3" class="accordion-collapse collapse" data-bs-parent="#accExp">
+                  <div class="accordion-body">
+                    <p class="text-body-secondary mb-2">Internship alongside my degree</p>
+                    <ul class="mb-0"><li>Worked on software development tasks in a team setting while studying.</li></ul>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h4 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#exp4" aria-expanded="false" aria-controls="exp4">
+                    <span><span class="mono date d-block">2022 — present</span>Freelance Video Editor &amp; Thumbnail Designer</span>
+                  </button>
+                </h4>
+                <div id="exp4" class="accordion-collapse collapse" data-bs-parent="#accExp">
+                  <div class="accordion-body">
+                    <p class="text-body-secondary mb-2">YouTube creators and small businesses</p>
+                    <ul class="mb-0"><li>Long-form edits, reels and promos in Premiere Pro, After Effects and DaVinci Resolve.</li><li>Thumbnail design and colour grading.</li></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <h3 class="h5 mono text-uppercase mb-3"><i class="bi bi-mortarboard me-2"></i>Education</h3>
+            <div class="accordion timeline-acc" id="accEdu">
+              <div class="accordion-item">
+                <h4 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#edu1" aria-expanded="true" aria-controls="edu1">
+                    <span><span class="mono date d-block">2024 — present</span>BS Computer Science</span>
+                  </button>
+                </h4>
+                <div id="edu1" class="accordion-collapse collapse show" data-bs-parent="#accEdu">
+                  <div class="accordion-body">
+                    <p class="text-body-secondary mb-2">Air University, Islamabad · 5th semester, section BSCS-V-A</p>
+                    <div class="d-flex flex-wrap gap-1">
+                      <span class="badge tag">Artificial Intelligence</span><span class="badge tag">Operating Systems</span><span class="badge tag">Design &amp; Analysis of Algorithms</span><span class="badge tag">Linear Algebra</span><span class="badge tag">Full Stack Web Development</span><span class="badge tag">Introduction to Management</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h4 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#edu2" aria-expanded="false" aria-controls="edu2">
+                    <span><span class="mono date d-block">Multan</span>Intermediate</span>
+                  </button>
+                </h4>
+                <div id="edu2" class="accordion-collapse collapse" data-bs-parent="#accEdu">
+                  <div class="accordion-body text-body-secondary">Pre-university studies in Multan, Pakistan.</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h4 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#edu3" aria-expanded="false" aria-controls="edu3">
+                    <span><span class="mono date d-block">Multan</span>Matriculation</span>
+                  </button>
+                </h4>
+                <div id="edu3" class="accordion-collapse collapse" data-bs-parent="#accEdu">
+                  <div class="accordion-body text-body-secondary">Multan, Pakistan.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         05 — CONTACT (form-floating + validation)
+         ============================================================ -->
+    <section id="contact" class="section py-5">
+      <div class="container py-lg-4">
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3"><p class="index mono">05 — Contact</p></div>
+          <div class="col-lg-9"><h2 class="section-title">Let's work <em>together.</em></h2></div>
+        </div>
+
+        <div class="row g-5">
+          <div class="col-lg-6">
+            <p class="mono small text-body-secondary mb-1">Email me</p>
+            <a class="big-mail d-inline-block mb-4" href="mailto:raheemxghumman@gmail.com">raheemxghumman@gmail.com</a>
+
+            <div class="list-group list-group-flush contact-list">
+              <a class="list-group-item list-group-item-action d-flex align-items-center gap-3 px-0" href="tel:+923318886868">
+                <span class="mono small text-body-secondary w-25">Phone</span><strong class="flex-grow-1">+92 331 8886868</strong><i class="bi bi-arrow-up-right"></i>
+              </a>
+              <a class="list-group-item list-group-item-action d-flex align-items-center gap-3 px-0" href="https://www.linkedin.com/in/abdulxraheem/" target="_blank" rel="noopener noreferrer">
+                <span class="mono small text-body-secondary w-25">LinkedIn</span><strong class="flex-grow-1 text-break">linkedin.com/in/abdulxraheem</strong><i class="bi bi-arrow-up-right"></i>
+              </a>
+              <a class="list-group-item list-group-item-action d-flex align-items-center gap-3 px-0" href="https://github.com/raheemxghumman" target="_blank" rel="noopener noreferrer">
+                <span class="mono small text-body-secondary w-25">GitHub</span><strong class="flex-grow-1 text-break">github.com/raheemxghumman</strong><i class="bi bi-arrow-up-right"></i>
+              </a>
+              <div class="list-group-item d-flex align-items-center gap-3 px-0">
+                <span class="mono small text-body-secondary w-25">Location</span><strong class="flex-grow-1">Islamabad, Pakistan</strong><i class="bi bi-geo-alt"></i>
+              </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <a class="btn btn-icon rounded-circle" href="mailto:raheemxghumman@gmail.com" aria-label="Email" data-bs-toggle="tooltip" data-bs-title="Email"><i class="bi bi-envelope"></i></a>
+              <a class="btn btn-icon rounded-circle" href="tel:+923318886868" aria-label="Phone" data-bs-toggle="tooltip" data-bs-title="Call"><i class="bi bi-telephone"></i></a>
+              <a class="btn btn-icon rounded-circle" href="https://www.linkedin.com/in/abdulxraheem/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-bs-toggle="tooltip" data-bs-title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+              <a class="btn btn-icon rounded-circle" href="https://github.com/raheemxghumman" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-bs-toggle="tooltip" data-bs-title="GitHub"><i class="bi bi-github"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="card form-card">
+              <div class="card-body p-4">
+                <p class="text-body-secondary mb-3">Or send a note straight from here.</p>
+                <!-- Bootstrap validation: the script below blocks submit until fields are valid -->
+                <form id="contactForm" class="needs-validation" action="mailto:raheemxghumman@gmail.com" method="post" enctype="text/plain" novalidate>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="cName" name="name" placeholder="Your name" required minlength="2">
+                    <label for="cName">Your name</label>
+                    <div class="invalid-feedback">Please tell me your name.</div>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="cEmail" name="email" placeholder="you@example.com" required>
+                    <label for="cEmail">Email address</label>
+                    <div class="invalid-feedback">Please enter a valid email.</div>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <select class="form-select" id="cTopic" name="topic" required>
+                      <option value="" selected disabled>Choose one</option>
+                      <option>Website or web app</option>
+                      <option>SEO</option>
+                      <option>Video editing</option>
+                      <option>Internship / job</option>
+                      <option>Something else</option>
+                    </select>
+                    <label for="cTopic">What's it about?</label>
+                    <div class="invalid-feedback">Pick a topic.</div>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <textarea class="form-control" id="cMsg" name="message" placeholder="Message" style="height: 140px" required minlength="10"></textarea>
+                    <label for="cMsg">What are we building?</label>
+                    <div class="invalid-feedback">A few words, at least 10 characters.</div>
+                  </div>
+                  <button type="submit" class="btn btn-accent w-100 py-3">Send message <i class="bi bi-arrow-right"></i></button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer border-top py-4">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <a href="#top" class="logo text-decoration-none">AR<i>.</i></a>
+      <p class="mb-0 small text-body-secondary">© 2026 Abdulraheem · Islamabad · Built with Bootstrap 5.</p>
+    </div>
+  </footer>
+
+  <!-- back to top -->
+  <a href="#top" class="btn btn-accent rounded-circle to-top shadow" aria-label="Back to top"><i class="bi bi-arrow-up"></i></a>
+
+  <!-- ============================================================
+       PROJECT MODALS (Bootstrap modal component)
+       ============================================================ -->
+  <div class="modal fade" id="modalNotes" tabindex="-1" aria-labelledby="modalNotesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header"><h2 class="modal-title h4 serif" id="modalNotesLabel">Notes by Raheem</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <div class="ratio ratio-16x9 mb-3"><img src="assets/thumb-notes.svg" class="rounded" alt=""></div>
+          <p>A notes-sharing website for students with separate <strong>Student</strong>, <strong>Admin</strong> and <strong>Owner</strong> dashboards for uploading, approving and managing study material.</p>
+          <p class="mb-0">It grew out of the exam-guide sites I made for my own class (CN, COAL, SE and Civics mids) when classmates kept asking for the same notes.</p>
+        </div>
+        <div class="modal-footer"><span class="me-auto mono small text-body-secondary">HTML · CSS · JavaScript</span><a class="btn btn-accent" href="https://github.com/raheemxghumman/Notes-by-Raheem" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> View on GitHub</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalChat" tabindex="-1" aria-labelledby="modalChatLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header"><h2 class="modal-title h4 serif" id="modalChatLabel">Real-time Chat App</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <div class="ratio ratio-16x9 mb-3"><img src="assets/thumb-chat.svg" class="rounded" alt=""></div>
+          <p>Sign up, log in, see who's online and chat live over Socket.IO. Profile updates, image uploads through Cloudinary, theme switching with DaisyUI, and an in-memory MongoDB fallback that keeps local testing painless.</p>
+          <p class="mb-0">State lives in Zustand on the client; the Express API handles auth and messages.</p>
+        </div>
+        <div class="modal-footer"><span class="me-auto mono small text-body-secondary">React · Vite · Express · MongoDB · Socket.IO · Zustand · Tailwind</span><a class="btn btn-accent" href="https://github.com/raheemxghumman/chat-app" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> View on GitHub</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalCiro" tabindex="-1" aria-labelledby="modalCiroLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header"><h2 class="modal-title h4 serif" id="modalCiroLabel">CIRO — Crisis Intelligence &amp; Response Orchestrator</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <div class="ratio ratio-16x9 mb-3"><img src="assets/thumb-ciro.svg" class="rounded" alt=""></div>
+          <p>A hackathon build: real-time, AI-powered crisis detection, reasoning and response planning. Agents are built on Google's Agent Development Kit.</p>
+          <p class="mb-0">The front-end is hosted on Firebase and the backend API runs on Google Cloud Run.</p>
+        </div>
+        <div class="modal-footer"><span class="me-auto mono small text-body-secondary">AI agents · Google ADK · Firebase · Cloud Run</span><a class="btn btn-accent" href="https://github.com/raheemxghumman/hackathon_ciro" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> View on GitHub</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalInsta" tabindex="-1" aria-labelledby="modalInstaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header"><h2 class="modal-title h4 serif" id="modalInstaLabel">Insta Downloader</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <div class="ratio ratio-16x9 mb-3"><img src="assets/thumb-insta.svg" class="rounded" alt=""></div>
+          <p>Paste a public Instagram reel, post or video link, preview it in the player and download it as an MP4.</p>
+          <p class="mb-0">The Express backend resolves the media server-side and proxies the stream, so the third-party source endpoint is never exposed in the front-end code.</p>
+        </div>
+        <div class="modal-footer"><span class="me-auto mono small text-body-secondary">React · Vite · Node.js · Express</span><a class="btn btn-accent" href="https://github.com/raheemxghumman/insta-downloader" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> View on GitHub</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalNexa" tabindex="-1" aria-labelledby="modalNexaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header"><h2 class="modal-title h4 serif" id="modalNexaLabel">NexaLAN</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <div class="ratio ratio-16x9 mb-3"><img src="assets/thumb-nexalan.svg" class="rounded" alt=""></div>
+          <p>A LAN-first communication and collaboration platform for software houses: direct messaging, project workspaces, company announcements, file sharing, a GitHub-style repository simulation and an activity audit trail.</p>
+          <p class="mb-0">Styled after WhatsApp Desktop and built to run entirely on a local network with no internet dependency.</p>
+        </div>
+        <div class="modal-footer"><span class="me-auto mono small text-body-secondary">.NET 10 · Blazor Server · C# · SignalR</span><span class="badge rounded-pill text-bg-secondary p-2"><i class="bi bi-lock"></i> Private repository</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalLab" tabindex="-1" aria-labelledby="modalLabLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header"><h2 class="modal-title h4 serif" id="modalLabLabel">Facebook Clone &amp; Nova Home</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <div class="ratio ratio-16x9 mb-3"><img src="assets/thumb-labui.svg" class="rounded" alt=""></div>
+          <p>Two pieces from my Full Stack Web Development lab: a pixel-faithful Facebook feed with a dark mode, and "Nova Home", an interactive smart-home dashboard with toggles, tabs and a thermostat dial.</p>
+          <p class="mb-0">Lab 2 built them in pure HTML and CSS with no JavaScript; Lab 3 rebuilt them with Bootstrap 5 components.</p>
+        </div>
+        <div class="modal-footer"><span class="me-auto mono small text-body-secondary">HTML5 · CSS3 · Bootstrap 5</span><a class="btn btn-accent" href="https://github.com/raheemxghumman/FULL-STACK-LAB" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> View on GitHub</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS bundle (includes Popper for tooltips) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    // 1) tooltips need to be switched on explicitly in Bootstrap
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) { new bootstrap.Tooltip(el); });
+
+    // 2) dark / light mode: flip data-bs-theme and remember the choice
+    document.getElementById('themeToggle').addEventListener('click', function () {
+      var root = document.documentElement;
+      var next = root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-bs-theme', next);
+      try { localStorage.setItem('ar-theme', next); } catch (e) {}
+    });
+
+    // 3) close the mobile menu after tapping a link
+    document.querySelectorAll('#navLinks .nav-link').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var menu = bootstrap.Collapse.getInstance(document.getElementById('navLinks'));
+        if (menu) menu.hide();
+      });
+    });
+
+    // 4) Bootstrap form validation for the contact form
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      if (!this.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+      this.classList.add('was-validated');
+    });
+  </script>
+</body>
+</html>
