@@ -1,0 +1,291 @@
+/* ==========================================================================
+   Kashi Ghar — theme on top of Bootstrap 5.3
+   Author: Abdulraheem · Full Stack Web Development Lab 3
+   --------------------------------------------------------------------------
+   1. Tokens + Bootstrap variable overrides (cobalt primary, clay body)
+   2. Typography
+   3. Navbar, search, cart button
+   4. Hero carousel + feature strip
+   5. Product cards + product modal
+   6. Reviews
+   7. Cart, checkout, account
+   8. Auth pages (login / signup)
+   9. Footer, toasts, offcanvas, utilities
+   10. Responsive tweaks
+   ========================================================================== */
+
+/* 1. TOKENS ------------------------------------------------------------- */
+:root {
+  --kg-cobalt: #1f4e9c;
+  --kg-cobalt-dark: #15356b;
+  --kg-cobalt-soft: #e6ecf7;
+  --kg-turq: #2a9d9b;
+  --kg-turq-soft: #dff1ef;
+  --kg-clay: #f7f3ea;
+  --kg-paper: #fffdf8;
+  --kg-terra: #c8553d;
+  --kg-ink: #1d2433;
+  --kg-muted: #5d6474;
+  --kg-line: #e4dccb;
+  --kg-radius: 14px;
+
+  /* Bootstrap CSS variables */
+  --bs-primary: var(--kg-cobalt);
+  --bs-primary-rgb: 31, 78, 156;
+  --bs-body-bg: var(--kg-clay);
+  --bs-body-color: var(--kg-ink);
+  --bs-secondary-color: var(--kg-muted);
+  --bs-border-color: var(--kg-line);
+  --bs-link-color: var(--kg-cobalt);
+  --bs-link-color-rgb: 31, 78, 156;
+  --bs-link-hover-color: var(--kg-cobalt-dark);
+  --bs-link-hover-color-rgb: 21, 53, 107;
+  --bs-body-font-family: "Karla", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --bs-body-font-size: 1rem;
+  --bs-border-radius: .6rem;
+  --bs-border-radius-lg: .9rem;
+  --bs-focus-ring-color: rgba(31, 78, 156, .25);
+
+  /* repeating kashi tile used as a subtle texture */
+  --kg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='%23ffffff' fill-opacity='.10'%3E%3Cpath d='M28 16c4 5 4 7 0 12-4-5-4-7 0-12zM28 40c4-5 4-7 0-12-4 5-4 7 0 12zM16 28c5-4 7-4 12 0-5 4-7 4-12 0zM40 28c-5-4-7-4-12 0 5 4 7 4 12 0z'/%3E%3Ccircle cx='0' cy='0' r='5'/%3E%3Ccircle cx='56' cy='0' r='5'/%3E%3Ccircle cx='0' cy='56' r='5'/%3E%3Ccircle cx='56' cy='56' r='5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Bootstrap components compile their colours, so re-point them here. */
+.btn-primary {
+  --bs-btn-bg: var(--kg-cobalt); --bs-btn-border-color: var(--kg-cobalt);
+  --bs-btn-hover-bg: var(--kg-cobalt-dark); --bs-btn-hover-border-color: var(--kg-cobalt-dark);
+  --bs-btn-active-bg: #102a57; --bs-btn-active-border-color: #102a57;
+  --bs-btn-disabled-bg: #8ba2c9; --bs-btn-disabled-border-color: #8ba2c9;
+  --bs-btn-focus-shadow-rgb: 31, 78, 156;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--kg-cobalt); --bs-btn-border-color: var(--kg-cobalt);
+  --bs-btn-hover-bg: var(--kg-cobalt); --bs-btn-hover-border-color: var(--kg-cobalt);
+  --bs-btn-active-bg: var(--kg-cobalt); --bs-btn-active-border-color: var(--kg-cobalt);
+  --bs-btn-focus-shadow-rgb: 31, 78, 156;
+}
+.btn-terra {
+  --bs-btn-color: #fff; --bs-btn-bg: var(--kg-terra); --bs-btn-border-color: var(--kg-terra);
+  --bs-btn-hover-color: #fff; --bs-btn-hover-bg: #a9432e; --bs-btn-hover-border-color: #a9432e;
+  --bs-btn-active-color: #fff; --bs-btn-active-bg: #923a28; --bs-btn-active-border-color: #923a28;
+  --bs-btn-focus-shadow-rgb: 200, 85, 61;
+}
+.btn-light-outline {
+  --bs-btn-color: #fff; --bs-btn-border-color: rgba(255,255,255,.7);
+  --bs-btn-hover-color: var(--kg-cobalt); --bs-btn-hover-bg: #fff; --bs-btn-hover-border-color: #fff;
+  --bs-btn-active-color: var(--kg-cobalt); --bs-btn-active-bg: #fff;
+}
+.form-control:focus, .form-select:focus, .form-check-input:focus {
+  border-color: #7d9ccf;
+  box-shadow: 0 0 0 .2rem rgba(31, 78, 156, .2);
+}
+.form-check-input:checked { background-color: var(--kg-cobalt); border-color: var(--kg-cobalt); }
+.form-control, .form-select { background-color: var(--kg-paper); }
+.progress { --bs-progress-bg: #ebe4d6; }
+.text-primary { color: var(--kg-cobalt) !important; }
+.bg-turq-soft { background: var(--kg-turq-soft); }
+.bg-paper { background: var(--kg-paper); }
+.text-terra { color: var(--kg-terra); }
+.badge-sale { background: var(--kg-terra); }
+.min-w-0 { min-width: 0; }
+.text-uppercase::placeholder { text-transform: none; }
+.accordion-button { font-family: var(--bs-body-font-family); --bs-accordion-active-bg: var(--kg-cobalt-soft); --bs-accordion-active-color: var(--kg-cobalt-dark); }
+.card { --bs-card-bg: var(--kg-paper); --bs-card-border-color: var(--kg-line); }
+.modal { --bs-modal-bg: var(--kg-paper); }
+.dropdown-menu { --bs-dropdown-bg: var(--kg-paper); --bs-dropdown-link-active-bg: var(--kg-cobalt); }
+.list-group { --bs-list-group-bg: transparent; }
+
+html { scroll-behavior: smooth; }
+section[id], [id="home"] { scroll-margin-top: 84px; }
+
+/* 2. TYPOGRAPHY --------------------------------------------------------- */
+h1, h2, h3, .display-font, .brand-name {
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  letter-spacing: -.01em;
+}
+.section-kicker {
+  font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--kg-turq);
+}
+.section-title { font-size: clamp(1.7rem, 3.2vw, 2.5rem); font-weight: 700; }
+.lead-sm { font-size: 1.05rem; color: var(--kg-muted); }
+
+/* 3. NAVBAR ------------------------------------------------------------- */
+.kg-navbar {
+  background: rgba(255, 253, 248, .92);
+  backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid var(--kg-line);
+  --bs-navbar-active-color: var(--kg-cobalt);
+  --bs-navbar-color: var(--kg-ink);
+  --bs-navbar-hover-color: var(--kg-cobalt);
+}
+.brand-name { font-size: 1.3rem; font-weight: 700; color: var(--kg-cobalt-dark); }
+.brand-tag { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--kg-muted); margin-top: 2px; }
+.kg-navbar .nav-link { font-weight: 600; position: relative; }
+.kg-navbar .nav-link.active::after {
+  content: ""; position: absolute; left: .5rem; right: .5rem; bottom: .15rem;
+  height: 2px; background: var(--kg-terra); border-radius: 2px;
+}
+.nav-search { min-width: 240px; }
+.nav-search .input-group-text { background: var(--kg-paper); }
+.btn-cart {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--kg-cobalt-soft); color: var(--kg-cobalt); border: 0; font-size: 1.15rem;
+}
+.btn-cart:hover { background: var(--kg-cobalt); color: #fff; }
+.cart-badge { background: var(--kg-terra); font-size: .68rem; }
+
+/* 4. HERO --------------------------------------------------------------- */
+.hero { background: var(--kg-cobalt-dark); color: #fff; position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: 0; background-image: var(--kg-pattern); opacity: .9; }
+.hero .carousel-item { min-height: 460px; }
+.hero-slide { position: relative; padding: 3.5rem 0 4.5rem; }
+.hero h1, .hero h2 { font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.08; font-weight: 700; }
+.hero h1 em, .hero h2 em { color: #8fd6d2; }
+.hero p { color: rgba(255, 255, 255, .82); max-width: 32rem; }
+.hero-art { width: 100%; max-width: 440px; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .3)); }
+.hero-arch {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 220px 220px 24px 24px;
+  padding: 1.5rem 1.5rem .5rem;
+}
+.hero .carousel-indicators [data-bs-target] { width: 26px; height: 4px; border-radius: 2px; }
+.hero .carousel-control-prev, .hero .carousel-control-next { width: 3.5rem; }
+@media (min-width: 768px) { .hero-slide { padding-left: 3.5rem; padding-right: 3.5rem; } }
+.hero .badge-pill { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); font-weight: 600; }
+.tile-strip {
+  height: 14px;
+  background:
+    linear-gradient(135deg, var(--kg-turq) 25%, transparent 25%) -7px 0/14px 14px,
+    linear-gradient(225deg, var(--kg-turq) 25%, transparent 25%) -7px 0/14px 14px,
+    linear-gradient(315deg, var(--kg-cobalt) 25%, transparent 25%) 0 0/14px 14px,
+    linear-gradient(45deg, var(--kg-cobalt) 25%, #fff 25%) 0 0/14px 14px;
+}
+.feature-strip { margin-top: -2.2rem; position: relative; z-index: 3; }
+.feature {
+  background: var(--kg-paper); border: 1px solid var(--kg-line); border-radius: var(--kg-radius);
+  padding: 1rem 1.1rem; height: 100%; box-shadow: 0 10px 24px -18px rgba(21, 53, 107, .5);
+}
+.feature i {
+  width: 42px; height: 42px; flex: none; border-radius: 12px; display: grid; place-items: center;
+  background: var(--kg-cobalt-soft); color: var(--kg-cobalt); font-size: 1.2rem;
+}
+
+/* 5. PRODUCTS ----------------------------------------------------------- */
+.filter-bar .btn { font-weight: 600; }
+.btn-check:checked + .btn-outline-primary { color: #fff; }
+.product-card { border-radius: var(--kg-radius); overflow: hidden; transition: transform .2s ease, box-shadow .2s ease; }
+.product-card:hover { transform: translateY(-4px); box-shadow: 0 18px 32px -20px rgba(21, 53, 107, .55); }
+.product-media {
+  position: relative; aspect-ratio: 1 / 1; background: var(--thumb-bg, var(--kg-cobalt-soft));
+  display: grid; place-items: center; overflow: hidden;
+}
+.product-media .product-art { width: 82%; height: 82%; transition: transform .35s ease; }
+.product-card:hover .product-art { transform: scale(1.06) rotate(-1.5deg); }
+.product-media .badge { position: absolute; top: .75rem; left: .75rem; }
+.product-media .stock-note { top: auto; left: auto; bottom: .6rem; right: .6rem; }
+.btn-quick {
+  position: absolute; top: .6rem; right: .6rem; width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.9); border: 1px solid var(--kg-line); color: var(--kg-cobalt);
+  display: grid; place-items: center; opacity: .9;
+}
+.btn-quick:hover { background: var(--kg-cobalt); color: #fff; }
+.product-card .card-title { font-family: "Playfair Display", Georgia, serif; font-size: 1.05rem; font-weight: 700; }
+.product-cat { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--kg-turq); font-weight: 700; }
+.price { font-weight: 800; color: var(--kg-cobalt-dark); }
+.price-old { color: var(--kg-muted); text-decoration: line-through; font-size: .9rem; }
+.stars { color: #e0a526; letter-spacing: 1px; white-space: nowrap; }
+.btn-added { animation: pop .5s ease; }
+@keyframes pop { 40% { transform: scale(1.08); } }
+.empty-state { border: 2px dashed var(--kg-line); border-radius: var(--kg-radius); }
+
+.modal-product-media { border-radius: var(--kg-radius); aspect-ratio: 1 / 1; background: var(--thumb-bg); display: grid; place-items: center; }
+.modal-product-media .product-art { width: 86%; height: 86%; }
+.modal-reviews { max-height: 260px; overflow-y: auto; }
+
+.qty-group { width: auto; flex-wrap: nowrap; }
+.qty-group .form-control { width: 3.4rem; text-align: center; flex: 0 0 auto; }
+.qty-group .input-group-text { min-width: 2.2rem; justify-content: center; }
+
+/* thumbnails used in carts and orders */
+.thumb { background: var(--thumb-bg, var(--kg-cobalt-soft)); border-radius: 10px; display: grid; place-items: center; flex: none; }
+.thumb .product-art { width: 88%; height: 88%; }
+.thumb-sm { width: 56px; height: 56px; }
+.thumb-md { width: 72px; height: 72px; }
+
+/* 6. REVIEWS ------------------------------------------------------------ */
+.rating-big { font-family: "Playfair Display", Georgia, serif; font-size: 3.4rem; font-weight: 700; line-height: 1; color: var(--kg-cobalt-dark); }
+.review-card { border-radius: var(--kg-radius); }
+.review-card blockquote { font-size: .98rem; }
+.review-avatar {
+  width: 40px; height: 40px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  background: var(--kg-turq-soft); color: var(--kg-turq); font-weight: 700;
+}
+.rating-picker .btn { min-width: 2.6rem; }
+.rating-picker .btn-check:checked + .btn { background: #e0a526; border-color: #e0a526; color: #fff; }
+.rating-picker .btn-outline-warning { --bs-btn-color: #b8861b; --bs-btn-border-color: #e0c27a; --bs-btn-hover-bg: #f6e2b0; --bs-btn-hover-color: #7a5a10; --bs-btn-hover-border-color: #e0c27a; }
+
+.about-band { background: var(--kg-paper); border-top: 1px solid var(--kg-line); border-bottom: 1px solid var(--kg-line); }
+.about-art { background: var(--kg-cobalt); border-radius: 180px 180px 18px 18px; padding: 2rem 1.5rem 1rem; position: relative; overflow: hidden; }
+.about-art::before { content: ""; position: absolute; inset: 0; background-image: var(--kg-pattern); }
+.about-art svg { position: relative; }
+
+/* 7. CART / CHECKOUT / ACCOUNT ----------------------------------------- */
+.page-head { background: var(--kg-paper); border-bottom: 1px solid var(--kg-line); }
+.summary-card { border-radius: var(--kg-radius); }
+@media (min-width: 992px) { .sticky-summary { position: sticky; top: 96px; } }
+.summary-row { display: flex; justify-content: space-between; margin-bottom: .45rem; }
+.summary-total { font-size: 1.25rem; font-weight: 800; color: var(--kg-cobalt-dark); }
+.cart-table td, .cart-table th { background: transparent; }
+.cart-table thead th { font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--kg-muted); }
+.option-card { border: 1px solid var(--kg-line); border-radius: 12px; padding: .9rem 1rem; background: var(--kg-paper); cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.option-card:has(input:checked) { border-color: var(--kg-cobalt); box-shadow: 0 0 0 .15rem rgba(31, 78, 156, .15); }
+.checkout-step { width: 28px; height: 28px; border-radius: 50%; background: var(--kg-cobalt); color: #fff; display: inline-grid; place-items: center; font-weight: 700; font-size: .85rem; margin-right: .5rem; }
+.success-mark { width: 76px; height: 76px; border-radius: 50%; background: var(--kg-turq-soft); color: var(--kg-turq); display: grid; place-items: center; font-size: 2.4rem; margin: 0 auto; }
+.avatar-lg { width: 72px; height: 72px; border-radius: 50%; background: var(--kg-cobalt); color: #fff; display: grid; place-items: center; font-size: 1.6rem; font-weight: 700; font-family: "Playfair Display", Georgia, serif; }
+
+/* 8. AUTH PAGES --------------------------------------------------------- */
+.auth-wrap { min-height: calc(100vh - 80px); }
+.auth-card { border-radius: 20px; overflow: hidden; }
+.auth-art { background: var(--kg-cobalt-dark); color: #fff; position: relative; }
+.auth-art::before { content: ""; position: absolute; inset: 0; background-image: var(--kg-pattern); }
+.auth-art > * { position: relative; }
+.auth-art blockquote { font-family: "Playfair Display", Georgia, serif; font-size: 1.35rem; }
+.strength .progress { height: 6px; }
+
+/* 9. FOOTER / TOASTS / OFFCANVAS -------------------------------------- */
+.kg-footer { background: #10254d; color: rgba(255, 255, 255, .75); }
+.kg-footer a { color: rgba(255, 255, 255, .8); text-decoration: none; }
+.kg-footer a:hover { color: #fff; text-decoration: underline; }
+.kg-footer li { margin-bottom: .35rem; }
+.pay-badge { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); font-weight: 500; padding: .45em .7em; }
+.kg-toast { background: var(--kg-paper); box-shadow: 0 12px 30px -12px rgba(0, 0, 0, .35); }
+.kg-offcanvas { --bs-offcanvas-bg: var(--kg-paper); --bs-offcanvas-width: 380px; }
+
+/* 10. RESPONSIVE ------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .nav-search { min-width: 0; }
+  .hero .carousel-item { min-height: 0; }
+  .hero-slide { padding: 2.5rem 0 4rem; text-align: center; }
+  .hero p { margin-left: auto; margin-right: auto; }
+  .hero-art { max-width: 260px; }
+}
+@media (max-width: 575.98px) {
+  .feature-strip { margin-top: -1.6rem; }
+  .hero h1, .hero h2 { font-size: 1.85rem; }
+  .hero-slide { padding-left: .5rem; padding-right: .5rem; }
+  .feature { padding: .7rem .75rem; gap: .6rem !important; }
+  .feature i { width: 32px; height: 32px; font-size: 1rem; border-radius: 9px; }
+  .feature strong { font-size: .85rem; line-height: 1.2; }
+  .feature small { display: none !important; }
+  .product-media { aspect-ratio: 4 / 3; }
+  .product-media .product-art { width: auto; height: 86%; }
+  .filter-bar { overflow-x: auto; flex-wrap: nowrap; padding-bottom: .25rem; }
+  .filter-bar .btn { white-space: nowrap; }
+  .rating-big { font-size: 2.8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .product-card, .product-art, .btn-added { transition: none; animation: none; }
+}

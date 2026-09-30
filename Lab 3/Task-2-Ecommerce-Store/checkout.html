@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Checkout at Kashi Ghar.">
+  <title>Checkout · Kashi Ghar</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="checkout">
+  <div id="site-nav"></div>
+
+  <header class="page-head py-4">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb small mb-1">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="cart.html">Cart</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+      </nav>
+      <h1 class="h2 mb-0">Checkout</h1>
+    </div>
+  </header>
+
+  <main class="container py-4">
+    <form id="checkoutForm" class="row g-4" novalidate>
+      <!-- ============ Left: details ============ -->
+      <div class="col-lg-7">
+
+        <!-- 1. Contact -->
+        <div class="card p-4 mb-4">
+          <h2 class="h5 mb-3"><span class="checkout-step">1</span>Contact</h2>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="coName" class="form-label">Full name</label>
+              <input type="text" class="form-control" id="coName" autocomplete="name" required minlength="3">
+              <div class="invalid-feedback">Enter the receiver’s name.</div>
+            </div>
+            <div class="col-md-6">
+              <label for="coPhone" class="form-label">Mobile number</label>
+              <input type="tel" class="form-control" id="coPhone" autocomplete="tel" required placeholder="03001234567">
+              <div class="invalid-feedback">Use a Pakistani mobile number, e.g. 03001234567.</div>
+            </div>
+            <div class="col-12">
+              <label for="coEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="coEmail" autocomplete="email" required>
+              <div class="invalid-feedback">Enter a valid email for the receipt.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Shipping -->
+        <div class="card p-4 mb-4">
+          <h2 class="h5 mb-3"><span class="checkout-step">2</span>Shipping address</h2>
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="coAddress" class="form-label">Street address</label>
+              <input type="text" class="form-control" id="coAddress" autocomplete="street-address" required minlength="8" placeholder="House 12, Street 4, Gulgasht Colony">
+              <div class="invalid-feedback">Enter your full street address.</div>
+            </div>
+            <div class="col-md-5">
+              <label for="coCity" class="form-label">City</label>
+              <select class="form-select" id="coCity" required>
+                <option value="">Choose…</option>
+                <option>Multan</option><option>Lahore</option><option>Karachi</option><option>Islamabad</option>
+                <option>Rawalpindi</option><option>Faisalabad</option><option>Peshawar</option><option>Quetta</option>
+                <option>Hyderabad</option><option>Sialkot</option><option>Bahawalpur</option><option>Gujranwala</option>
+              </select>
+              <div class="invalid-feedback">Choose a city we deliver to.</div>
+            </div>
+            <div class="col-md-3">
+              <label for="coPostal" class="form-label">Postal code</label>
+              <input type="text" class="form-control" id="coPostal" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required placeholder="60000">
+              <div class="invalid-feedback">5 digits.</div>
+            </div>
+            <div class="col-md-4">
+              <label for="coArea" class="form-label">Area / landmark <span class="text-body-secondary">(optional)</span></label>
+              <input type="text" class="form-control" id="coArea" maxlength="60">
+            </div>
+            <div class="col-12">
+              <label for="coNotes" class="form-label">Order notes <span class="text-body-secondary">(optional)</span></label>
+              <textarea class="form-control" id="coNotes" rows="2" maxlength="300" placeholder="Khussa size, gift message, delivery time…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Delivery -->
+        <div class="card p-4 mb-4">
+          <h2 class="h5 mb-3"><span class="checkout-step">3</span>Delivery</h2>
+          <div class="vstack gap-2" id="deliveryOptions">
+            <label class="option-card d-flex align-items-center gap-3">
+              <input class="form-check-input mt-0" type="radio" name="delivery" value="standard" checked>
+              <span class="flex-grow-1"><strong class="d-block">Standard delivery</strong><small class="text-body-secondary">3–5 working days · TCS / Leopards</small></span>
+              <span class="fw-semibold text-nowrap" id="stdPrice">PKR 250</span>
+            </label>
+            <label class="option-card d-flex align-items-center gap-3">
+              <input class="form-check-input mt-0" type="radio" name="delivery" value="express">
+              <span class="flex-grow-1"><strong class="d-block">Express delivery</strong><small class="text-body-secondary">1–2 working days · extra padding for fragile items</small></span>
+              <span class="fw-semibold text-nowrap">PKR 600</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 4. Payment -->
+        <div class="card p-4">
+          <h2 class="h5 mb-3"><span class="checkout-step">4</span>Payment</h2>
+          <div class="vstack gap-2">
+            <label class="option-card d-flex align-items-center gap-3">
+              <input class="form-check-input mt-0" type="radio" name="payment" value="cod" checked>
+              <i class="bi bi-cash-coin fs-4 text-success"></i>
+              <span><strong class="d-block">Cash on Delivery</strong><small class="text-body-secondary">Pay the rider when your parcel arrives</small></span>
+            </label>
+
+            <label class="option-card d-flex align-items-center gap-3">
+              <input class="form-check-input mt-0" type="radio" name="payment" value="wallet">
+              <i class="bi bi-phone fs-4 text-danger"></i>
+              <span><strong class="d-block">JazzCash / Easypaisa</strong><small class="text-body-secondary">You’ll get a payment request on your phone</small></span>
+            </label>
+            <div class="collapse" id="walletFields">
+              <fieldset class="border rounded-3 p-3 bg-body" id="walletFieldset" disabled>
+                <legend class="visually-hidden">Mobile wallet details</legend>
+                <div class="row g-3">
+                  <div class="col-md-5">
+                    <label for="walletProvider" class="form-label">Wallet</label>
+                    <select class="form-select" id="walletProvider" required>
+                      <option value="JazzCash">JazzCash</option>
+                      <option value="Easypaisa">Easypaisa</option>
+                    </select>
+                  </div>
+                  <div class="col-md-7">
+                    <label for="walletNumber" class="form-label">Wallet mobile number</label>
+                    <input type="tel" class="form-control" id="walletNumber" required placeholder="03001234567">
+                    <div class="invalid-feedback">Enter the 11-digit number linked to your wallet.</div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+            <label class="option-card d-flex align-items-center gap-3">
+              <input class="form-check-input mt-0" type="radio" name="payment" value="card">
+              <i class="bi bi-credit-card fs-4 text-primary"></i>
+              <span><strong class="d-block">Debit / credit card</strong><small class="text-body-secondary">Visa, Mastercard, UnionPay</small></span>
+            </label>
+            <div class="collapse" id="cardFields">
+              <fieldset class="border rounded-3 p-3 bg-body" id="cardFieldset" disabled>
+                <legend class="visually-hidden">Card details</legend>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="cardName" class="form-label">Name on card</label>
+                    <input type="text" class="form-control" id="cardName" autocomplete="cc-name" required minlength="3">
+                    <div class="invalid-feedback">Enter the name printed on the card.</div>
+                  </div>
+                  <div class="col-12">
+                    <label for="cardNumber" class="form-label">Card number</label>
+                    <div class="input-group has-validation">
+                      <span class="input-group-text"><i class="bi bi-credit-card-2-front"></i></span>
+                      <input type="text" class="form-control" id="cardNumber" inputmode="numeric" autocomplete="cc-number" required maxlength="19" placeholder="4242 4242 4242 4242">
+                      <div class="invalid-feedback">Enter a valid 16-digit card number.</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <label for="cardExpiry" class="form-label">Expiry (MM/YY)</label>
+                    <input type="text" class="form-control" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" required maxlength="5" placeholder="09/28">
+                    <div class="invalid-feedback">Use MM/YY, not in the past.</div>
+                  </div>
+                  <div class="col-6">
+                    <label for="cardCvc" class="form-label">CVC</label>
+                    <input type="password" class="form-control" id="cardCvc" inputmode="numeric" autocomplete="cc-csc" required maxlength="4" pattern="[0-9]{3,4}">
+                    <div class="invalid-feedback">3 or 4 digits.</div>
+                  </div>
+                </div>
+                <p class="small text-body-secondary mt-2 mb-0"><i class="bi bi-shield-lock me-1"></i>Demo store: card details are checked in the browser and never saved.</p>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ Right: summary ============ -->
+      <div class="col-lg-5">
+        <div class="card summary-card p-4 sticky-summary">
+          <h2 class="h5 mb-3">Your order</h2>
+          <ul class="list-unstyled vstack gap-3 mb-3" id="coItems"></ul>
+
+          <div class="input-group input-group-sm has-validation mb-2" id="coCouponGroup">
+            <input type="text" class="form-control text-uppercase" id="coCoupon" placeholder="Coupon code" aria-label="Coupon code">
+            <button class="btn btn-outline-primary" type="button" id="coApply">Apply</button>
+            <div class="invalid-feedback" id="coCouponFeedback"></div>
+          </div>
+          <div id="coCouponApplied"></div>
+
+          <hr>
+          <div id="coTotals"></div>
+
+          <button type="submit" class="btn btn-terra btn-lg w-100 mt-3" id="placeOrderBtn">
+            <span class="spinner-border spinner-border-sm me-2 d-none" aria-hidden="true"></span>
+            <span class="btn-label">Place order</span>
+          </button>
+          <p class="small text-body-secondary text-center mt-2 mb-0"><i class="bi bi-arrow-repeat me-1"></i>7-day returns · breakage replaced free</p>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <!-- Success modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="successTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center p-2">
+        <div class="modal-body p-4">
+          <div class="success-mark mb-3"><i class="bi bi-check-lg"></i></div>
+          <h2 class="h3" id="successTitle">Shukriya! Order placed.</h2>
+          <p class="mb-1">Your order number is</p>
+          <p class="fs-4 fw-bold text-primary mb-3" id="successOrderId">KG-2026-0000</p>
+          <p class="text-body-secondary" id="successText"></p>
+          <div class="d-grid gap-2 d-sm-flex justify-content-center mt-4">
+            <a href="index.html" class="btn btn-outline-primary">Continue shopping</a>
+            <a href="account.html" class="btn btn-primary" id="viewOrderLink">View my orders</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>
