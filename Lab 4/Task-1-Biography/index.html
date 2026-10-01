@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Lab 4 Task 1: a biography stored in var variables and a nested JavaScript object, printed on the console.">
+  <title>Task 1 · Biography | Lab 4 JavaScript</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="../index.html"><span class="js-badge">JS</span><span>Lab 4 · Hands-on JavaScript<small>Full Stack Web Development</small></span></a>
+      <span class="topbar-meta">Abdulraheem · BSCS-V-A</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav class="crumbs"><a href="../index.html">Lab 4</a><span>/</span>Task 1</nav>
+    <header class="page-head">
+      <span class="task-tag">TASK #1</span>
+      <h1>Biography</h1>
+      <p>My biography stored in <code>var</code> variables of different primitive types, then as a nested JavaScript object, and printed on the console line by line.</p>
+      <ul class="concepts"><li>var</li><li>string</li><li>number</li><li>boolean</li><li>null</li><li>undefined</li><li>typeof</li><li>nested objects</li><li>for loop</li></ul>
+    </header>
+
+    <div class="grid">
+      <div class="stack">
+        <article class="card statement">
+          <div class="card-head"><h2>Task statement</h2></div>
+          <ol>
+            <li>Write biography about yourself and print on console.</li>
+            <li>Use <code>var</code> to store your biography in variables, use appropriate primitive types.</li>
+            <li>Create JS Object for your biography key-value pairs. At least 4-5 keys, nested JS Object for Address, DegreePrograms etc. Print biography on console (do not print entire object as it is).</li>
+          </ol>
+          <div class="example">e.g. { name: 'Some Name', age: 34,
+       address: { }, degreeProgram: {} }</div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><h2>Biography card</h2><span class="small-link">built from the <code>biography</code> object</span></div>
+          <div class="profile" id="profile"></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><h2>Primitive types used</h2><span class="small-link">from the <code>var</code> variables</span></div>
+          <div style="overflow-x:auto"><table class="data" id="typesTable"></table></div>
+        </article>
+      </div>
+
+      <article class="card">
+        <div class="card-head"><h2>Console output</h2><a class="small-link" href="script.js">View script.js</a></div>
+        <div class="console">
+          <div class="console-bar"><i></i><i></i><i></i><span>script.js</span><button type="button" onclick="consolePanel.clear()">Clear</button></div>
+          <div class="console-body" id="console-body"></div>
+        </div>
+        <p class="console-hint">This is the real <code>console.log</code> output of <code>script.js</code>. Press <kbd>F12</kbd> and open the Console tab to see it in DevTools too.</p>
+      </article>
+    </div>
+
+    <nav class="pager">
+      <a href="../index.html"><small>Back to</small>All tasks</a>
+      <a class="next" href="../Task-2-Next-Prime/index.html"><small>Next</small>Task 2 · Next prime →</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer"><div class="wrap"><span>Lab 4 · Hands-on Practice on JavaScript · CLO-1 GA-4</span><span>Abdulraheem · Air University, Islamabad</span></div></footer>
+
+  <script src="../assets/console.js"></script>
+  <script src="script.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>

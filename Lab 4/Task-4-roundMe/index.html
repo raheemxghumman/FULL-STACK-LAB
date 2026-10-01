@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Lab 4 Task 4: roundMe(), a JavaScript function that rounds 0 to N arguments.">
+  <title>Task 4 · roundMe() | Lab 4 JavaScript</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="../index.html"><span class="js-badge">JS</span><span>Lab 4 · Hands-on JavaScript<small>Full Stack Web Development</small></span></a>
+      <span class="topbar-meta">Abdulraheem · BSCS-V-A</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav class="crumbs"><a href="../index.html">Lab 4</a><span>/</span>Task 4</nav>
+    <header class="page-head">
+      <span class="task-tag">TASK #4</span>
+      <h1>roundMe()</h1>
+      <p>A rounding function that accepts any number of arguments: none returns <code>0</code>, one returns a number, and several return an array. The rounding is written by hand instead of calling <code>Math.round</code>.</p>
+      <ul class="concepts"><li>rest parameters ...args</li><li>arguments length</li><li>arrays</li><li>modulo %</li><li>return types</li></ul>
+    </header>
+
+    <div class="grid">
+      <div class="stack">
+        <article class="card statement">
+          <div class="card-head"><h2>Task statement</h2></div>
+          <p>Create a <code>roundMe()</code> method. <code>roundMe</code> function can work on 0 - N arguments, for multiple arguments, it returns an array of rounded values.</p>
+          <div class="example">roundMe()          // returns 0
+roundMe(4.7)       // returns 5
+roundMe(4.7, 4.4)  // returns [5, 4]</div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><h2>Try it</h2><span class="small-link">calls <code>roundMe(...)</code></span></div>
+          <form id="roundForm" class="row" novalidate>
+            <div class="field">
+              <label for="numbers">Arguments, separated by commas</label>
+              <input type="text" id="numbers" value="4.7, 4.4" placeholder="leave empty for no arguments">
+            </div>
+            <button class="btn btn-primary" type="submit">Run roundMe</button>
+          </form>
+          <div class="chips" id="examples" style="margin-top:12px">
+            <button type="button" class="chip" data-v="">roundMe()</button>
+            <button type="button" class="chip" data-v="4.7">roundMe(4.7)</button>
+            <button type="button" class="chip" data-v="4.7, 4.4">roundMe(4.7, 4.4)</button>
+            <button type="button" class="chip" data-v="2.5, -2.5, -4.7">negatives</button>
+            <button type="button" class="chip" data-v="0.49, 0.5, 99.5, 7">edge cases</button>
+          </div>
+          <div class="result" id="roundResult" hidden></div>
+          <div id="compare" style="margin-top:16px; overflow-x:auto"></div>
+        </article>
+      </div>
+
+      <article class="card">
+        <div class="card-head"><h2>Console output</h2><a class="small-link" href="script.js">View script.js</a></div>
+        <div class="console">
+          <div class="console-bar"><i></i><i></i><i></i><span>script.js</span><button type="button" onclick="consolePanel.clear()">Clear</button></div>
+          <div class="console-body" id="console-body"></div>
+        </div>
+        <p class="console-hint">Like <code>Math.round</code>, a value ending in .5 rounds up, so <code>roundMe(-2.5)</code> is <code>-2</code>.</p>
+      </article>
+    </div>
+
+    <nav class="pager">
+      <a href="../Task-3-Phone-Number/index.html"><small>Previous</small>← Task 3 · Phone number</a>
+      <a class="next" href="../Task-5-abs-ceil-floor/index.html"><small>Next</small>Task 5 · abs, ceil, floor →</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer"><div class="wrap"><span>Lab 4 · Hands-on Practice on JavaScript · CLO-1 GA-4</span><span>Abdulraheem · Air University, Islamabad</span></div></footer>
+
+  <script src="../assets/console.js"></script>
+  <script src="script.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>

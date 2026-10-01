@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdulraheem">
+  <meta name="description" content="Lab 4 Task 2: print the prime number that comes after a given prime, using JavaScript loops and let.">
+  <title>Task 2 · Next Prime | Lab 4 JavaScript</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="../index.html"><span class="js-badge">JS</span><span>Lab 4 · Hands-on JavaScript<small>Full Stack Web Development</small></span></a>
+      <span class="topbar-meta">Abdulraheem · BSCS-V-A</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav class="crumbs"><a href="../index.html">Lab 4</a><span>/</span>Task 2</nav>
+    <header class="page-head">
+      <span class="task-tag">TASK #2</span>
+      <h1>The next prime number</h1>
+      <p>Given a hardcoded prime number, the program finds and prints the prime that comes right after it, using <code>for</code> and <code>while</code> loops with <code>let</code>.</p>
+      <ul class="concepts"><li>let</li><li>for loop</li><li>while loop</li><li>functions</li><li>modulo %</li></ul>
+    </header>
+
+    <div class="grid">
+      <div class="stack">
+        <article class="card statement">
+          <div class="card-head"><h2>Task statement</h2></div>
+          <p>Get used to with the JS loops and <code>let</code> keyword.</p>
+          <p>By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the prime after 11 is 13.</p>
+          <p>Write a program, in which you are given any prime Number (hardcode, user input from keyboard is not required). Print the prime number after the given prime number.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><h2>Try another prime</h2><span class="small-link">calls <code>nextPrime(n)</code></span></div>
+          <form id="primeForm" class="row" novalidate>
+            <div class="field">
+              <label for="primeInput">Given prime</label>
+              <input type="number" id="primeInput" value="11" min="2" step="1">
+            </div>
+            <button class="btn btn-primary" type="submit">Find next prime</button>
+          </form>
+          <div class="result" id="primeResult" hidden></div>
+          <div style="margin-top:16px">
+            <span class="label">Primes below 100: click one to try it</span>
+            <div class="chips" id="primeChips" style="margin-top:8px"></div>
+          </div>
+        </article>
+      </div>
+
+      <article class="card">
+        <div class="card-head"><h2>Console output</h2><a class="small-link" href="script.js">View script.js</a></div>
+        <div class="console">
+          <div class="console-bar"><i></i><i></i><i></i><span>script.js</span><button type="button" onclick="consolePanel.clear()">Clear</button></div>
+          <div class="console-body" id="console-body"></div>
+        </div>
+        <p class="console-hint">The given prime is hardcoded in <code>script.js</code> as <code>let givenPrime = 11;</code>. The form on this page only adds extra runs to the console.</p>
+      </article>
+    </div>
+
+    <nav class="pager">
+      <a href="../Task-1-Biography/index.html"><small>Previous</small>← Task 1 · Biography</a>
+      <a class="next" href="../Task-3-Phone-Number/index.html"><small>Next</small>Task 3 · Phone number →</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer"><div class="wrap"><span>Lab 4 · Hands-on Practice on JavaScript · CLO-1 GA-4</span><span>Abdulraheem · Air University, Islamabad</span></div></footer>
+
+  <script src="../assets/console.js"></script>
+  <script src="script.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
