@@ -1,0 +1,23 @@
+{
+  "name": "campusflow-lab-5",
+  "version": "1.0.0",
+  "description": "Lab 5 - Hands-on Practice on Advanced JavaScript: CampusFlow core logic in plain Node.js (no external packages)",
+  "type": "module",
+  "private": true,
+  "author": "Abdul Raheem",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "task1": "node Task-1-Admission/demo.js",
+    "task2": "node Task-2-Performance/demo.js",
+    "task3": "node Task-3-Profile-Update/demo.js",
+    "task4": "node Task-4-User-Hierarchy/demo.js",
+    "task5": "node Task-5-Transcript-Modules/main.js",
+    "task6": "node Task-6-Callbacks/demo.js",
+    "task7": "node Task-7-Promises/demo.js",
+    "task8": "node Task-8-Async-Await/demo.js",
+    "all": "npm run task1 && npm run task2 && npm run task3 && npm run task4 && npm run task5 && npm run task6 && npm run task7 && npm run task8",
+    "test": "node --test tests/"
+  }
+}
