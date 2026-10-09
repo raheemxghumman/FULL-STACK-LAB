@@ -1,0 +1,20 @@
+{
+  "name": "connecfriend",
+  "version": "1.0.0",
+  "description": "ConnecFriend social networking UI (Assignment 1, Full Stack Web Development) with a basic Socket.IO chat server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/socket.test.js"
+  },
+  "author": "Abdul Raheem",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.1"
+  }
+}

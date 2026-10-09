@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdul Raheem">
+  <title>People · ConnecFriend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="shell-nav"></div>
+
+  <main class="app-main">
+    <div class="container-xxl py-4 px-3 px-md-4">
+      <div class="mb-4">
+        <h1 class="h3 fw-bold mb-1">People</h1>
+        <p class="text-body-secondary mb-0">Invite members to be your friends, answer requests, and start a conversation with anyone.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Requests -->
+        <div class="col-xl-4 order-xl-2" id="requests">
+          <section class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-transparent border-0 pt-3">
+              <h2 class="h6 fw-semibold mb-0">Friend requests <span class="badge text-bg-warning ms-1" id="receivedCount">0</span></h2>
+            </div>
+            <ul class="list-group list-group-flush" id="receivedList"></ul>
+          </section>
+          <section class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent border-0 pt-3">
+              <h2 class="h6 fw-semibold mb-0">Requests you sent</h2>
+            </div>
+            <ul class="list-group list-group-flush" id="sentList"></ul>
+          </section>
+        </div>
+
+        <!-- Directory -->
+        <div class="col-xl-8 order-xl-1">
+          <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body d-flex flex-wrap gap-2 align-items-center">
+              <div class="input-group flex-grow-1" style="min-width:220px">
+                <span class="input-group-text bg-body"><i class="bi bi-search"></i></span>
+                <input type="search" class="form-control" id="search" placeholder="Search by name, username or city" aria-label="Search members">
+              </div>
+              <div class="btn-group btn-group-sm" role="group" aria-label="Filter members">
+                <input type="radio" class="btn-check" name="filter" id="fAll" value="all" checked><label class="btn btn-outline-secondary" for="fAll">Everyone</label>
+                <input type="radio" class="btn-check" name="filter" id="fFriends" value="friends"><label class="btn btn-outline-secondary" for="fFriends">Friends</label>
+                <input type="radio" class="btn-check" name="filter" id="fOthers" value="others"><label class="btn btn-outline-secondary" for="fOthers">Not friends</label>
+              </div>
+            </div>
+          </div>
+          <div class="row row-cols-1 row-cols-md-2 g-3" id="directory"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/people.js"></script>
+</body>
+</html>
