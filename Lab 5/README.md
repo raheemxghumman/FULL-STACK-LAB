@@ -40,12 +40,20 @@ npm run all         # every demo in order
 - **SELECTED vs WAITING (our definition).** An eligible applicant is **SELECTED** when merit reaches the program's closing merit and the fee is paid. The closing merits come from a `switch`: BSCS 80, BSAI 78, BSSE 76, BSDS 75. Otherwise an eligible applicant is **WAITING**, either because merit is below the closing merit or because the fee is unpaid. A valid but ineligible applicant is **REJECTED**.
 - **Summary.** It reports valid and invalid counts, the highest-merit applicant, the lowest merit, the average merit, and counts per program and per status.
 
+**Output** (`npm run task1`):
+
+![Task 1 terminal output](screenshots/task1.png)
+
 ### Task 2 — Academic performance engine (`Task-2-Performance/`)
 
 - **Grading.** Grade, grade points and PASS/FAIL come from a grading table searched with `find()`. Processed records are new objects made with `map()` and spread.
 - **Ranking.** The merit list uses `slice().sort(...)`, with marks descending and ties broken by name. `sort()` changes the array it runs on, so it always works on a copy.
 - **Department statistics.** These are built with `reduce()` into an object keyed by department name, so a new department such as "DS" works automatically.
 - **Queries.** The queries use `find`, `findIndex`, `some`, `every`, `filter` and `slice(0, 3).map(...)`, and the table printer uses `forEach`.
+
+**Output** (`npm run task2`):
+
+![Task 2 terminal output](screenshots/task2.png)
 
 ### Task 3 — Safe profile update (`Task-3-Profile-Update/`)
 
@@ -54,6 +62,10 @@ npm run all         # every demo in order
 - **Concepts used.** Object and nested destructuring, renaming (`address: currentAddress`), default values, array destructuring (`([, value])`), rest parameters (`applyUpdates(student, ...updates)`), object rest, spread, optional chaining, nullish coalescing (`??` keeps `marks: 0`, while `||` would replace it), and property shorthand.
 - **Reference challenge.** `compareReferences()` proves that the original vs updated object, address and contact are all **different** objects. The demo then shows that a plain `{ ...student }` would still **share** `address` with the original. That is why the nested objects are copied as well.
 
+**Output** (`npm run task3`):
+
+![Task 3 terminal output](screenshots/task3.png)
+
 ### Task 4 — User hierarchy and dynamic `this` (`Task-4-User-Hierarchy/`)
 
 - **The classes.** `Person` → `Student` and `FacultyMember`, using `class`, `constructor`, `extends` and `super(...)`. Each subclass overrides `introduce()` and reuses the parent version through `super.introduce()`.
@@ -61,6 +73,10 @@ npm run all         # every demo in order
 - **`call()`.** `Person.prototype.introduce.call(guest)` borrows the method with the guest object as `this`.
 - **Detached method.** `const fn = student.introduce; fn()` throws a `TypeError`. `this` is decided by how a function is called. With nothing before the dot, and class code always running in strict mode, `this` is `undefined`, so `this.name` fails.
 - **`bind()`.** `student.introduce.bind(student)` creates a version whose `this` is fixed. It keeps working when passed around, for example to `map()`.
+
+**Output** (`npm run task4`):
+
+![Task 4 terminal output](screenshots/task4.png)
 
 ### Task 5 — Modular transcript processing (`Task-5-Transcript-Modules/`)
 
@@ -76,6 +92,10 @@ npm run all         # every demo in order
   - Marks below 0 or above 100 raise a `RangeError`.
   - A duplicate id raises an `Error`.
 - **Caller.** `main.js` runs every case with `try` / `catch` / `finally`.
+
+**Output** (`npm run task5`):
+
+![Task 5 terminal output](screenshots/task5.png)
 
 ### Task 6 — Legacy registration with callbacks (`Task-6-Callbacks/`)
 
@@ -94,11 +114,19 @@ cannot see errors thrown later inside a timer. Sequencing several independent re
 nesting or manual counters. Promises and `async/await` (Tasks 7 and 8) flatten this into one chain, with
 one error path.
 
+**Output** (`npm run task6`):
+
+![Task 6 terminal output](screenshots/task6.png)
+
 ### Task 7 — Promise-based registration (`Task-7-Promises/`)
 
 - **Part A, the chain.** `getStudent → getCourse → checkPrerequisites → checkSeats → registerStudent`. Each `.then()` returns the next promise, and one context object `{ student, course, ... }` carries data forward. The caller uses `.catch()` for any failure and `.finally()` for clean-up. `brokenRegistrationChain()` shows the same chain with a missing `return`: the next stage receives `undefined` and the chain fails.
 - **Part B, `Promise.allSettled`.** `sendEmail`, `sendSMS` and `writeAuditLog` start together. They are independent, so one failure, such as a student without a phone, must not hide the others. `Promise.all` would reject on the first failure and lose the other results. The output is `[{ service: 'Email', status: 'fulfilled' }, { service: 'SMS', status: 'rejected' }, ...]`.
 - **Part C, `Promise.any`.** It resolves with the first **successful** server and only rejects, with an `AggregateError`, when every server fails. `Promise.race` would settle on the first server to finish, even if it failed, so a fast error would win over a slower success. The demo shows both on the same inputs to justify the choice.
+
+**Output** (`npm run task7`):
+
+![Task 7 terminal output](screenshots/task7.png)
 
 ### Task 8 — Concurrent API aggregator with async/await (`Task-8-Async-Await/`)
 
@@ -106,6 +134,16 @@ one error path.
 - **`fakeFetch(url, options)`.** It returns objects shaped like a real response. It simulates a 200 success (`/users`, `/courses`, `/results`), a 404 (`/missing`), a 500 (`/server-error`), a network failure (`/network-down`), invalid JSON (`/bad-json`) and a slow response (`/slow`, 3 s). It also respects an abort signal.
 - **`loadDashboard()`.** It starts all three requests at once with `Promise.all`, taking about 200 ms instead of about 600 ms. It reports totals, overall average, the top student, failed students and department statistics.
 - **`fetchWithTimeout(url, ms)`.** It uses `AbortController` with `setTimeout`, and `clearTimeout` in `finally`, so the timer is always cleaned up. A timeout raises a `TimeoutError`. `classifyError()` tells HTTP, network, invalid JSON and timeout failures apart.
+
+**Output** (`npm run task8`):
+
+![Task 8 terminal output](screenshots/task8.png)
+
+## Test results
+
+`npm test` runs 42 tests, and all of them pass:
+
+![npm test output](screenshots/tests.png)
 
 ## Structure
 
@@ -120,5 +158,6 @@ Lab 5/
 ├── Task-6-Callbacks/               registration.js · demo.js
 ├── Task-7-Promises/                registrationService.js · demo.js
 ├── Task-8-Async-Await/             api.js · demo.js
-└── tests/                          task1-4.test.js · task5-8.test.js
+├── tests/                          task1-4.test.js · task5-8.test.js
+└── screenshots/                    terminal output of every task and of npm test
 ```
