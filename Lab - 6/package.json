@@ -1,0 +1,19 @@
+{
+  "name": "lab-6-async-await-promise-all",
+  "version": "1.0.0",
+  "description": "Lab 6 - async/await user fetching and Promise.all validation of two asynchronous operations (plain Node.js, no packages)",
+  "type": "module",
+  "private": true,
+  "author": "Abdul Raheem",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "task1": "node Task-1-Async-Await/demo.js",
+    "task2": "node Task-2-Promise-All/demo.js",
+    "all": "npm run task1 && npm run task2",
+    "ui": "node scripts/serve.js",
+    "mock-api": "node mock-api/server.js",
+    "test": "node --test tests/"
+  }
+}
