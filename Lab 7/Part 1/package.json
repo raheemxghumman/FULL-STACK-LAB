@@ -1,0 +1,16 @@
+{
+  "name": "lab-7-part-1-student-management-api",
+  "version": "1.0.0",
+  "description": "Lab 7 Part 1 - Student Management System: in-memory REST API (students, teachers, attendance, marks) built with node:http, plus a test UI",
+  "type": "module",
+  "private": true,
+  "author": "Abdul Raheem",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "client": "node client.js",
+    "test": "node --test tests/"
+  }
+}

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdul Raheem">
+  <meta name="description" content="Test UI for the Lab 7 Student Management System API: students, teachers, attendance and marks with full CRUD.">
+  <title>Student Management System · Lab 7 API</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234f46e5'/%3E%3Cpath d='M16 7 3 13l13 6 13-6-13-6Zm-8 9v5c0 2 4 4 8 4s8-2 8-4v-5l-8 4-8-4Z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Sidebar (desktop) ===== -->
+  <aside class="sidebar d-none d-lg-flex flex-column" aria-label="Main navigation">
+    <a class="brand" href="#dashboard">
+      <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+      <span class="lh-sm"><span class="d-block fw-bold">Student Management</span><span class="brand-sub">Lab 7 · in-memory API</span></span>
+    </a>
+    <nav class="nav-list" data-nav></nav>
+    <div class="sidebar-foot">
+      <div class="small text-white-50 mb-1">Built by</div>
+      <div class="fw-semibold">Abdul Raheem</div>
+      <div class="small text-white-50">241854 · BSCS-V-A</div>
+    </div>
+  </aside>
+
+  <!-- ===== Top bar + menu (mobile) ===== -->
+  <header class="mobile-bar d-lg-none">
+    <a class="brand" href="#dashboard">
+      <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+      <span class="fw-bold">Student Management</span>
+    </a>
+    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNav" aria-controls="mobileNav" aria-label="Open menu"><i class="bi bi-list fs-5"></i></button>
+  </header>
+  <div class="offcanvas offcanvas-start sidebar-offcanvas" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title h6 mb-0 text-white" id="mobileNavLabel">Student Management</h2>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body"><nav class="nav-list" data-nav></nav></div>
+  </div>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+    <div class="page-head">
+      <div class="min-w-0">
+        <p class="eyebrow mb-1" id="viewEyebrow">Overview</p>
+        <h1 class="h3 fw-bold mb-0" id="viewTitle">Dashboard</h1>
+      </div>
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <div class="dropdown">
+          <button class="btn btn-sm mode-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="modePill">
+            <span class="dot"></span><span id="modeLabel">Connecting…</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end p-3 shadow mode-menu">
+            <p class="small mb-2" id="modeHelp"></p>
+            <div class="input-group input-group-sm mb-2">
+              <input class="form-control font-mono" id="serverUrl" value="http://localhost:3002" aria-label="API server address">
+              <button class="btn btn-primary" type="button" id="connectBtn">Connect</button>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary w-100" type="button" id="browserBtn"><i class="bi bi-window me-1"></i>Use the API inside this page</button>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline-secondary" type="button" id="resetBtn" title="POST /api/reset"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset data</button>
+        <button class="btn btn-sm btn-dark position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#logPanel" aria-controls="logPanel">
+          <i class="bi bi-activity me-1"></i>Network log <span class="badge text-bg-light ms-1" id="logCount">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <section class="view" data-view="dashboard" aria-labelledby="viewTitle">
+      <div class="row g-3 mb-3" id="statCards"></div>
+      <div class="row g-3">
+        <div class="col-xl-7">
+          <div class="card panel h-100">
+            <div class="card-body">
+              <h2 class="panel-title">Attendance by status</h2>
+              <p class="small text-body-secondary mb-3" id="attSummary"></p>
+              <div class="stack-bar mb-3" id="attBar"></div>
+              <div class="d-flex flex-wrap gap-3 small" id="attLegend"></div>
+              <hr>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <h3 class="panel-sub"><i class="bi bi-exclamation-triangle text-warning me-1"></i>Short attendance (&lt; 75%)</h3>
+                  <ul class="list-unstyled mb-0 vstack gap-2" id="lowList"></ul>
+                </div>
+                <div class="col-md-6">
+                  <h3 class="panel-sub"><i class="bi bi-trophy text-success me-1"></i>Top students by marks</h3>
+                  <ul class="list-unstyled mb-0 vstack gap-2" id="topList"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-5">
+          <div class="card panel h-100">
+            <div class="card-body">
+              <h2 class="panel-title">Endpoints</h2>
+              <p class="small text-body-secondary">Read from <code>GET /api</code>. Every module has the same five operations.</p>
+              <div class="endpoint-list" id="endpointList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Students / Teachers / Marks (same layout, filled by app.js) -->
+    <section class="view" data-view="students" hidden>
+      <div class="card panel">
+        <div class="card-body">
+          <div class="toolbar" id="studentsToolbar"></div>
+          <div class="table-responsive"><table class="table align-middle data-table mb-0"><thead id="studentsHead"></thead><tbody id="studentsBody"></tbody></table></div>
+          <p class="request-hint" id="studentsHint"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="teachers" hidden>
+      <div class="card panel">
+        <div class="card-body">
+          <div class="toolbar" id="teachersToolbar"></div>
+          <div class="table-responsive"><table class="table align-middle data-table mb-0"><thead id="teachersHead"></thead><tbody id="teachersBody"></tbody></table></div>
+          <p class="request-hint" id="teachersHint"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="attendance" hidden>
+      <div class="card panel mb-3">
+        <div class="card-body">
+          <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+            <div>
+              <h2 class="panel-title mb-1">Class register</h2>
+              <p class="small text-body-secondary mb-0">Pick a course and a date. Saving sends <span class="m-badge m-post">POST</span> for new marks, <span class="m-badge m-patch">PATCH</span> for changes and <span class="m-badge m-delete">DELETE</span> for "not marked".</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2 align-items-end">
+              <div><label class="form-label small mb-1" for="regCourse">Course</label><select class="form-select form-select-sm" id="regCourse"></select></div>
+              <div><label class="form-label small mb-1" for="regDate">Date</label><input type="date" class="form-control form-control-sm" id="regDate"></div>
+              <button class="btn btn-sm btn-outline-secondary" type="button" id="regAllPresent"><i class="bi bi-check2-all me-1"></i>All present</button>
+            </div>
+          </div>
+          <div class="register" id="register"></div>
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+            <span class="small text-body-secondary" id="regInfo"></span>
+            <button class="btn btn-primary" type="button" id="regSave" data-busy="Saving"><i class="bi bi-cloud-arrow-up me-1"></i>Save register</button>
+          </div>
+        </div>
+      </div>
+      <div class="card panel">
+        <div class="card-body">
+          <div class="toolbar" id="attendanceToolbar"></div>
+          <div class="table-responsive"><table class="table align-middle data-table mb-0"><thead id="attendanceHead"></thead><tbody id="attendanceBody"></tbody></table></div>
+          <p class="request-hint" id="attendanceHint"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="marks" hidden>
+      <div class="card panel">
+        <div class="card-body">
+          <div class="toolbar" id="marksToolbar"></div>
+          <div class="table-responsive"><table class="table align-middle data-table mb-0"><thead id="marksHead"></thead><tbody id="marksBody"></tbody></table></div>
+          <p class="request-hint" id="marksHint"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- API tester -->
+    <section class="view" data-view="tester" hidden>
+      <div class="row g-3">
+        <div class="col-xl-5">
+          <div class="card panel h-100">
+            <div class="card-body">
+              <h2 class="panel-title">Request</h2>
+              <form id="testerForm" novalidate>
+                <div class="input-group mb-2">
+                  <select class="form-select flex-grow-0 font-mono fw-semibold" id="tMethod" style="width:7.5rem" aria-label="HTTP method">
+                    <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option><option>OPTIONS</option>
+                  </select>
+                  <input class="form-control font-mono" id="tPath" value="/api/students" list="tPaths" aria-label="Path" spellcheck="false">
+                  <datalist id="tPaths"></datalist>
+                </div>
+                <label class="form-label small mb-1" for="tBody">Body (JSON) <span class="text-body-secondary">· sent with POST, PUT and PATCH</span></label>
+                <textarea class="form-control font-mono code-input mb-2" id="tBody" rows="9" spellcheck="false"></textarea>
+                <div class="form-check form-switch mb-3">
+                  <input class="form-check-input" type="checkbox" role="switch" id="tAsForm">
+                  <label class="form-check-label small" for="tAsForm">Send as <code>text/plain</code> instead of JSON (expect 415)</label>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                  <button class="btn btn-primary px-4" type="submit"><i class="bi bi-send me-1"></i>Send</button>
+                  <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-lightning me-1"></i>Examples</button>
+                    <ul class="dropdown-menu examples-menu" id="tExamples"></ul>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-7">
+          <div class="card panel h-100">
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                <h2 class="panel-title mb-0">Response</h2>
+                <div id="tMeta" class="small"></div>
+              </div>
+              <div id="tHeaders" class="small mb-2"></div>
+              <pre class="code-view flex-grow-1 mb-0" id="tResponse"><span class="text-body-secondary">Send a request to see the response.</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Requirement checks -->
+    <section class="view" data-view="checks" hidden>
+      <div class="card panel mb-3">
+        <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div>
+            <h2 class="panel-title mb-1">Lab requirements, tested against the running API</h2>
+            <p class="small text-body-secondary mb-0">Each check sends a real request and compares the status code and the response with what the API should return. The records it creates are deleted at the end.</p>
+          </div>
+          <button class="btn btn-success px-4" type="button" id="runChecks"><i class="bi bi-play-fill me-1"></i>Run all checks</button>
+        </div>
+        <div class="progress rounded-0" style="height:6px" role="progressbar" aria-label="Checks progress" id="checksProgressWrap">
+          <div class="progress-bar bg-success" id="checksProgress" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="row g-3 mb-3" id="checksSummary"></div>
+      <div id="checksList"></div>
+    </section>
+  </main>
+
+  <!-- ===== Create / edit modal ===== -->
+  <div class="modal fade" id="recordModal" tabindex="-1" aria-labelledby="recordModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <form class="modal-content" id="recordForm" novalidate>
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title h5" id="recordModalTitle">New record</h2>
+            <div class="small font-mono" id="recordModalRequest"></div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger small d-none" id="recordError" role="alert"></div>
+          <div class="row g-3" id="recordFields"></div>
+          <p class="small text-body-secondary mt-3 mb-0"><i class="bi bi-shield-check me-1"></i>The browser does not check these fields. The API validates them, and any problems come back in a <strong>422</strong> or <strong>409</strong> response and are shown under each field.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary px-4" id="recordSave" data-busy="Saving">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Confirm delete modal ===== -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0 pb-0">
+          <h2 class="modal-title h5" id="confirmTitle">Delete?</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="confirmBody"></div>
+          <div class="small font-mono mt-2" id="confirmRequest"></div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmYes">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Student report ===== -->
+  <div class="offcanvas offcanvas-end report-panel" tabindex="-1" id="reportPanel" aria-labelledby="reportTitle">
+    <div class="offcanvas-header border-bottom">
+      <div>
+        <h2 class="offcanvas-title h5 mb-0" id="reportTitle">Report</h2>
+        <div class="small font-mono text-body-secondary" id="reportRequest"></div>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" id="reportBody"></div>
+  </div>
+
+  <!-- ===== Network log ===== -->
+  <div class="offcanvas offcanvas-end log-panel" tabindex="-1" id="logPanel" aria-labelledby="logTitle">
+    <div class="offcanvas-header border-bottom">
+      <div>
+        <h2 class="offcanvas-title h5 mb-0" id="logTitle">Network log</h2>
+        <div class="small text-body-secondary">Every request this page sent, newest first. Click one for details.</div>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <div class="d-flex justify-content-end px-3 py-2 border-bottom"><button class="btn btn-sm btn-link text-danger p-0" type="button" id="clearLog">Clear</button></div>
+      <div id="logList" class="log-list"></div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastHolder" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
