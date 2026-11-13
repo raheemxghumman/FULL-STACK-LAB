@@ -1,0 +1,1380 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "HealthController_health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Server status, where the data is saved, record counts",
+        "tags": [
+          "General"
+        ]
+      }
+    },
+    "/api": {
+      "get": {
+        "operationId": "HealthController_index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Every endpoint of this API (full documentation at /docs)",
+        "tags": [
+          "General"
+        ]
+      }
+    },
+    "/api/auth/signup": {
+      "post": {
+        "operationId": "AuthController_signup",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "409": {
+            "description": "The email already has an account"
+          }
+        },
+        "summary": "Create an account; returns a login token",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Wrong email or password"
+          }
+        },
+        "summary": "Log in; returns a login token (send it as Authorization: Bearer <token>)",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "operationId": "AuthController_me",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Not logged in"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The logged-in account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Not logged in"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "End this login (the token stops working)",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/auth/email-available": {
+      "get": {
+        "operationId": "AuthController_emailAvailable",
+        "parameters": [
+          {
+            "name": "email",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": "demo@kashighar.pk",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Is this email still free for signup? Used by the signup form while typing",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/products": {
+      "get": {
+        "operationId": "ProductsController_list",
+        "parameters": [
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "vases",
+                "tableware",
+                "tiles",
+                "lamps",
+                "textiles"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Words to search in the name, category and description",
+            "schema": {
+              "example": "blue vase",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "featured",
+              "type": "string",
+              "enum": [
+                "featured",
+                "price-asc",
+                "price-desc",
+                "rating",
+                "name",
+                "newest"
+              ]
+            }
+          },
+          {
+            "name": "minPrice",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 1000,
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 6000,
+              "type": "number"
+            }
+          },
+          {
+            "name": "inStock",
+            "required": false,
+            "in": "query",
+            "description": "true = only products that are in stock",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List products: filter by category, search, price range and stock; sort",
+        "tags": [
+          "Products"
+        ]
+      },
+      "post": {
+        "operationId": "ProductsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Not logged in"
+          },
+          "403": {
+            "description": "Logged in, but not the admin"
+          },
+          "422": {
+            "description": "Invalid fields, listed in details"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add a product (admin)",
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "operationId": "ProductsController_one",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "No such product"
+          }
+        },
+        "summary": "One product with its rating",
+        "tags": [
+          "Products"
+        ]
+      },
+      "put": {
+        "operationId": "ProductsController_replace",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Not logged in"
+          },
+          "403": {
+            "description": "Logged in, but not the admin"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Replace a product (admin)",
+        "tags": [
+          "Products"
+        ]
+      },
+      "patch": {
+        "operationId": "ProductsController_patch",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Not logged in"
+          },
+          "403": {
+            "description": "Logged in, but not the admin"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Change some fields of a product, e.g. the stock (admin)",
+        "tags": [
+          "Products"
+        ]
+      },
+      "delete": {
+        "operationId": "ProductsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Not logged in"
+          },
+          "403": {
+            "description": "Logged in, but not the admin"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove a product, also from carts (admin). Past orders keep their copy.",
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "operationId": "CatalogController_categories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Product categories with how many products each has",
+        "tags": [
+          "Catalogue"
+        ]
+      }
+    },
+    "/api/delivery-options": {
+      "get": {
+        "operationId": "CatalogController_delivery",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delivery methods, fees and the free-delivery limit",
+        "tags": [
+          "Catalogue"
+        ]
+      }
+    },
+    "/api/reviews": {
+      "get": {
+        "operationId": "ReviewsController_list",
+        "parameters": [
+          {
+            "name": "productId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "p1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 6,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Reviews, newest first",
+        "tags": [
+          "Reviews"
+        ]
+      },
+      "post": {
+        "operationId": "ReviewsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Post a review (marked 'verified buyer' when logged in)",
+        "tags": [
+          "Reviews"
+        ]
+      }
+    },
+    "/api/reviews/summary": {
+      "get": {
+        "operationId": "ReviewsController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "1 to 5 star distribution for the whole shop",
+        "tags": [
+          "Reviews"
+        ]
+      }
+    },
+    "/api/reviews/{id}": {
+      "delete": {
+        "operationId": "ReviewsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Not logged in"
+          },
+          "403": {
+            "description": "Logged in, but not the admin"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a review (admin)",
+        "tags": [
+          "Reviews"
+        ]
+      }
+    },
+    "/api/products/{id}/reviews": {
+      "get": {
+        "operationId": "ProductReviewsController_forProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Reviews of one product",
+        "tags": [
+          "Reviews"
+        ]
+      }
+    },
+    "/api/carts": {
+      "post": {
+        "operationId": "CartsController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Start a new, empty cart (the browser keeps its id)",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/api/carts/{id}": {
+      "get": {
+        "operationId": "CartsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "A cart with its lines and the totals for each delivery method",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/api/carts/{id}/items": {
+      "post": {
+        "operationId": "CartsController_add",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "409": {
+            "description": "Already at the stock limit, or sold out"
+          }
+        },
+        "summary": "Add a product (never more than the stock)",
+        "tags": [
+          "Cart"
+        ]
+      },
+      "delete": {
+        "operationId": "CartsController_clear",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Empty the cart and remove the coupon",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/api/carts/{id}/items/{productId}": {
+      "patch": {
+        "operationId": "CartsController_setQty",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "productId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetQtyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Set the quantity of one line (1 to the stock)",
+        "tags": [
+          "Cart"
+        ]
+      },
+      "delete": {
+        "operationId": "CartsController_removeItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "productId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Remove one line",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/api/carts/{id}/coupon": {
+      "put": {
+        "operationId": "CartsController_applyCoupon",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Apply a coupon code",
+        "tags": [
+          "Cart"
+        ]
+      },
+      "delete": {
+        "operationId": "CartsController_removeCoupon",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Remove the coupon",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "operationId": "OrdersController_place",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Not logged in"
+          },
+          "409": {
+            "description": "The cart is empty or an item is short of stock"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Place an order from a cart: checks the stock, takes the items out of stock, empties the cart",
+        "tags": [
+          "Orders"
+        ]
+      },
+      "get": {
+        "operationId": "OrdersController_list",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Processing",
+                "Shipped",
+                "Delivered",
+                "Cancelled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "Not logged in"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "My orders, newest first (the admin sees every order)",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "operationId": "OrdersController_one",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "Not logged in"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "One order",
+        "tags": [
+          "Orders"
+        ]
+      },
+      "patch": {
+        "operationId": "OrdersController_setStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "Not logged in"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Change the status: customers may cancel while Processing (stock goes back); the admin ships and delivers",
+        "tags": [
+          "Orders"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Kashi Ghar store API",
+    "description": "NestJS backend for the Lab 3 e-commerce store (Lab 8, Abdul Raheem 241854). Log in with POST /api/auth/login (demo@kashighar.pk / demo1234, or admin@kashighar.pk / admin1234), then press Authorize and paste the token.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "The NestJS backend on your computer (npm start in Lab 8/backend)"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "SignupDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Sara Malik"
+          },
+          "email": {
+            "type": "string",
+            "example": "sara@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "03211234567"
+          },
+          "city": {
+            "type": "string",
+            "enum": [
+              "Multan",
+              "Lahore",
+              "Karachi",
+              "Islamabad",
+              "Rawalpindi",
+              "Faisalabad",
+              "Peshawar",
+              "Quetta",
+              "Hyderabad",
+              "Sialkot",
+              "Bahawalpur",
+              "Gujranwala",
+              "Other"
+            ],
+            "example": "Lahore"
+          },
+          "password": {
+            "type": "string",
+            "example": "Kashi#2026",
+            "minLength": 8
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "phone",
+          "city",
+          "password"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "demo@kashighar.pk"
+          },
+          "password": {
+            "type": "string",
+            "example": "demo1234"
+          },
+          "remember": {
+            "type": "boolean",
+            "description": "Keep the login for 30 days instead of 1",
+            "default": false
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "CreateProductDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Kashi Pen Holder"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "vases",
+              "tableware",
+              "tiles",
+              "lamps",
+              "textiles"
+            ],
+            "example": "tableware"
+          },
+          "price": {
+            "type": "number",
+            "example": 900,
+            "description": "PKR, whole rupees"
+          },
+          "oldPrice": {
+            "type": "object",
+            "example": 1100,
+            "description": "Price before the sale; must be higher than price"
+          },
+          "stock": {
+            "type": "number",
+            "example": 15
+          },
+          "description": {
+            "type": "string",
+            "example": "A small hand-painted pen holder for the study table."
+          },
+          "art": {
+            "type": "string",
+            "enum": [
+              "a-surahi",
+              "a-matka",
+              "a-bottle",
+              "a-plate",
+              "a-bowl",
+              "a-mugs",
+              "a-tiles",
+              "a-hex",
+              "a-camel",
+              "a-lamp",
+              "a-khussa",
+              "a-ajrak"
+            ],
+            "default": "a-plate",
+            "description": "Which SVG picture of the store to use"
+          },
+          "bg": {
+            "type": "string",
+            "example": "#e6ecf7"
+          }
+        },
+        "required": [
+          "name",
+          "category",
+          "price",
+          "stock",
+          "description"
+        ]
+      },
+      "UpdateProductDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Kashi Pen Holder"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "vases",
+              "tableware",
+              "tiles",
+              "lamps",
+              "textiles"
+            ],
+            "example": "tableware"
+          },
+          "price": {
+            "type": "number",
+            "example": 900,
+            "description": "PKR, whole rupees"
+          },
+          "oldPrice": {
+            "type": "object",
+            "example": 1100,
+            "description": "Price before the sale; must be higher than price"
+          },
+          "stock": {
+            "type": "number",
+            "example": 15
+          },
+          "description": {
+            "type": "string",
+            "example": "A small hand-painted pen holder for the study table."
+          },
+          "art": {
+            "type": "string",
+            "enum": [
+              "a-surahi",
+              "a-matka",
+              "a-bottle",
+              "a-plate",
+              "a-bowl",
+              "a-mugs",
+              "a-tiles",
+              "a-hex",
+              "a-camel",
+              "a-lamp",
+              "a-khussa",
+              "a-ajrak"
+            ],
+            "default": "a-plate",
+            "description": "Which SVG picture of the store to use"
+          },
+          "bg": {
+            "type": "string",
+            "example": "#e6ecf7"
+          }
+        }
+      },
+      "CreateReviewDto": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "example": "p6"
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5,
+            "example": 5
+          },
+          "name": {
+            "type": "string",
+            "example": "Sara Malik"
+          },
+          "text": {
+            "type": "string",
+            "example": "The chai mugs arrived safely and look even better in person."
+          }
+        },
+        "required": [
+          "productId",
+          "rating",
+          "name",
+          "text"
+        ]
+      },
+      "AddItemDto": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "example": "p9"
+          },
+          "qty": {
+            "type": "number",
+            "example": 1,
+            "default": 1,
+            "description": "Never goes above the stock"
+          }
+        },
+        "required": [
+          "productId"
+        ]
+      },
+      "SetQtyDto": {
+        "type": "object",
+        "properties": {
+          "qty": {
+            "type": "number",
+            "example": 2,
+            "description": "From 1 to the product's stock"
+          }
+        },
+        "required": [
+          "qty"
+        ]
+      },
+      "CouponDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "MULTAN10",
+            "description": "MULTAN10 = 10% off, KASHI500 = PKR 500 off orders over PKR 3,000"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "ContactDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Sara Malik"
+          },
+          "email": {
+            "type": "string",
+            "example": "sara@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "03211234567"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "phone"
+        ]
+      },
+      "ShippingDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "example": "House 7, Street 9, Gulberg III"
+          },
+          "area": {
+            "type": "string",
+            "example": "Near Liberty Market"
+          },
+          "city": {
+            "type": "string",
+            "enum": [
+              "Multan",
+              "Lahore",
+              "Karachi",
+              "Islamabad",
+              "Rawalpindi",
+              "Faisalabad",
+              "Peshawar",
+              "Quetta",
+              "Hyderabad",
+              "Sialkot",
+              "Bahawalpur",
+              "Gujranwala",
+              "Other"
+            ],
+            "example": "Lahore"
+          },
+          "postal": {
+            "type": "string",
+            "example": "54000"
+          }
+        },
+        "required": [
+          "address",
+          "city",
+          "postal"
+        ]
+      },
+      "PaymentDto": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": [
+              "cod",
+              "wallet",
+              "card"
+            ],
+            "example": "cod"
+          },
+          "label": {
+            "type": "string",
+            "example": "JazzCash",
+            "description": "Wallet name (JazzCash or Easypaisa)"
+          },
+          "account": {
+            "type": "string",
+            "example": "0300****567",
+            "description": "Masked wallet number"
+          },
+          "last4": {
+            "type": "string",
+            "example": "4242",
+            "description": "Only the last 4 digits of a card. Full card numbers are refused."
+          }
+        },
+        "required": [
+          "method"
+        ]
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "cartId": {
+            "type": "string",
+            "description": "The id from POST /api/carts"
+          },
+          "deliveryMethod": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "express"
+            ],
+            "default": "standard"
+          },
+          "contact": {
+            "$ref": "#/components/schemas/ContactDto"
+          },
+          "shipping": {
+            "$ref": "#/components/schemas/ShippingDto"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/PaymentDto"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Please call before delivery."
+          }
+        },
+        "required": [
+          "cartId",
+          "contact",
+          "shipping",
+          "payment"
+        ]
+      },
+      "OrderStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "Processing",
+              "Shipped",
+              "Delivered",
+              "Cancelled"
+            ],
+            "example": "Cancelled"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      }
+    }
+  }
+}

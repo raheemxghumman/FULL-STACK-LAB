@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdul Raheem">
+  <title>Kashi Ghar API docs · Lab 8 NestJS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14/swagger-ui.css">
+  <style>
+    body { margin: 0; background: #fafafa; font-family: "Segoe UI", system-ui, sans-serif; }
+    .banner { background: linear-gradient(135deg, #1f4e9c, #102a5c); color: #fff; padding: 18px 24px; }
+    .banner h1 { margin: 0 0 4px; font-size: 1.35rem; }
+    .banner p { margin: 4px 0; font-size: .92rem; opacity: .92; max-width: 980px; line-height: 1.5; }
+    .banner a { color: #fde68a; }
+    .banner code { background: rgba(255,255,255,.14); padding: 1px 6px; border-radius: 4px; }
+    .swagger-ui .topbar { display: none; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <h1>Kashi Ghar store API · NestJS backend (Lab 8)</h1>
+    <p>Abdul Raheem · 241854 · BSCS-V-A. Every endpoint of the NestJS backend, generated from its controllers and DTOs with <code>@nestjs/swagger</code>.
+      <a href="../">Lab 8 preview</a> · <a href="../frontend/">Store demo</a> · <a href="https://github.com/raheemxghumman/FULL-STACK-LAB/tree/main/Lab%208">Source on GitHub</a></p>
+    <p>"Try it out" sends requests to <code>http://localhost:3000</code>: run <code>npm install</code> and <code>npm start</code> in <code>Lab 8/backend</code> first.
+      Log in with <code>POST /api/auth/login</code> (<code>demo@kashighar.pk</code> / <code>demo1234</code>), then press <b>Authorize</b> and paste the token.</p>
+  </div>
+  <div id="swagger"></div>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14/swagger-ui-bundle.js"></script>
+  <script>
+    window.ui = SwaggerUIBundle({ url: "openapi.json", dom_id: "#swagger", deepLinking: true, docExpansion: "list", defaultModelsExpandDepth: 0, tryItOutEnabled: false });
+  </script>
+</body>
+</html>
