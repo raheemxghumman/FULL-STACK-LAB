@@ -1,0 +1,156 @@
+PASS test/e2e/07-discovery.spec.ts
+  [S9] Discovery, categories and reset
+    √ case-insensitive title search + category + status + priority, applied together (8 ms)
+    √ scopes to the caller BEFORE counting and paginating (6 ms)
+    √ paginates newest first with id as tie-breaker, defaults page 1 / limit 10 (9 ms)
+    √ details return the request, current assignment and chronological history (3 ms)
+    √ category management: create, unique name, update, deactivate, list active only (25 ms)
+    √ deactivating a category blocks new requests but keeps historical ones (13 ms)
+    √ record ids are unique per entity type and never reused (8 ms)
+    √ a fresh start resets all data to the seed (31 ms)
+
+  console.log
+    SUCCESS (200)
+    [Lifecycle] [170a64e6] +  1ms  1 middleware RequestIdMiddleware -> id assigned, X-Request-Id header set
+    [Lifecycle] [170a64e6] +  1ms  2 guard      JwtAuthGuard -> pass (user #2, REQUESTER)
+    [Lifecycle] [170a64e6] +  1ms  2 guard      RolesGuard -> pass (REQUESTER is allowed)
+    [Lifecycle] [170a64e6] +  1ms  3 intercept  ResponseEnvelopeInterceptor -> before handler (pipes run next)
+    [Lifecycle] [170a64e6] +  1ms  4 pipe       ValidationPipe(UpdateRequestDto) -> body valid, transformed to UpdateRequestDto
+    [Lifecycle] [170a64e6] +  1ms  4 pipe       ParsePositiveIntPipe(id) -> "1" became 1
+    [Lifecycle] [170a64e6] +  1ms  5 controller RequestsController.update(#1) -> calling RequestsService
+    [Lifecycle] [170a64e6] +  1ms  5 service    RequestsService.update(#1) -> checking owner, status and category
+    [Lifecycle] [170a64e6] +  1ms  6 intercept  ResponseEnvelopeInterceptor -> response wrapped { success, data, requestId }
+    [Lifecycle] [170a64e6] +  1ms  7 finish     middleware "finish" event -> 200
+    [HTTP] PATCH /api/requests/1 200 1ms rid=170a64e6-53f5-46ca-8795-7104b0dfc66c
+
+      at Object.<anonymous> (test/e2e/08-lifecycle.spec.ts:98:13)
+
+  console.log
+    AUTH FAILURE (401)
+    [Lifecycle] [9a65e6fd] +  0ms  1 middleware RequestIdMiddleware -> id assigned, X-Request-Id header set
+    [Lifecycle] [9a65e6fd] +  0ms  2 guard      JwtAuthGuard -> no bearer token (401); RolesGuard, interceptor, pipes, controller are skipped
+    [Lifecycle] [9a65e6fd] +  0ms  7 finish     middleware "finish" event -> 401
+    [HTTP] PATCH /api/requests/1 401 0ms rid=9a65e6fd-c887-49ef-86d0-7e0cfcdc58d1
+
+      at Object.<anonymous> (test/e2e/08-lifecycle.spec.ts:110:13)
+
+  console.log
+    VALIDATION FAILURE (400)
+    [Lifecycle] [57ba1d65] +  0ms  1 middleware RequestIdMiddleware -> id assigned, X-Request-Id header set
+    [Lifecycle] [57ba1d65] +  0ms  2 guard      JwtAuthGuard -> pass (user #2, REQUESTER)
+    [Lifecycle] [57ba1d65] +  0ms  2 guard      RolesGuard -> pass (REQUESTER is allowed)
+    [Lifecycle] [57ba1d65] +  0ms  3 intercept  ResponseEnvelopeInterceptor -> before handler (pipes run next)
+    [Lifecycle] [57ba1d65] +  1ms  4 pipe       ParsePositiveIntPipe(id) -> "1" became 1
+    [Lifecycle] [57ba1d65] +  1ms  4 pipe       ValidationPipe(UpdateRequestDto) -> invalid body (400)
+    [Lifecycle] [57ba1d65] +  1ms  6 intercept  ResponseEnvelopeInterceptor -> saw BadRequestException, re-thrown unchanged (not wrapped)
+    [Lifecycle] [57ba1d65] +  1ms  7 finish     middleware "finish" event -> 400
+    [HTTP] PATCH /api/requests/1 400 1ms rid=57ba1d65-48f3-4a54-8421-16035af70d19
+
+      at Object.<anonymous> (test/e2e/08-lifecycle.spec.ts:130:13)
+
+PASS test/e2e/08-lifecycle.spec.ts
+  [S10] Request ids, response wrapping and lifecycle
+    √ returns a unique X-Request-Id on every response, including errors (11 ms)
+    √ wraps successes as { success, data, requestId } and keeps the status code (8 ms)
+    √ does not wrap errors: standard Nest error bodies (3 ms)
+    √ success: middleware -> guards -> interceptor -> pipes -> controller -> service -> interceptor -> finish (39 ms)
+    √ 401: the guard rejects; interceptor, pipes, controller and service are skipped; finish still logs (34 ms)
+    √ 400: guards and interceptor pass, the ValidationPipe rejects; controller and service are skipped (30 ms)
+    √ logs requests that never reach a controller (unknown route 404) (30 ms)
+    √ never logs passwords (31 ms)
+
+PASS test/e2e/04-validation.spec.ts
+  [S4] Input validation (400)
+    √ rejects a short description, title, building and empty room (13 ms)
+    √ trims text before measuring and rejects whitespace-only values (3 ms)
+    √ rejects unknown and server-owned body fields (19 ms)
+    √ rejects malformed route ids before the controller runs (16 ms)
+    √ rejects invalid enum values in bodies and filters (10 ms)
+    √ rejects invalid pagination: page < 1, limit outside 1-50, fractions and text (35 ms)
+    √ requires numeric ids in bodies to be real positive integers (24 ms)
+    √ validates updates as carefully as creation, and rejects an empty update body (23 ms)
+    √ category rules: names 3-50, descriptions 10-300, active must be a real boolean (14 ms)
+    √ feedback: rating must be an integer 1-5 and the comment at most 500 characters (16 ms)
+
+PASS test/e2e/05-limits-concurrency.spec.ts
+  [S5] Capacity limits and eligibility
+    √ rejects a sixth active request for one requester (409) (15 ms)
+    √ cancelled requests do not count as active (12 ms)
+    √ rejects a fourth ASSIGNED/IN_PROGRESS job for one technician (409) (22 ms)
+    √ rejects an unsupported category, a non-technician and an unknown technician (11 ms)
+    √ only OPEN requests can be assigned (reassignment is out of scope) (4 ms)
+  [S11] Concurrency near a capacity limit
+    √ five simultaneous creates when the requester has 3 active: exactly 2 succeed (18 ms)
+    √ four simultaneous assignments to a technician with 1 job: exactly 2 succeed, failures add no history (26 ms)
+    √ two simultaneous starts of the same job: one succeeds, the other is refused (no double history) (10 ms)
+
+PASS test/e2e/06-reopen-feedback.spec.ts
+  [S7] Reopening resolved work
+    √ reopens a RESOLVED request with a reason: OPEN again, assignment cleared, history retained (17 ms)
+    √ the technician loses access once the assignment is cleared (4 ms)
+    √ rejects a reopen when the owner already has five active requests (409), leaving everything unchanged (26 ms)
+  [S8] Feedback and technician ratings
+    √ rejects feedback before the request is CLOSED (409) (3 ms)
+    √ rejects duplicate feedback (409) (2 ms)
+    √ attributes feedback to the technician who did the FINAL repair after a reopen and reassignment (27 ms)
+    √ dispatcher report: feedback count, average rounded to 2 decimals, null without feedback (16 ms)
+
+PASS test/e2e/01-auth.spec.ts
+  [S1] Registration and login
+    √ registers a REQUESTER (201), normalises the email and never returns a password or hash (9 ms)
+    √ rejects a duplicate email even with different case and spaces (409) (4 ms)
+    √ logs in with valid credentials and returns a signed JWT (200) (4 ms)
+    √ rejects an incorrect password (401) with the same message as an unknown email (5 ms)
+    √ rejects an attempted role escalation and other unrecognised fields (400) (16 ms)
+    √ enforces the password and name rules, and does not trim passwords (26 ms)
+  [S2] Token authentication
+    √ rejects a missing token (401) (3 ms)
+    √ rejects an invalid / tampered token (401) (10 ms)
+    √ rejects an expired token (401) with a clear message (3 ms)
+    √ accepts a valid token (8 ms)
+    √ keeps register and login public, and every other route protected (11 ms)
+
+PASS test/e2e/03-workflow.spec.ts
+  [S3] Complete workflow, feedback and dashboard
+    √ creates a request: server sets id, owner, OPEN, timestamps and a creation event (201) (7 ms)
+    √ OPEN -> ASSIGNED by the dispatcher (200) (3 ms)
+    √ ASSIGNED -> IN_PROGRESS by the assigned technician (9 ms)
+    √ IN_PROGRESS -> RESOLVED with a resolution note of 20-1000 characters (5 ms)
+    √ RESOLVED -> CLOSED by the owner (2 ms)
+    √ records every change in chronological history with old/new status, actor and note (3 ms)
+    √ accepts feedback for the CLOSED request (201) and attributes it to the technician (4 ms)
+    √ dashboard counts are derived from stored data for each role (7 ms)
+  [S6] Invalid workflow actions
+    √ rejects completion before the job is started (409) and adds no history (7 ms)
+    √ rejects start/resolve by a technician who is not assigned (403) (5 ms)
+    √ rejects edits and cancellation after assignment (409) (5 ms)
+    √ rejects any transition from a terminal status (409) (7 ms)
+    √ lets the owner edit and cancel only while OPEN, without changing owner, status or history (10 ms)
+
+PASS test/e2e/02-access.spec.ts
+  [S2] Roles and record ownership
+    √ prevents a requester from reading another requester's record (403, not 404) (4 ms)
+    √ prevents editing, cancelling, closing, reopening or rating another requester's record (403) (16 ms)
+    √ a missing record is 404, an existing unauthorised one is 403 (4 ms)
+    √ a technician sees only requests assigned to them (5 ms)
+    √ rejects cross-role operations with 403 (14 ms)
+    √ a dispatcher sees every request (3 ms)
+    √ has no public route for creating privileged accounts (6 ms)
+
+  console.log
+    FakeFixflowStore received 22 calls, e.g.: findUserByEmail, findUserById, runExclusive, findCategoryById, listRequests, createRequest, findRequestById, applyRequestChange
+
+      at Object.<anonymous> (test/e2e/09-storage-replacement.spec.ts:41:13)
+
+PASS test/e2e/09-storage-replacement.spec.ts
+  [S10] Replacing the FIXFLOW_STORE binding
+    √ Nest injects the fake under the token, and the in-memory class is not used (1 ms)
+    √ GET /api/health reports the fake driver (11 ms)
+    √ the unchanged business services run the full workflow on the fake store (32 ms)
+    √ RequestsService itself received the fake through constructor injection
+
+Test Suites: 9 passed, 9 total
+Tests:       76 passed, 76 total
+Snapshots:   0 total
+Time:        6.853 s, estimated 8 s
+Ran all test suites.

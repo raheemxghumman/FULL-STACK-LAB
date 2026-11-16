@@ -1,0 +1,34 @@
+> GET /health   (public)
+  HTTP 200 OK
+  X-Request-Id: edb677fa-61b3-4be3-9bda-f9b692e9edb1
+  {"success":true,"requestId":"edb677fa-61b3-4be3-9bda-f9b692e9edb1","data":{"status":"ok","service":"FixFlow API","storage":"in-memory","time":"2026-11-16T13:49:48.929Z"}}
+  requestId in body == X-Request-Id header: true
+
+> GET /requests/1   (Ali, own request: success is wrapped)
+  HTTP 200 OK
+  X-Request-Id: 9d68bbcc-8dea-408f-beb1-8a5e021fc3da
+  {"success":true,"requestId":"9d68bbcc-8dea-408f-beb1-8a5e021fc3da","data":{"request":{"id":1,"title":"Projector not turning on in CS Lab 3","status":"OPEN"},"history":"1 events"}}
+  requestId in body == X-Request-Id header: true
+
+> GET /requests/3   (Ali, Sara's request: 403, standard Nest error, not wrapped)
+  HTTP 403 Forbidden
+  X-Request-Id: 5d7efb3a-82b3-4469-bac7-d63d8840e441
+  {"message":"You do not have access to request 3.","error":"Forbidden","statusCode":403}
+
+> GET /requests   (no token: 401 from the guard, header still set)
+  HTTP 401 Unauthorized
+  X-Request-Id: 09f1918c-7a08-4adf-bb4c-91a53e02e0b7
+  {"message":"Missing access token.","error":"Unauthorized","statusCode":401}
+
+> GET /requests/1.5   (malformed id: 400 from ParsePositiveIntPipe)
+  HTTP 400 Bad Request
+  X-Request-Id: ebb145b4-c38f-4c5d-a950-76efbff2e8c5
+  {"message":"id must be a positive integer (got \"1.5\").","error":"Bad Request","statusCode":400}
+
+> server log for these requests (written by the middleware on 'finish', including rejected ones):
+  [HTTP] POST /api/auth/login 200 66ms rid=fc39820a-d99b-406f-a87f-876cf9926dc2
+  [HTTP] GET /api/health 200 1ms rid=edb677fa-61b3-4be3-9bda-f9b692e9edb1
+  [HTTP] GET /api/requests/1 200 1ms rid=9d68bbcc-8dea-408f-beb1-8a5e021fc3da
+  [HTTP] GET /api/requests/3 403 1ms rid=5d7efb3a-82b3-4469-bac7-d63d8840e441
+  [HTTP] GET /api/requests 401 0ms rid=09f1918c-7a08-4adf-bb4c-91a53e02e0b7
+  [HTTP] GET /api/requests/1.5 400 1ms rid=ebb145b4-c38f-4c5d-a950-76efbff2e8c5

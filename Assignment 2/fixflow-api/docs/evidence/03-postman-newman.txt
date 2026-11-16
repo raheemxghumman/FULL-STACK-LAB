@@ -1,0 +1,705 @@
+newman
+
+FixFlow API - Assignment 2 (241854)
+
+□ 00 Setup: health and demo logins
+└ Health check (public)
+  GET http://localhost:3000/api/health [200 OK, 458B, 37ms]
+  √  Status is 200
+  √  Success is wrapped as { success, data, requestId }
+  √  X-Request-Id header is present
+  √  Storage provider is reported
+
+└ Login dispatcher (Nadia)
+  POST http://localhost:3000/api/auth/login [200 OK, 767B, 86ms]
+  √  Status is 200
+  √  Returns a signed JWT
+
+└ Login requester Ali
+  POST http://localhost:3000/api/auth/login [200 OK, 743B, 70ms]
+  √  Status is 200
+  √  Returns a signed JWT
+
+└ Login requester Sara
+  POST http://localhost:3000/api/auth/login [200 OK, 747B, 69ms]
+  √  Status is 200
+  √  Returns a signed JWT
+
+└ Login requester Usman
+  POST http://localhost:3000/api/auth/login [200 OK, 751B, 71ms]
+  √  Status is 200
+  √  Returns a signed JWT
+
+└ Login technician Bilal (Electrical, IT)
+  POST http://localhost:3000/api/auth/login [200 OK, 784B, 71ms]
+  √  Status is 200
+  √  Returns a signed JWT
+
+└ Login technician Zara (Electrical, IT, Furniture, HVAC)
+  POST http://localhost:3000/api/auth/login [200 OK, 783B, 68ms]
+  √  Status is 200
+  √  Returns a signed JWT
+
+└ Login technician Imran (Plumbing, Furniture)
+  POST http://localhost:3000/api/auth/login [200 OK, 781B, 69ms]
+  √  Status is 200
+  √  Returns a signed JWT
+
+□ S1 Register and log in
+└ Register a requester (201)
+  POST http://localhost:3000/api/auth/register [201 Created, 494B, 72ms]
+  √  Status is 201
+  √  Success is wrapped as { success, data, requestId }
+  √  Public registration always creates a REQUESTER
+  √  Email is normalised (trimmed, lower case)
+  √  No password or hash is returned
+
+└ Reject duplicate email, different case (409)
+  POST http://localhost:3000/api/auth/register [409 Conflict, 385B, 66ms]
+  √  Status is 409
+  √  Message matches /already exists/
+
+└ Login the new requester (200)
+  POST http://localhost:3000/api/auth/login [200 OK, 767B, 65ms]
+  √  Status is 200
+  √  Token type is Bearer
+
+└ Reject incorrect password (401)
+  POST http://localhost:3000/api/auth/login [401 Unauthorized, 377B, 68ms]
+  √  Status is 401
+  √  Message matches /Invalid email or password/
+
+└ Reject role escalation on register (400)
+  POST http://localhost:3000/api/auth/register [400 Bad Request, 381B, 2ms]
+  √  Status is 400
+  √  Message matches /property role should not exist/
+
+└ Reject a supplied user id (400)
+  POST http://localhost:3000/api/auth/register [400 Bad Request, 379B, 1ms]
+  √  Status is 400
+  √  Message matches /property id should not exist/
+
+└ Reject weak password: no digit (400)
+  POST http://localhost:3000/api/auth/register [400 Bad Request, 392B, 2ms]
+  √  Status is 400
+  √  Message matches /at least one digit/
+
+□ S2 Tokens, roles and ownership
+└ Reject missing token (401)
+  GET http://localhost:3000/api/requests [401 Unauthorized, 372B, 2ms]
+  √  Status is 401
+  √  Message matches /Missing access token/
+
+└ Reject invalid token (401)
+  GET http://localhost:3000/api/requests [401 Unauthorized, 372B, 2ms]
+  √  Status is 401
+  √  Message matches /Invalid access token/
+
+└ Reject expired token (401)
+  GET http://localhost:3000/api/requests [401 Unauthorized, 398B, 2ms]
+  √  Status is 401
+  √  Message says the token expired
+
+└ Ali cannot read Sara's request 3 (403)
+  GET http://localhost:3000/api/requests/3 [403 Forbidden, 381B, 3ms]
+  √  Status is 403
+  √  Message matches /do not have access to request 3/
+
+└ Missing request is 404
+  GET http://localhost:3000/api/requests/99999 [404 Not Found, 369B, 2ms]
+  √  Status is 404
+
+└ Ali cannot edit Sara's request (403)
+  PATCH http://localhost:3000/api/requests/3 [403 Forbidden, 399B, 3ms]
+  √  Status is 403
+
+└ Requester cannot assign (403)
+  POST http://localhost:3000/api/requests/1/assign [403 Forbidden, 386B, 2ms]
+  √  Status is 403
+  √  Message matches /DISPATCHER role/
+
+└ Technician cannot assign (403)
+  POST http://localhost:3000/api/requests/1/assign [403 Forbidden, 386B, 4ms]
+  √  Status is 403
+
+└ Technician cannot close (403)
+  POST http://localhost:3000/api/requests/4/close [403 Forbidden, 385B, 2ms]
+  √  Status is 403
+
+└ Dispatcher cannot create a request as a requester (403)
+  POST http://localhost:3000/api/requests [403 Forbidden, 385B, 3ms]
+  √  Status is 403
+
+└ Dispatcher cannot start work as a technician (403)
+  POST http://localhost:3000/api/requests/3/start [403 Forbidden, 386B, 3ms]
+  √  Status is 403
+
+└ Requester cannot create categories (403)
+  POST http://localhost:3000/api/categories [403 Forbidden, 386B, 2ms]
+  √  Status is 403
+
+└ Technician sees only assigned requests
+  GET http://localhost:3000/api/requests [200 OK, 857B, 2ms]
+  √  Status is 200
+  √  Every item is assigned to Bilal (#5)
+
+□ S3 Complete workflow, feedback and dashboard
+└ Usman creates a request (201)
+  POST http://localhost:3000/api/requests [201 Created, 783B, 2ms]
+  √  Status is 201
+  √  Success is wrapped as { success, data, requestId }
+  √  Server sets status OPEN, owner and no assignment
+
+└ Dispatcher assigns Bilal: OPEN -> ASSIGNED (200)
+  POST http://localhost:3000/api/requests/8/assign [200 OK, 779B, 2ms]
+  √  Status is 200
+  √  Status ASSIGNED to technician 5
+
+└ Bilal starts: ASSIGNED -> IN_PROGRESS (200)
+  POST http://localhost:3000/api/requests/8/start [200 OK, 782B, 2ms]
+  √  Status is 200
+  √  IN_PROGRESS
+
+└ Reject a resolution note under 20 characters (400)
+  POST http://localhost:3000/api/requests/8/resolve [400 Bad Request, 411B, 3ms]
+  √  Status is 400
+
+└ Bilal resolves: IN_PROGRESS -> RESOLVED (200)
+  POST http://localhost:3000/api/requests/8/resolve [200 OK, 839B, 2ms]
+  √  Status is 200
+  √  RESOLVED by Bilal
+
+└ Usman closes: RESOLVED -> CLOSED (200)
+  POST http://localhost:3000/api/requests/8/close [200 OK, 837B, 3ms]
+  √  Status is 200
+  √  CLOSED
+
+└ Usman submits feedback (201)
+  POST http://localhost:3000/api/requests/8/feedback [201 Created, 508B, 2ms]
+  √  Status is 201
+  √  Attributed to technician 5
+
+└ Details: request, assignment and chronological history
+  GET http://localhost:3000/api/requests/8 [200 OK, 2.26kB, 3ms]
+  √  Status is 200
+  √  History has every step in order
+  √  Each event has old status, new status, actor and time
+  √  Creation event comes first (fromStatus null)
+  √  Assignment and feedback are included
+
+└ Requester dashboard counts
+  GET http://localhost:3000/api/dashboard [200 OK, 547B, 3ms]
+  √  Status is 200
+  √  Role REQUESTER with counts by status
+
+└ Technician dashboard: counts and workload
+  GET http://localhost:3000/api/dashboard [200 OK, 610B, 2ms]
+  √  Status is 200
+  √  Workload with capacity 3
+
+└ Dispatcher dashboard: by status, by category, per technician
+  GET http://localhost:3000/api/dashboard [200 OK, 1.72kB, 3ms]
+  √  Status is 200
+  √  System-wide counts
+  √  byStatus adds up to the total
+
+□ S4 Validation (400)
+└ Reject a short description
+  POST http://localhost:3000/api/requests [400 Bad Request, 408B, 2ms]
+  √  Status is 400
+  √  Message matches /description must be 20-1000/
+
+└ Reject a whitespace-only title
+  POST http://localhost:3000/api/requests [400 Bad Request, 400B, 2ms]
+  √  Status is 400
+  √  Message matches /title must be 5-100/
+
+└ Reject unknown body fields
+  POST http://localhost:3000/api/requests [400 Bad Request, 383B, 2ms]
+  √  Status is 400
+  √  Message matches /property colour should not exist/
+
+└ Reject server-owned fields (status, requesterId)
+  POST http://localhost:3000/api/requests [400 Bad Request, 424B, 2ms]
+  √  Status is 400
+  √  Message matches /property status should not exist/
+
+└ Reject malformed id "abc"
+  GET http://localhost:3000/api/requests/abc [400 Bad Request, 393B, 3ms]
+  √  Status is 400
+  √  Message matches /positive integer/
+
+└ Reject fractional id "1.5"
+  GET http://localhost:3000/api/requests/1.5 [400 Bad Request, 393B, 1ms]
+  √  Status is 400
+
+└ Reject zero id
+  POST http://localhost:3000/api/requests/0/cancel [400 Bad Request, 391B, 2ms]
+  √  Status is 400
+
+└ Reject invalid priority enum
+  POST http://localhost:3000/api/requests [400 Bad Request, 394B, 4ms]
+  √  Status is 400
+  √  Message matches /LOW, MEDIUM, HIGH/
+
+└ Reject invalid status filter
+  GET http://localhost:3000/api/requests?status=DONE [400 Bad Request, 432B, 4ms]
+  √  Status is 400
+
+└ Reject limit above 50
+  GET http://localhost:3000/api/requests?limit=51 [400 Bad Request, 382B, 3ms]
+  √  Status is 400
+  √  Message matches /limit must be between 1 and 50/
+
+└ Reject page 0
+  GET http://localhost:3000/api/requests?page=0 [400 Bad Request, 375B, 2ms]
+  √  Status is 400
+
+└ Reject fractional limit
+  GET http://localhost:3000/api/requests?limit=2.5 [400 Bad Request, 445B, 2ms]
+  √  Status is 400
+
+└ Reject a string categoryId in the body
+  POST http://localhost:3000/api/requests [400 Bad Request, 423B, 2ms]
+  √  Status is 400
+
+└ Reject an empty update body
+  PATCH http://localhost:3000/api/requests/1 [400 Bad Request, 409B, 3ms]
+  √  Status is 400
+  √  Message matches /at least one field/
+
+└ Reject prohibited update field: assignedTechnicianId
+  PATCH http://localhost:3000/api/requests/1 [400 Bad Request, 398B, 2ms]
+  √  Status is 400
+
+└ Reject "true" as text for active
+  PATCH http://localhost:3000/api/categories/1 [400 Bad Request, 403B, 3ms]
+  √  Status is 400
+  √  Message matches /active must be a boolean/
+
+□ S5 Limits: sixth active request, fourth job, unsupported category
+└ Register limit-test requester
+  POST http://localhost:3000/api/auth/register [201 Created, 497B, 69ms]
+  √  Status is 201
+
+└ Login limit-test requester
+  POST http://localhost:3000/api/auth/login [200 OK, 770B, 69ms]
+  √  Status is 200
+
+└ Create OPEN requests (loops until 4)
+  POST http://localhost:3000/api/requests [201 Created, 776B, 2ms]
+  √  Status is 201
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Create OPEN requests (loops until 4)
+
+└ Create OPEN requests (loops until 4)
+  POST http://localhost:3000/api/requests [201 Created, 777B, 3ms]
+  √  Status is 201
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Create OPEN requests (loops until 4)
+
+└ Create OPEN requests (loops until 4)
+  POST http://localhost:3000/api/requests [201 Created, 777B, 3ms]
+  √  Status is 201
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Create OPEN requests (loops until 4)
+
+└ Create OPEN requests (loops until 4)
+  POST http://localhost:3000/api/requests [201 Created, 777B, 3ms]
+  √  Status is 201
+
+└ Create a 5th request in Furniture (to be resolved)
+  POST http://localhost:3000/api/requests [201 Created, 781B, 2ms]
+  √  Status is 201
+
+└ Reject a sixth active request (409)
+  POST http://localhost:3000/api/requests [409 Conflict, 430B, 2ms]
+  √  Status is 409
+  √  Message matches /already have 5 active requests/
+
+└ Dispatcher assigns the 5th to Imran
+  POST http://localhost:3000/api/requests/13/assign [200 OK, 777B, 2ms]
+  √  Status is 200
+
+└ Imran starts it
+  POST http://localhost:3000/api/requests/13/start [200 OK, 780B, 2ms]
+  √  Status is 200
+
+└ Imran resolves it
+  POST http://localhost:3000/api/requests/13/resolve [200 OK, 844B, 2ms]
+  √  Status is 200
+
+└ Register capacity-test requester
+  POST http://localhost:3000/api/auth/register [201 Created, 504B, 75ms]
+  √  Status is 201
+
+└ Login capacity-test requester
+  POST http://localhost:3000/api/auth/login [200 OK, 783B, 74ms]
+  √  Status is 200
+
+└ Create Furniture requests (loops until 4)
+  POST http://localhost:3000/api/requests [201 Created, 771B, 3ms]
+  √  Status is 201
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Create Furniture requests (loops until 4)
+
+└ Create Furniture requests (loops until 4)
+  POST http://localhost:3000/api/requests [201 Created, 772B, 2ms]
+  √  Status is 201
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Create Furniture requests (loops until 4)
+
+└ Create Furniture requests (loops until 4)
+  POST http://localhost:3000/api/requests [201 Created, 772B, 4ms]
+  √  Status is 201
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Create Furniture requests (loops until 4)
+
+└ Create Furniture requests (loops until 4)
+  POST http://localhost:3000/api/requests [201 Created, 772B, 2ms]
+  √  Status is 201
+
+└ Assign three of them to Zara (loops until 3)
+  POST http://localhost:3000/api/requests/14/assign [200 OK, 767B, 3ms]
+  √  Status is 200
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Assign three of them to Zara (loops until 3)
+
+└ Assign three of them to Zara (loops until 3)
+  POST http://localhost:3000/api/requests/15/assign [200 OK, 768B, 4ms]
+  √  Status is 200
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Assign three of them to Zara (loops until 3)
+
+└ Assign three of them to Zara (loops until 3)
+  POST http://localhost:3000/api/requests/16/assign [200 OK, 768B, 3ms]
+  √  Status is 200
+
+└ Reject Zara's fourth active job (409)
+  POST http://localhost:3000/api/requests/17/assign [409 Conflict, 409B, 3ms]
+  √  Status is 409
+  √  Message matches /already has 3 ASSIGNED/IN_PROGRESS jobs/
+
+└ Failed assignment left no history
+  GET http://localhost:3000/api/requests/17 [200 OK, 1.11kB, 2ms]
+  √  Status is 200
+  √  Still OPEN with only the creation event
+
+└ Reject unsupported category: Plumbing to Bilal (409)
+  POST http://localhost:3000/api/requests [201 Created, 757B, 4ms]
+  POST http://localhost:3000/api/requests/18/assign [409 Conflict, 384B, 2ms]
+  √  Status is 409
+  √  Message matches /does not support category 2/
+
+└ Reject assigning to a non-technician (409)
+  POST http://localhost:3000/api/requests/18/assign [409 Conflict, 383B, 2ms]
+  √  Status is 409
+  √  Message matches /not a TECHNICIAN/
+
+□ S6 Invalid workflow actions
+└ Ali creates an IT request
+  POST http://localhost:3000/api/requests [201 Created, 775B, 2ms]
+  √  Status is 201
+
+└ Dispatcher assigns it to Bilal
+  POST http://localhost:3000/api/requests/19/assign [200 OK, 771B, 3ms]
+  √  Status is 200
+
+└ Reject completion before starting (409)
+  POST http://localhost:3000/api/requests/19/resolve [409 Conflict, 395B, 2ms]
+  √  Status is 409
+  √  Message matches /ASSIGNED; it cannot move to RESOLVED/
+
+└ Reject start by an unassigned technician (403)
+  POST http://localhost:3000/api/requests/19/start [403 Forbidden, 402B, 2ms]
+  √  Status is 403
+  √  Message matches /Only the technician assigned/
+
+└ Reject edit after assignment (409)
+  PATCH http://localhost:3000/api/requests/19 [409 Conflict, 401B, 3ms]
+  √  Status is 409
+  √  Message matches /only be edited while OPEN/
+
+└ Reject cancel after assignment (409)
+  POST http://localhost:3000/api/requests/19/cancel [409 Conflict, 396B, 2ms]
+  √  Status is 409
+
+└ History unchanged by the failed actions
+  GET http://localhost:3000/api/requests/19 [200 OK, 1.57kB, 2ms]
+  √  Status is 200
+  √  Only OPEN and ASSIGNED events
+
+└ Owner edits an OPEN request (200)
+  PATCH http://localhost:3000/api/requests/1 [200 OK, 806B, 3ms]
+  √  Status is 200
+  √  Fields changed, owner and status did not
+
+□ S7 Reopen resolved work
+└ Reject a reason shorter than 10 characters (400)
+  POST http://localhost:3000/api/requests/4/reopen [400 Bad Request, 402B, 2ms]
+  √  Status is 400
+
+└ Sara reopens request 4 (RESOLVED -> OPEN)
+  POST http://localhost:3000/api/requests/4/reopen [200 OK, 860B, 2ms]
+  √  Status is 200
+  √  OPEN and assignment cleared
+
+└ History retained, previous assignment marked cleared
+  GET http://localhost:3000/api/requests/4 [200 OK, 2.03kB, 2ms]
+  √  Status is 200
+  √  No current assignment
+  √  Old assignment kept with cleared time and reason
+  √  History ends with RESOLVED -> OPEN and the reason
+
+└ Reject a reopen above the 5-active limit (409)
+  POST http://localhost:3000/api/requests/13/reopen [409 Conflict, 429B, 3ms]
+  √  Status is 409
+  √  Message matches /already have 5 active requests/
+
+└ The rejected reopen changed nothing
+  GET http://localhost:3000/api/requests/13 [200 OK, 1.98kB, 2ms]
+  √  Status is 200
+  √  Still RESOLVED and still assigned to Imran
+
+□ S8 Feedback and technician ratings
+└ Reject early feedback: request 4 is OPEN (409)
+  POST http://localhost:3000/api/requests/4/feedback [409 Conflict, 411B, 2ms]
+  √  Status is 409
+  √  Message matches /only be given for a CLOSED request/
+
+└ Reject duplicate feedback: request 5 already rated (409)
+  POST http://localhost:3000/api/requests/5/feedback [409 Conflict, 394B, 2ms]
+  √  Status is 409
+  √  Message matches /already been submitted/
+
+└ Reject feedback on another user's request (403)
+  POST http://localhost:3000/api/requests/6/feedback [403 Forbidden, 411B, 2ms]
+  √  Status is 403
+
+└ Reassign reopened request 4 to Bilal (was Zara)
+  POST http://localhost:3000/api/requests/4/assign [200 OK, 861B, 3ms]
+  √  Status is 200
+
+└ Bilal starts request 4
+  POST http://localhost:3000/api/requests/4/start [200 OK, 864B, 2ms]
+  √  Status is 200
+
+└ Bilal resolves request 4 (the final repair)
+  POST http://localhost:3000/api/requests/4/resolve [200 OK, 852B, 2ms]
+  √  Status is 200
+
+└ Sara closes request 4
+  POST http://localhost:3000/api/requests/4/close [200 OK, 850B, 3ms]
+  √  Status is 200
+
+└ Sara rates request 4: attributed to Bilal, not Zara
+  POST http://localhost:3000/api/requests/4/feedback [201 Created, 508B, 2ms]
+  √  Status is 201
+  √  technicianId is 5 (Bilal)
+
+└ Dispatcher technician report: counts and averages
+  GET http://localhost:3000/api/reports/technicians [200 OK, 957B, 2ms]
+  √  Status is 200
+  √  Bilal: 2 ratings (5 and 3), average 4
+  √  Zara keeps only her seed rating (5)
+  √  Averages have at most 2 decimals
+
+└ Technicians cannot read the report (403)
+  GET http://localhost:3000/api/reports/technicians [403 Forbidden, 386B, 2ms]
+  √  Status is 403
+
+□ S9 Search, filters, pagination, categories
+└ Search + category + status + priority together
+  GET http://localhost:3000/api/requests?q=PROJECTOR&categoryId=3&status=OPEN&priority=HIGH [200 OK, 420B, 3ms]
+  √  Status is 200
+  √  Every item matches all filters
+  √  Pagination totals are returned
+
+└ Requester totals count only their own records
+  GET http://localhost:3000/api/requests?limit=50 [200 OK, 2.19kB, 2ms]
+  √  Status is 200
+  √  Only Ali's requests
+  √  total equals the scoped items
+
+└ Page 2 with limit 3, newest first
+  GET http://localhost:3000/api/requests?page=2&limit=3 [200 OK, 1.64kB, 4ms]
+  √  Status is 200
+  √  page 2, limit 3, at most 3 items
+  √  Sorted newest first
+
+└ Defaults: page 1, limit 10
+  GET http://localhost:3000/api/requests [200 OK, 4.55kB, 2ms]
+  √  Status is 200
+  √  page 1 / limit 10
+
+└ Any user lists active categories
+  GET http://localhost:3000/api/categories [200 OK, 1.12kB, 2ms]
+  √  Status is 200
+  √  Seeded categories present, inactive HVAC hidden
+
+└ Dispatcher creates a category (201)
+  POST http://localhost:3000/api/categories [201 Created, 546B, 2ms]
+  √  Status is 201
+
+└ Reject a duplicate category name (409)
+  POST http://localhost:3000/api/categories [409 Conflict, 397B, 2ms]
+  √  Status is 409
+
+└ Dispatcher deactivates the category
+  PATCH http://localhost:3000/api/categories/6 [200 OK, 542B, 2ms]
+  √  Status is 200
+  √  active is false
+
+└ Reject a new request in the deactivated category (409)
+  POST http://localhost:3000/api/requests [409 Conflict, 425B, 3ms]
+  √  Status is 409
+  √  Message matches /deactivated/
+
+└ Historical request in inactive HVAC is kept
+  GET http://localhost:3000/api/requests/6 [200 OK, 2.19kB, 2ms]
+  √  Status is 200
+  √  Category HVAC, inactive
+
+□ S10 Request ids, wrapping and lifecycle
+└ Success is wrapped; requestId matches X-Request-Id
+  GET http://localhost:3000/api/users/me [200 OK, 478B, 3ms]
+  √  Status is 200
+  √  Success is wrapped as { success, data, requestId }
+
+└ Errors are standard Nest responses, not wrapped
+  GET http://localhost:3000/api/requests/99999 [404 Not Found, 369B, 1ms]
+  √  Status is 404
+  √  No success wrapper
+  √  X-Request-Id still set
+
+└ Lifecycle: instrumented route, success (200)
+  PATCH http://localhost:3000/api/requests/1 [200 OK, 798B, 2ms]
+  √  Status is 200
+  √  Success is wrapped as { success, data, requestId }
+
+└ Lifecycle: instrumented route, no token (401)
+  PATCH http://localhost:3000/api/requests/1 [401 Unauthorized, 372B, 1ms]
+  √  Status is 401
+
+└ Lifecycle: instrumented route, invalid body (400)
+  PATCH http://localhost:3000/api/requests/1 [400 Bad Request, 443B, 3ms]
+  √  Status is 400
+
+└ Storage provider in use
+  GET http://localhost:3000/api/health [200 OK, 458B, 1ms]
+  √  Status is 200
+  √  Default binding is the in-memory store
+
+□ S11 Concurrency near a capacity limit
+└ Register race-test requester
+  POST http://localhost:3000/api/auth/register [201 Created, 496B, 67ms]
+  √  Status is 201
+
+└ Login race-test requester
+  POST http://localhost:3000/api/auth/login [200 OK, 769B, 67ms]
+  √  Status is 200
+
+└ Create 3 active requests (loops until 3)
+  POST http://localhost:3000/api/requests [201 Created, 772B, 2ms]
+  √  Status is 201
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Create 3 active requests (loops until 3)
+
+└ Create 3 active requests (loops until 3)
+  POST http://localhost:3000/api/requests [201 Created, 772B, 3ms]
+  √  Status is 201
+  ┌
+  │ 'Using "postman.setNextRequest" is deprecated. Use "pm
+  │ .execution.setNextRequest()" instead.'
+  └
+
+Attempting to set next request to Create 3 active requests (loops until 3)
+
+└ Create 3 active requests (loops until 3)
+  POST http://localhost:3000/api/requests [201 Created, 772B, 2ms]
+  √  Status is 201
+
+└ Five simultaneous creates: exactly 2 succeed
+  GET http://localhost:3000/api/dashboard [200 OK, 547B, 3ms]
+  POST http://localhost:3000/api/requests   POST http://localhost:3000/api/requests   POST http://localhost:3000/api/requests   POST http://localhost:3000/api/requests   POST http://localhost:3000/api/requests [201 Created, 736B, 5ms]
+[201 Created, 736B, 9ms]
+[409 Conflict, 430B, 10ms]
+[409 Conflict, 430B, 11ms]
+[409 Conflict, 430B, 12ms]
+  √  Codes are 201, 201, 409, 409, 409
+
+└ Race requester has exactly 5 active requests
+  GET http://localhost:3000/api/dashboard [200 OK, 548B, 2ms]
+  √  Status is 200
+  √  activeRequests is 5
+
+└ Simultaneous assignments to Bilal: limit 3 holds
+  GET http://localhost:3000/api/reports/technicians [200 OK, 957B, 2ms]
+  GET http://localhost:3000/api/requests?status=OPEN&limit=50 [200 OK, 2.37kB, 2ms]
+  POST http://localhost:3000/api/requests/24/assign   POST http://localhost:3000/api/requests/23/assign   POST http://localhost:3000/api/requests/22/assign   POST http://localhost:3000/api/requests/21/assign [200 OK, 732B, 2ms]
+[409 Conflict, 409B, 4ms]
+[409 Conflict, 409B, 5ms]
+[409 Conflict, 409B, 6ms]
+  √  Exactly the free capacity (1) succeeded
+  √  The rest were refused with 409
+
+└ Bilal's workload is exactly 3
+  GET http://localhost:3000/api/reports/technicians [200 OK, 957B, 1ms]
+  √  Status is 200
+  √  activeJobs is 3
+
+┌─────────────────────────┬──────────────────┬──────────────────┐
+│                         │         executed │           failed │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              iterations │                1 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│                requests │              138 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│            test-scripts │              127 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│      prerequest-scripts │                5 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              assertions │              218 │                0 │
+├─────────────────────────┴──────────────────┴──────────────────┤
+│ total run duration: 12.2s                                     │
+├───────────────────────────────────────────────────────────────┤
+│ total data received: 56.62kB (approx)                         │
+├───────────────────────────────────────────────────────────────┤
+│ average response time: 11ms [min: 1ms, max: 86ms, s.d.: 22ms] │
+└───────────────────────────────────────────────────────────────┘

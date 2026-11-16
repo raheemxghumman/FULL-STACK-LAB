@@ -1,0 +1,29 @@
+=== 1) SUCCESS (200): every stage runs
+[Lifecycle] [0ec1bb66] +  0ms  1 middleware RequestIdMiddleware -> id assigned, X-Request-Id header set
+[Lifecycle] [0ec1bb66] +  0ms  2 guard      JwtAuthGuard -> pass (user #2, REQUESTER)
+[Lifecycle] [0ec1bb66] +  0ms  2 guard      RolesGuard -> pass (REQUESTER is allowed)
+[Lifecycle] [0ec1bb66] +  1ms  3 intercept  ResponseEnvelopeInterceptor -> before handler (pipes run next)
+[Lifecycle] [0ec1bb66] +  1ms  4 pipe       ValidationPipe(UpdateRequestDto) -> body valid, transformed to UpdateRequestDto
+[Lifecycle] [0ec1bb66] +  1ms  4 pipe       ParsePositiveIntPipe(id) -> "1" became 1
+[Lifecycle] [0ec1bb66] +  1ms  5 controller RequestsController.update(#1) -> calling RequestsService
+[Lifecycle] [0ec1bb66] +  1ms  5 service    RequestsService.update(#1) -> checking owner, status and category
+[Lifecycle] [0ec1bb66] +  1ms  6 intercept  ResponseEnvelopeInterceptor -> response wrapped { success, data, requestId }
+[Lifecycle] [0ec1bb66] +  1ms  7 finish     middleware "finish" event -> 200
+[HTTP] PATCH /api/requests/1 200 1ms rid=0ec1bb66-10bd-4a5b-8a31-ba9027f7fc83
+
+=== 2) AUTHENTICATION FAILURE (401): JwtAuthGuard rejects; interceptor, pipes, controller and service are skipped
+[Lifecycle] [36f419ab] +  0ms  1 middleware RequestIdMiddleware -> id assigned, X-Request-Id header set
+[Lifecycle] [36f419ab] +  0ms  2 guard      JwtAuthGuard -> no bearer token (401); RolesGuard, interceptor, pipes, controller are skipped
+[Lifecycle] [36f419ab] +  0ms  7 finish     middleware "finish" event -> 401
+[HTTP] PATCH /api/requests/1 401 0ms rid=36f419ab-3da9-4e2f-84f2-7941d9ad9653
+
+=== 3) VALIDATION FAILURE (400): guards and interceptor pass, ValidationPipe rejects; controller and service are skipped
+[Lifecycle] [da20dbd0] +  0ms  1 middleware RequestIdMiddleware -> id assigned, X-Request-Id header set
+[Lifecycle] [da20dbd0] +  0ms  2 guard      JwtAuthGuard -> pass (user #2, REQUESTER)
+[Lifecycle] [da20dbd0] +  0ms  2 guard      RolesGuard -> pass (REQUESTER is allowed)
+[Lifecycle] [da20dbd0] +  0ms  3 intercept  ResponseEnvelopeInterceptor -> before handler (pipes run next)
+[Lifecycle] [da20dbd0] +  1ms  4 pipe       ParsePositiveIntPipe(id) -> "1" became 1
+[Lifecycle] [da20dbd0] +  1ms  4 pipe       ValidationPipe(UpdateRequestDto) -> invalid body (400)
+[Lifecycle] [da20dbd0] +  1ms  6 intercept  ResponseEnvelopeInterceptor -> saw BadRequestException, re-thrown unchanged (not wrapped)
+[Lifecycle] [da20dbd0] +  1ms  7 finish     middleware "finish" event -> 400
+[HTTP] PATCH /api/requests/1 400 1ms rid=da20dbd0-d11c-4e3b-97f8-7c3c22b7d669

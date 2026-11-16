@@ -1,0 +1,1071 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/health": {
+      "get": {
+        "operationId": "AppController_health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Public status check. \"storage\" names the implementation bound to FIXFLOW_STORE.",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "operationId": "UsersController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The authenticated account (any role).",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/technicians": {
+      "get": {
+        "operationId": "UsersController_technicians",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Technicians and the categories they support, so a dispatcher can pick one to assign (dispatcher).",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Public requester registration. Always creates a REQUESTER (201). Duplicate email: 409.",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Credential login. Returns a signed JWT access token (200). Wrong credentials: 401.",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "operationId": "CategoriesController_list",
+        "parameters": [
+          {
+            "name": "includeInactive",
+            "required": false,
+            "in": "query",
+            "description": "Dispatchers only: \"true\" also lists deactivated categories.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Active categories (any authenticated user). Dispatchers may add ?includeInactive=true.",
+        "tags": [
+          "Categories"
+        ]
+      },
+      "post": {
+        "operationId": "CategoriesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a category (dispatcher). 201; duplicate name 409.",
+        "tags": [
+          "Categories"
+        ]
+      }
+    },
+    "/api/categories/{id}": {
+      "patch": {
+        "operationId": "CategoriesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update or deactivate ({ \"active\": false }) a category (dispatcher).",
+        "tags": [
+          "Categories"
+        ]
+      }
+    },
+    "/api/requests": {
+      "post": {
+        "operationId": "RequestsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a request (requester). 201.",
+        "tags": [
+          "Requests"
+        ]
+      },
+      "get": {
+        "operationId": "RequestsController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive search in the title.",
+            "schema": {
+              "maxLength": 100,
+              "example": "projector",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "OPEN",
+                "ASSIGNED",
+                "IN_PROGRESS",
+                "RESOLVED",
+                "CLOSED",
+                "CANCELLED"
+              ]
+            }
+          },
+          {
+            "name": "priority",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "LOW",
+                "MEDIUM",
+                "HIGH"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Default 1.",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Default 10, maximum 50.",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Search, filter and paginate the caller's scoped requests.",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/requests/{id}": {
+      "get": {
+        "operationId": "RequestsController_details",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Request, current assignment, assignment history, chronological status history and feedback.",
+        "tags": [
+          "Requests"
+        ]
+      },
+      "patch": {
+        "operationId": "RequestsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Edit own OPEN request (requester). This is the instrumented route: with LIFECYCLE_TRACE=true\nevery stage it passes through is logged (see docs/architecture-and-lifecycle.md).",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/requests/{id}/cancel": {
+      "post": {
+        "operationId": "RequestsController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancel own OPEN request (requester).",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/requests/{id}/assign": {
+      "post": {
+        "operationId": "RequestsController_assign",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Assign an OPEN request to an eligible technician (dispatcher).",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/requests/{id}/start": {
+      "post": {
+        "operationId": "RequestsController_start",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Start assigned work (assigned technician).",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/requests/{id}/resolve": {
+      "post": {
+        "operationId": "RequestsController_resolve",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Complete work with a resolution note (assigned technician).",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/requests/{id}/close": {
+      "post": {
+        "operationId": "RequestsController_close",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Confirm completion of own RESOLVED request (requester).",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/requests/{id}/reopen": {
+      "post": {
+        "operationId": "RequestsController_reopen",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReopenRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reopen own RESOLVED request with a reason (requester). Clears the assignment.",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/requests/{id}/feedback": {
+      "post": {
+        "operationId": "RequestsController_feedback",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Submit one feedback record for own CLOSED request (requester). 201.",
+        "tags": [
+          "Requests"
+        ]
+      }
+    },
+    "/api/dashboard": {
+      "get": {
+        "operationId": "ReportsController_dashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Role-specific summary: requester counts, technician workload, or the dispatcher's system view.",
+        "tags": [
+          "Dashboard & reports"
+        ]
+      }
+    },
+    "/api/reports/technicians": {
+      "get": {
+        "operationId": "ReportsController_technicians",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Operational report: workload, resolved jobs, feedback count and average rating per technician (dispatcher).",
+        "tags": [
+          "Dashboard & reports"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "FixFlow API",
+    "description": "Campus Maintenance and Service Dispatch System. Assignment 2, Full Stack Web Development (CS-301), Abdul Raheem 241854. Log in with POST /api/auth/login, then press Authorize and paste data.accessToken.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Hamza Ali",
+            "minLength": 3,
+            "maxLength": 80
+          },
+          "email": {
+            "type": "string",
+            "example": "hamza@fixflow.test",
+            "maxLength": 254,
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "8-72 characters with at least one letter and one digit. Not trimmed or changed.",
+            "example": "Campus2026",
+            "minLength": 8,
+            "maxLength": 72,
+            "pattern": "[A-Za-z]"
+          }
+        },
+        "required": [
+          "fullName",
+          "email",
+          "password"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ali@fixflow.test",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "example": "Requester2026",
+            "minLength": 1,
+            "maxLength": 72
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "CreateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unique (case-insensitive), 3-50 characters.",
+            "example": "Carpentry",
+            "minLength": 3,
+            "maxLength": 50
+          },
+          "description": {
+            "type": "string",
+            "description": "10-300 characters.",
+            "example": "Wooden fittings, shelves and notice boards.",
+            "minLength": 10,
+            "maxLength": 300
+          },
+          "active": {
+            "type": "boolean",
+            "description": "A real JSON boolean (\"true\" as text is rejected). Defaults to true."
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ]
+      },
+      "UpdateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 50
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 300
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateRequestDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "5-100 characters.",
+            "example": "Projector flickering in Room A-12",
+            "minLength": 5,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "description": "20-1000 characters.",
+            "example": "The projector flickers every few seconds and then switches off.",
+            "minLength": 20,
+            "maxLength": 1000
+          },
+          "categoryId": {
+            "type": "number",
+            "description": "An active category id (JSON integer).",
+            "example": 3,
+            "minimum": 1
+          },
+          "building": {
+            "type": "string",
+            "description": "2-80 characters.",
+            "example": "Academic Block A",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "room": {
+            "type": "string",
+            "description": "1-30 characters.",
+            "example": "A-12",
+            "minLength": 1,
+            "maxLength": 30
+          },
+          "priority": {
+            "type": "string",
+            "description": "LOW, MEDIUM or HIGH.",
+            "example": "HIGH",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "categoryId",
+          "building",
+          "room",
+          "priority"
+        ]
+      },
+      "UpdateRequestDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 1000
+          },
+          "categoryId": {
+            "type": "number",
+            "minimum": 1
+          },
+          "building": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "room": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          }
+        }
+      },
+      "AssignRequestDto": {
+        "type": "object",
+        "properties": {
+          "technicianId": {
+            "type": "number",
+            "description": "Id of an existing technician who supports the request's category.",
+            "example": 5,
+            "minimum": 1
+          }
+        },
+        "required": [
+          "technicianId"
+        ]
+      },
+      "ResolveRequestDto": {
+        "type": "object",
+        "properties": {
+          "resolutionNote": {
+            "type": "string",
+            "description": "20-1000 characters.",
+            "example": "Replaced the faulty HDMI cable and tested the projector.",
+            "minLength": 20,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "resolutionNote"
+        ]
+      },
+      "ReopenRequestDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "10-500 characters.",
+            "example": "The projector is flickering again.",
+            "minLength": 10,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "FeedbackDto": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "number",
+            "description": "Whole number from 1 to 5.",
+            "example": 5,
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": "string",
+            "description": "Optional, up to 500 characters.",
+            "example": "Fixed quickly and politely.",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "rating"
+        ]
+      }
+    }
+  }
+}

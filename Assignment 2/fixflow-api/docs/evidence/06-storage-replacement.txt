@@ -1,0 +1,8 @@
+Bound to FIXFLOW_STORE: FakeFixflowStore
+GET /api/health -> storage: "fake-array-store (test double)"
+POST /api/requests -> 201, id 8, status OPEN
+POST /api/requests/8/assign (technician 6, no Electrical) -> 409: Technician 6 does not support category 1.
+POST /api/requests/8/assign (technician 5) -> 200, status ASSIGNED
+
+The unchanged services made 18 calls to the fake store:
+  reset, findUserByEmail, findUserById, runExclusive, findCategoryById, listRequests, createRequest, findRequestById, applyRequestChange

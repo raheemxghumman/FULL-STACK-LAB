@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Abdul Raheem (241854)">
+  <meta name="description" content="FixFlow: a NestJS campus maintenance and service dispatch API. Assignment 2, Full Stack Web Development (CS-301), Air University Islamabad.">
+  <title>FixFlow API · Assignment 2</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23f59e0b'/%3E%3Cpath d='M19.5 7a5.5 5.5 0 0 0-5.3 7l-6.6 6.6a2 2 0 1 0 2.8 2.8l6.6-6.6a5.5 5.5 0 0 0 7-5.3l-3.2 3.2-2.8-.7-.7-2.8L20.5 7h-1z' fill='%231a1205'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <!-- ===================== navigation ===================== -->
+  <nav class="nav" id="nav" aria-label="Main">
+    <div class="wrap">
+      <a class="logo" href="#top" aria-label="FixFlow home">
+        <span class="logo-mark"><svg viewBox="0 0 24 24" fill="#1a1205" aria-hidden="true"><path d="M15.5 3a5.5 5.5 0 0 0-5.3 7l-6.6 6.6a2 2 0 1 0 2.8 2.8l6.6-6.6a5.5 5.5 0 0 0 7-5.3l-3.2 3.2-2.8-.7-.7-2.8L16.5 3h-1z"/></svg></span>
+        FixFlow
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#workflow">Workflow</a>
+        <a href="#lifecycle">Lifecycle</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#concurrency">Concurrency</a>
+        <a href="#endpoints">Endpoints</a>
+        <a href="#replay">Test run</a>
+        <a href="#evidence">Evidence</a>
+      </div>
+      <a class="btn btn-sm btn-gh" href="https://github.com/raheemxghumman/FULL-STACK-LAB/tree/main/Assignment%202/fixflow-api">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg>
+        Source
+      </a>
+      <button class="btn btn-sm menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    </div>
+  </nav>
+
+  <!-- ===================== hero ===================== -->
+  <header class="hero" id="top">
+    <div class="hero-bg" aria-hidden="true"><div class="hero-grid"></div><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div></div>
+    <div class="wrap">
+      <div class="hero-inner">
+        <div>
+          <div class="chip-row reveal">
+            <span class="chip"><span class="dot"></span>All 76 tests + 218 Postman assertions passing</span>
+            <span class="chip">Assignment 2 · CS-301</span>
+          </div>
+          <h1 class="reveal d1">Fix<span class="grad">Flow</span></h1>
+          <p class="sub reveal d2">A campus maintenance and service dispatch API built with <b>NestJS</b> and <b>TypeScript</b>. Requesters report faults, dispatchers assign the right technician, technicians record the work, and every step is checked, authorised and kept in an audit history.</p>
+          <div class="hero-cta reveal d3">
+            <a class="btn btn-primary" href="#replay">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Replay the test run
+            </a>
+            <a class="btn" href="https://github.com/raheemxghumman/FULL-STACK-LAB/blob/main/Assignment%202/fixflow-api/README.md">Read the README</a>
+            <a class="btn" href="fixflow-api/docs/architecture-and-lifecycle.pdf">Architecture PDF</a>
+          </div>
+          <p class="muted reveal d3" style="margin-top:22px;font-size:14px">Abdul Raheem · 241854 · BSCS-V-A · Air University Islamabad</p>
+        </div>
+        <div class="terminal reveal d2" aria-label="Example API session">
+          <div class="term-bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>fixflow-api — npm start</span></div>
+          <div class="term-body" id="heroTerm"></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat ok reveal"><b data-count="76">0</b><span>e2e tests passing</span></div>
+        <div class="stat ok reveal d1"><b data-count="218">0</b><span>Postman assertions, 0 failed</span></div>
+        <div class="stat reveal d2"><b data-count="21">0</b><span>endpoints under /api</span></div>
+        <div class="stat reveal d3"><b data-count="6">0</b><span>NestJS modules</span></div>
+        <div class="stat reveal"><b data-count="3">0</b><span>roles, enforced by guards</span></div>
+        <div class="stat reveal d1"><b data-count="11">0</b><span>acceptance scenarios</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== workflow ===================== -->
+    <section class="section" id="workflow">
+      <div class="wrap">
+        <span class="eyebrow reveal">Section 3 · request workflow</span>
+        <h2 class="h2 reveal d1">Six statuses, six legal moves</h2>
+        <p class="lead reveal d2">Each status change has its own action endpoint. Any move not shown here is refused with <b>409</b>, and CLOSED and CANCELLED are final. Click an arrow to see who can make that move, the endpoint, and its error codes, or press play to watch a request go all the way through.</p>
+        <div class="flow-wrap">
+          <div class="card flow-stage reveal">
+            <div class="flow-toolbar">
+              <button class="btn btn-sm btn-primary" id="playFlow"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Play the happy path</button>
+              <button class="btn btn-sm" id="playReopen">Play a reopen</button>
+              <span class="hint">Tip: click any arrow</span>
+            </div>
+            <svg class="flow" id="flowSvg" viewBox="0 0 1000 390" role="img" aria-label="Request status state machine"></svg>
+          </div>
+          <aside class="card flow-info reveal d1" id="flowInfo" aria-live="polite"></aside>
+        </div>
+        <div class="limits">
+          <div class="card limit reveal"><b>5</b><span><strong>active requests per requester</strong>: any status except CLOSED or CANCELLED. The limit also applies to reopening.</span></div>
+          <div class="card limit reveal d1"><b>3</b><span><strong>ASSIGNED or IN_PROGRESS jobs</strong> per technician. A fourth assignment gets 409.</span></div>
+          <div class="card limit reveal d2"><b>1</b><span><strong>feedback per request</strong>, only once it is CLOSED. It is credited to the technician who did the final repair.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== roles ===================== -->
+    <section class="section" id="roles" style="padding-top:70px">
+      <div class="wrap">
+        <span class="eyebrow reveal">Section 1 · access control</span>
+        <h2 class="h2 reveal d1">A role is required, but ownership is checked too</h2>
+        <p class="lead reveal d2"><code>RolesGuard</code> checks the caller's role. <code>RequestAccessPolicy</code> then checks, inside the service, whether the caller owns or is assigned to that record. Someone else's existing record always gets <b>403</b>, before any of its state is revealed.</p>
+        <div class="grid-3" style="margin-top:30px">
+          <article class="card role reveal" style="--c:var(--sky)">
+            <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>REQUESTER</h3>
+            <p class="muted" style="margin:0;font-size:14px">The only role public registration can create</p>
+            <ul>
+              <li>Create requests: <code>POST /requests</code></li>
+              <li>See their own requests and history</li>
+              <li>Edit or cancel, only while OPEN</li>
+              <li>Close or reopen their own RESOLVED work</li>
+              <li>One feedback per CLOSED request</li>
+              <li class="no">Assign, start, resolve, or create categories</li>
+            </ul>
+          </article>
+          <article class="card role reveal d1" style="--c:var(--teal)">
+            <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span>TECHNICIAN</h3>
+            <p class="muted" style="margin:0;font-size:14px">Created only by the seed command</p>
+            <ul>
+              <li>See the requests assigned to them</li>
+              <li>Start their assigned work</li>
+              <li>Resolve it with a 20-1000 character note</li>
+              <li>See the history of those requests</li>
+              <li class="no">Assign work or close requests</li>
+              <li class="no">Act on a job assigned to someone else</li>
+            </ul>
+          </article>
+          <article class="card role reveal d2" style="--c:var(--amber)">
+            <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3h18v4H3zM5 7v14h14V7M9 11h6"/></svg></span>DISPATCHER</h3>
+            <p class="muted" style="margin:0;font-size:14px">Created only by the seed command</p>
+            <ul>
+              <li>See every request</li>
+              <li>Create, update and deactivate categories</li>
+              <li>Assign eligible technicians that have capacity</li>
+              <li>View system dashboards and technician ratings</li>
+              <li class="no">Create requests, or start or resolve work (no impersonation)</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== lifecycle ===================== -->
+    <section class="section" id="lifecycle">
+      <div class="wrap">
+        <span class="eyebrow reveal">Section 6 · request lifecycle</span>
+        <h2 class="h2 reveal d1">What one request passes through</h2>
+        <p class="lead reveal d2">These are the real stage logs of the instrumented route <code>PATCH /api/requests/:id</code>, recorded with <code>LIFECYCLE_TRACE=true</code>. Choose an outcome to see which stages run and which are skipped.</p>
+        <div class="reveal" style="margin-top:26px">
+          <div class="tabs" role="tablist" aria-label="Lifecycle outcome">
+            <button class="tab on" role="tab" aria-selected="true" data-case="ok">Success <span class="tag g">200</span></button>
+            <button class="tab" role="tab" aria-selected="false" data-case="auth">No token <span class="tag r">401</span></button>
+            <button class="tab" role="tab" aria-selected="false" data-case="invalid">Invalid body <span class="tag a">400</span></button>
+          </div>
+        </div>
+        <div class="pipeline" id="pipeline"></div>
+        <div class="console reveal" id="lifeConsole" aria-live="polite"></div>
+        <div class="note-grid">
+          <div class="card note reveal"><b>Guards run before pipes</b>That is why ownership is checked in the service and not in a guard: a guard has neither the validated DTO nor the stored record.</div>
+          <div class="card note reveal d1"><b>The interceptor never wraps errors</b>It only maps successful responses. <code>catchError</code> re-throws the original exception, so Nest's standard error body and status code are kept.</div>
+          <div class="card note reveal d2"><b>The final log line always appears</b>The middleware logs on the response's <code>finish</code> event. That covers 401s, 404s and pipe errors that never reach the interceptor.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== architecture ===================== -->
+    <section class="section" id="architecture">
+      <div class="wrap">
+        <span class="eyebrow reveal">Section 5 · NestJS architecture</span>
+        <h2 class="h2 reveal d1">Modules, constructor injection and a custom token</h2>
+        <p class="lead reveal d2">Controllers only handle HTTP, and every rule lives in a service. Storage sits behind the <code>FIXFLOW_STORE</code> token with a typed contract, so the store can be swapped without editing any service. Try it below.</p>
+        <div class="arch">
+          <div class="card mods reveal">
+            <div class="mod storage"><h4>StorageModule</h4><p>Binds <code>FIXFLOW_STORE</code> to <code>InMemoryFixflowStore</code>; <code>SeedService</code> loads the seed on start. <b>Exports the token.</b></p></div>
+            <div class="mod"><h4>AuthModule</h4><p>Register and login, a JWT signed with the secret from <code>.env</code>, global <code>JwtAuthGuard</code> and <code>RolesGuard</code>.</p></div>
+            <div class="mod"><h4>UsersModule</h4><p><code>UsersService</code>: public views of users (never the hash), technicians. Exported.</p></div>
+            <div class="mod"><h4>CategoriesModule</h4><p>Create, update and deactivate categories; names are unique regardless of case. <code>CategoriesService</code> is exported.</p></div>
+            <div class="mod"><h4>RequestsModule</h4><p>Every workflow rule, <code>RequestAccessPolicy</code> for ownership, and the status transition table.</p></div>
+            <div class="mod"><h4>ReportsModule</h4><p>Role-specific dashboards and technician ratings, always computed from stored data.</p></div>
+            <div class="mod"><h4>Global pipeline</h4><p><code>APP_GUARD</code> ×2 · <code>APP_PIPE</code> · <code>APP_INTERCEPTOR</code> · request-id middleware.</p></div>
+          </div>
+          <div class="card socket reveal d1">
+            <div class="token-row">
+              <span class="token">FIXFLOW_STORE</span>
+              <span class="wire" aria-hidden="true"></span>
+              <span class="plug mem" id="plug">InMemoryFixflowStore</span>
+            </div>
+            <div class="consumers" id="consumers">
+              <span class="consumer">RequestsService</span><span class="consumer">CategoriesService</span>
+              <span class="consumer">UsersService</span><span class="consumer">ReportsService</span>
+              <span class="consumer">SeedService</span><span class="consumer">AppController</span>
+            </div>
+            <pre class="code" id="bindCode"></pre>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn btn-sm btn-primary" id="swapStore">Swap the binding</button>
+              <span class="muted" style="font-size:13px;align-self:center">Same as <code>test/e2e/09-storage-replacement.spec.ts</code> and <code>npm run demo:fake-store</code></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== concurrency ===================== -->
+    <section class="section" id="concurrency">
+      <div class="wrap">
+        <span class="eyebrow reveal">Consistency · competing requests</span>
+        <h2 class="h2 reveal d1">The limits hold even when requests race</h2>
+        <p class="lead reveal d2">Every check-and-update runs inside <code>store.runExclusive()</code>, one action at a time. The write that follows is a single all-or-nothing change with a version check. Below is the real result of <code>npm run demo:concurrency</code>: 5 creates sent at the same moment by a requester who already has 3 active requests.</p>
+        <div class="card race reveal" style="margin-top:28px">
+          <div class="race-head">
+            <div>
+              <b style="font-family:var(--display);font-size:18px">Active-request limit</b>
+              <div class="meter" id="meter" aria-label="Active requests" style="margin-top:8px"></div>
+            </div>
+            <button class="btn btn-sm btn-primary" id="raceBtn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Send 5 at once</button>
+          </div>
+          <div class="lanes" id="lanes"></div>
+          <p class="race-foot" id="raceFoot">Five requests reach the gate together. Only 2 slots are free, so exactly 2 get through.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== endpoints ===================== -->
+    <section class="section" id="endpoints">
+      <div class="wrap">
+        <span class="eyebrow reveal">API contract · /api prefix</span>
+        <h2 class="h2 reveal d1">Endpoint explorer</h2>
+        <p class="lead reveal d2">Generated from the OpenAPI document that the Swagger plugin builds out of the controllers and DTOs. Open an endpoint to see its body schema with the validation rules, and a real response recorded from the Postman run.</p>
+        <div class="ep-tools reveal">
+          <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="epSearch" type="search" placeholder="Search: assign, feedback, categories, GET…" aria-label="Search endpoints"></label>
+          <a class="btn btn-sm" href="assets/data/openapi.json">openapi.json</a>
+        </div>
+        <div id="epList" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ===================== replay ===================== -->
+    <section class="section" id="replay">
+      <div class="wrap">
+        <span class="eyebrow reveal">Postman · Newman run</span>
+        <h2 class="h2 reveal d1">Replay the recorded test run</h2>
+        <p class="lead reveal d2" id="replayLead">Every request from <code>npm run test:postman</code> against a freshly started API: its real status, request id, response body and assertions. Choose a scenario folder, then a request.</p>
+        <div class="replay">
+          <div class="card folders reveal" id="folders" role="tablist" aria-label="Scenario folders"></div>
+          <div class="card reveal d1" style="overflow:hidden">
+            <div class="runlist" id="runlist"></div>
+            <div class="viewer" id="viewer"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== evidence ===================== -->
+    <section class="section" id="evidence">
+      <div class="wrap">
+        <span class="eyebrow reveal">Submission evidence</span>
+        <h2 class="h2 reveal d1">Labelled screenshots of real runs</h2>
+        <p class="lead reveal d2">Each image is rendered from real terminal output. The matching <code>.txt</code> files are in <code>fixflow-api/docs/evidence</code>.</p>
+        <div class="gallery" id="gallery"></div>
+        <div class="links">
+          <a class="card link-card reveal" href="https://github.com/raheemxghumman/FULL-STACK-LAB/tree/main/Assignment%202/fixflow-api"><b>Source code →</b><span>src, tests, Postman collection, scripts</span></a>
+          <a class="card link-card reveal d1" href="https://github.com/raheemxghumman/FULL-STACK-LAB/blob/main/Assignment%202/fixflow-api/README.md"><b>README →</b><span>setup, accounts, endpoints, payloads, limitations</span></a>
+          <a class="card link-card reveal d2" href="fixflow-api/docs/architecture-and-lifecycle.pdf"><b>Architecture PDF →</b><span>two pages: modules, token, lifecycle, concurrency</span></a>
+          <a class="card link-card reveal d3" href="https://github.com/raheemxghumman/FULL-STACK-LAB/tree/main/Assignment%202/fixflow-api/postman"><b>Postman collection →</b><span>117 requests · environment template</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>FixFlow · Assignment 2 · Full Stack Web Development (CS-301), Fall 2026 · Abdul Raheem (241854)</span>
+      <span>NestJS 11 · TypeScript 5 · Node 26 · <a href="https://github.com/raheemxghumman/FULL-STACK-LAB">FULL-STACK-LAB</a></span>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot">
+    <button class="btn btn-sm" id="lbClose">Close ✕</button>
+    <img id="lbImg" alt="">
+    <p id="lbCap"></p>
+  </div>
+
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

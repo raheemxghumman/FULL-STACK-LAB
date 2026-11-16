@@ -1,0 +1,23 @@
+
+1) Active-request limit (5 per requester)
+   Usman has 3 active requests. Sending 5 creates at the same moment...
+   create #1 -> 201 request 11
+   create #2 -> 201 request 12
+   create #3 -> 409 You already have 5 active requests. At most 5 may be active (not CLOSED or CANCELLED).
+   create #4 -> 409 You already have 5 active requests. At most 5 may be active (not CLOSED or CANCELLED).
+   create #5 -> 409 You already have 5 active requests. At most 5 may be active (not CLOSED or CANCELLED).
+   Usman now has 5 active requests (limit held).
+
+2) Technician capacity (3 ASSIGNED/IN_PROGRESS jobs)
+   Bilal (#5) has 1 active job(s). Sending 4 assignments at the same moment...
+   assign request 13 -> 200 ASSIGNED
+   assign request 14 -> 200 ASSIGNED
+   assign request 15 -> 409 Technician 5 already has 3 ASSIGNED/IN_PROGRESS jobs (maximum 3).
+   assign request 16 -> 409 Technician 5 already has 3 ASSIGNED/IN_PROGRESS jobs (maximum 3).
+   Bilal now has 3 active jobs (limit held).
+
+3) Failed operations left no history
+   request 15: status OPEN, history [OPEN], assignment none
+   request 16: status OPEN, history [OPEN], assignment none
+
+Why: every check-and-update runs inside store.runExclusive() (one at a time), and each write also checks the record version.

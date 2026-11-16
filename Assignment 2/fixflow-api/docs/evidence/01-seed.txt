@@ -1,0 +1,15 @@
+Seed written to C:\Users\rahee\Desktop\SEM-5\FULL STACK - LAB\Assignment 2\fixflow-api\data\seed.json
+  7 users, 5 categories, 7 requests, 22 history events, 5 assignments, 2 feedback
+
+┌─────────┬────┬──────────────┬─────────────────┬───────────────────────────┬──────────────────┐
+│ (index) │ id │ role         │ name            │ email                     │ password         │
+├─────────┼────┼──────────────┼─────────────────┼───────────────────────────┼──────────────────┤
+│ 0       │ 1  │ 'DISPATCHER' │ 'Nadia Qureshi' │ 'dispatcher@fixflow.test' │ 'Dispatch2026'   │
+│ 1       │ 2  │ 'REQUESTER'  │ 'Ali Raza'      │ 'ali@fixflow.test'        │ 'Requester2026'  │
+│ 2       │ 3  │ 'REQUESTER'  │ 'Sara Ahmed'    │ 'sara@fixflow.test'       │ 'Requester2026'  │
+│ 3       │ 4  │ 'REQUESTER'  │ 'Usman Tariq'   │ 'usman@fixflow.test'      │ 'Requester2026'  │
+│ 4       │ 5  │ 'TECHNICIAN' │ 'Bilal Hussain' │ 'bilal@fixflow.test'      │ 'Technician2026' │
+│ 5       │ 6  │ 'TECHNICIAN' │ 'Imran Khan'    │ 'imran@fixflow.test'      │ 'Technician2026' │
+│ 6       │ 7  │ 'TECHNICIAN' │ 'Zara Malik'    │ 'zara@fixflow.test'       │ 'Technician2026' │
+└─────────┴────┴──────────────┴─────────────────┴───────────────────────────┴──────────────────┘
+Restart the API (npm start) to load it. Passwords are stored only as bcrypt hashes.
